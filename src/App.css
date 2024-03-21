@@ -1,0 +1,33 @@
+@media print {
+  body,
+  html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  p {
+    text-align: center;
+    font-size: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  p:first-of-type {
+    margin-top: 0.5rem;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  button {
+    display: none;
+  }
+}
