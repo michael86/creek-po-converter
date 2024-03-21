@@ -1,18 +1,17 @@
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import axios from "axios";
 
 const ProcessPdf = () => {
   const ref = useRef<HTMLInputElement>(null);
+  const [success, setSuccess] = useState<null | "uploaded" | "failed">(null);
 
   const onClick = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!ref.current || !ref.current.files) return;
     const file = ref.current.files[0];
-    console.log("ya yeet");
-    if (file) {
-      console.log("Uploading file...");
 
+    if (file) {
       const formData = new FormData();
       formData.append("pdf", file);
 
@@ -26,7 +25,13 @@ const ProcessPdf = () => {
           },
         });
 
-        console.log("result", result);
+        if (result.data.status === 1) {
+          setSuccess("uploaded");
+          setTimeout(() => setSuccess(null), 1000 * 5);
+        } else {
+          setSuccess("failed");
+          setTimeout(() => setSuccess(null), 1000 * 5);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -38,6 +43,7 @@ const ProcessPdf = () => {
       <form>
         <input type="file" name="pdf" id="pdf" ref={ref} />
         <button onClick={onClick}>Upload</button>
+        {typeof success === "string" && <p>File {success}</p>}
       </form>
     </>
   );
