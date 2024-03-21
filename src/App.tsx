@@ -1,18 +1,20 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-
-const onClick = () => window.print();
+import { useState } from "react";
+import ProcessPdf from "./components/ProcessPdf";
 
 function App() {
+  const [screen, setScreen] = useState<number>(0);
   return (
     <>
-      <p>ECAPT0208</p>
-      <p>PO: 24358</p>
-      <p>QTY: 12000</p>
-      <p>21/2/23</p>
-      <p>D-14</p>
-      <button onClick={onClick}>print</button>
+      <header>
+        <nav>
+          {screen === 0 && <li onClick={() => setScreen(1)}>Upload new PO</li>}
+          {screen === 1 && <li onClick={() => setScreen(0)}>Home</li>}
+        </nav>
+      </header>
+
+      {screen === 0 && <h1>Home</h1>}
+      {screen === 1 && <ProcessPdf />}
     </>
   );
 }
