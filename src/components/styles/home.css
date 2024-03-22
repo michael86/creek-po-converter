@@ -1,0 +1,30 @@
+.home {
+  text-align: center;
+  font-size: 2rem;
+}
+
+form {
+  margin-top: 20px;
+}
+
+form label {
+  margin-top: 1rem;
+  font-size: 1.8rem;
+  display: block;
+}
+
+form input {
+  border-radius: 15px;
+  border: 1px solid black;
+}
+
+form button {
+  background-color: blue;
+  border-radius: 15px;
+  color: white;
+  padding: 10px;
+}
+
+form button:first-of-type {
+  margin-right: 20px;
+}

@@ -1,22 +1,22 @@
-import "./App.css";
+import "./Print.css";
+import "./reset.css";
 import { useState } from "react";
 import ProcessPdf from "./components/ProcessPdf";
 import DownloadPo from "./components/DownloadPo";
+import Nav from "./components/Nav";
+import Home from "./components/Home";
 
 function App() {
   const [screen, setScreen] = useState<number>(0);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
   return (
     <>
       <header className="no-print">
-        <nav>
-          {screen === 0 && <li onClick={() => setScreen(1)}>Upload new PO</li>}
-          {screen === 0 && <li onClick={() => setScreen(2)}>Download PO/stickers</li>}
-          {screen === 1 && <li onClick={() => setScreen(0)}>Home</li>}
-          {screen === 2 && <li onClick={() => setScreen(0)}>Home</li>}
-        </nav>
+        <Nav screen={screen} setScreen={setScreen} loggedIn={loggedIn} />
       </header>
 
-      {screen === 0 && <h1>Home</h1>}
+      {screen === 0 && <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
       {screen === 1 && <ProcessPdf />}
       {screen === 2 && <DownloadPo />}
     </>
