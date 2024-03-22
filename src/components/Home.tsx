@@ -1,20 +1,23 @@
-import { Dispatch, FormEvent, ReactElement, SetStateAction, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import axios from "axios";
 import "./styles/home.css";
 
-type Props = {
+interface HomeProps {
   loggedIn: boolean;
   setLoggedIn: Dispatch<SetStateAction<boolean>>;
-};
+}
 
-type _Home = (props: Props) => ReactElement;
-
-const Home: _Home = ({ loggedIn, setLoggedIn }) => {
-  const [clicked, setClicked] = useState<"login" | "register" | null>(null);
+const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
+  const [formState, setFormState] = useState<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const res = await axios.get("127.0.0.1:6005/account/login");
+
+    const res = await axios.post("http://127.0.0.1:6005/account/login", { data: formState });
+    // Handle response accordingly
   };
 
   return (
@@ -23,13 +26,24 @@ const Home: _Home = ({ loggedIn, setLoggedIn }) => {
       {!loggedIn && (
         <form onSubmit={onSubmit}>
           <label htmlFor="email">Email</label>
-          <input type="email" name="email" id="email" />
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={formState.email}
+            onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+          />
           <label htmlFor="password">Password</label>
-          <input type="password" name="password" id="password" />
-
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={formState.password}
+            onChange={(e) => setFormState({ ...formState, password: e.target.value })}
+          />
           <div>
-            <button onClick={() => setClicked("login")}>Log in</button>
-            <button onClick={() => setClicked("register")}>register</button>
+            <button type="submit">Log in</button>
+            <button type="button">register</button>
           </div>
         </form>
       )}
