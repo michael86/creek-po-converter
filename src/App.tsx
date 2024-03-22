@@ -7,7 +7,7 @@ function App() {
   const [screen, setScreen] = useState<number>(0);
   return (
     <>
-      <header>
+      <header className="no-print">
         <nav>
           {screen === 0 && <li onClick={() => setScreen(1)}>Upload new PO</li>}
           {screen === 0 && <li onClick={() => setScreen(2)}>Download PO/stickers</li>}

@@ -19,7 +19,7 @@ const ProcessPdf = () => {
         // You can write the URL of your server or any other endpoint used for file upload
         console.log("begin upload");
 
-        const result = await axios.post("http://127.0.0.1:6005/pdf/process", formData, {
+        const result = await axios.post("http://192.168.1.62:6005/pdf/process", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
