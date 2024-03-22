@@ -12,11 +12,20 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
     email: "",
     password: "",
   });
+  const [status, setStatus] = useState<string | null>(null);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const res = await axios.post("http://127.0.0.1:6005/account/login", { data: formState });
+    console.log(res.data.status);
+    if (res.data.status === 2) {
+      setStatus("Email used");
+      console.log("yeet");
+      setTimeout(() => {
+        setStatus(null);
+      }, 1000 * 5);
+    }
     // Handle response accordingly
   };
 
@@ -45,6 +54,7 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
             <button type="submit">Log in</button>
             <button type="button">register</button>
           </div>
+          {status && <p>{status}</p>}
         </form>
       )}
     </section>
