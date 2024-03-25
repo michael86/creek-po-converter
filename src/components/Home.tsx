@@ -49,6 +49,8 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
           return;
         }
         setLoggedIn(true);
+        saveToStorage("token", res.data.token);
+        saveToStorage("email", formState.email);
 
         break;
       default:
