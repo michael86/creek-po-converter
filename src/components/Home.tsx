@@ -14,19 +14,25 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
   });
   const [status, setStatus] = useState<string | null>(null);
 
+  const showMessage = (message: string) => {
+    setStatus(message);
+
+    setTimeout(() => {
+      setStatus(null);
+    }, 1000 * 5);
+  };
+
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    const res = await axios.post("http://127.0.0.1:6005/account/login", { data: formState });
-    console.log(res.data.status);
+    const res = await axios.post("http://127.0.0.1:6005/account/register", { data: formState });
+
     if (res.data.status === 2) {
-      setStatus("Email used");
-      console.log("yeet");
-      setTimeout(() => {
-        setStatus(null);
-      }, 1000 * 5);
+      showMessage("Email used");
+      return;
     }
-    // Handle response accordingly
+
+    showMessage("Account created");
   };
 
   return (
