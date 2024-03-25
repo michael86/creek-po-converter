@@ -2,14 +2,15 @@ import { FormEvent, useRef, useState } from "react";
 import axios from "../utils/interceptors";
 
 const ProcessPdf = () => {
-  const ref = useRef<HTMLInputElement>(null);
-  const [success, setSuccess] = useState<null | "uploaded" | "failed">(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadStatus, setUploadStatus] = useState<null | "uploaded" | "failed" | "empty">(null);
 
-  const onClick = async (e: FormEvent) => {
+  const handleUpload = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!ref.current || !ref.current.files) return;
-    const file = ref.current.files[0];
+    if (!fileInputRef.current || !fileInputRef.current.files) return;
+
+    const file = fileInputRef.current.files[0];
 
     if (file) {
       const formData = new FormData();
@@ -22,13 +23,17 @@ const ProcessPdf = () => {
           },
         });
 
-        if (result.data.status === 1) {
-          setSuccess("uploaded");
-          setTimeout(() => setSuccess(null), 1000 * 5);
+        const status = result.data.status;
+
+        if (status === 1) {
+          setUploadStatus("uploaded");
+        } else if (status === 3) {
+          setUploadStatus("empty");
         } else {
-          setSuccess("failed");
-          setTimeout(() => setSuccess(null), 1000 * 5);
+          setUploadStatus("failed");
         }
+
+        setTimeout(() => setUploadStatus(null), 5000);
       } catch (error) {
         console.error(error);
       }
@@ -36,13 +41,11 @@ const ProcessPdf = () => {
   };
 
   return (
-    <>
-      <form>
-        <input type="file" name="pdf" id="pdf" ref={ref} />
-        <button onClick={onClick}>Upload</button>
-        {typeof success === "string" && <p>File {success}</p>}
-      </form>
-    </>
+    <form>
+      <input type="file" name="pdf" id="pdf" ref={fileInputRef} />
+      <button onClick={handleUpload}>Upload</button>
+      {uploadStatus && <p>File {uploadStatus}</p>}
+    </form>
   );
 };
 
