@@ -24,6 +24,7 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    console.log();
 
     const res = await axios.post("http://127.0.0.1:6005/account/register", { data: formState });
 
@@ -58,7 +59,7 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
           />
           <div>
             <button type="submit">Log in</button>
-            <button type="button">register</button>
+            <button type="submit">register</button>
           </div>
           {status && <p>{status}</p>}
         </form>
