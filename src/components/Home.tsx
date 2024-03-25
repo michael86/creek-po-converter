@@ -40,7 +40,8 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
 
         showMessage("Account created");
         saveToStorage("token", res.data.token);
-        console.log(res.data);
+        saveToStorage("email", formState.email);
+
         break;
       case "login":
         if (res.data.status !== 1) {
