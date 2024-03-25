@@ -13,6 +13,18 @@ const instance = axios.create({
   },
 });
 
+instance.interceptors.request.use(
+  (config) => {
+    config.headers.token = readFromStorage("token") || "";
+    config.headers.email = readFromStorage("email") || "";
+    return config;
+  },
+  (error) => {
+    console.log("error", error);
+    return Promise.reject(error);
+  }
+);
+
 instance.interceptors.response.use(
   (response) => {
     const token = response?.data?.token;

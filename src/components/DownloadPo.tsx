@@ -1,64 +1,77 @@
 import axios from "../utils/interceptors";
 import { useEffect, useState } from "react";
 
-type PurchaseOrders = { purchase_order: string }[];
+type PurchaseOrder = { purchase_order: string };
 type Stickers = {
   purchaseOrder: string;
   orderRef: string;
   partNumbers: (string | number)[][];
 };
+
 const DownloadPo = () => {
-  const [fetched, setFetched] = useState<PurchaseOrders | null>(null);
-  const [stickers, setStickers] = useState<Stickers | null>(null);
+  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[] | null>(null);
+  const [selectedStickers, setSelectedStickers] = useState<Stickers | null>(null);
 
   useEffect(() => {
-    (async () => {
-      const purchaseOrders = await axios.get("pdf/fetch");
-      if (purchaseOrders.data.status !== 1)
-        console.log("failed to get purchase orders ", purchaseOrders);
+    const fetchPurchaseOrders = async () => {
+      try {
+        const response = await axios.get("pdf/fetch");
+        console.log("response ", response);
+        if (response.data.status === 1) {
+          setPurchaseOrders(response.data.data);
+        } else {
+          console.log("Failed to fetch purchase orders: ", response);
+        }
+      } catch (error) {
+        console.error("Error fetching purchase orders: ", error);
+      }
+    };
 
-      setFetched(purchaseOrders.data.data);
-    })();
+    fetchPurchaseOrders();
   }, []);
 
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault();
-    const res = await axios.get(`pdf/fetch/${e.target.value}`);
-    if (!res.data.data) return;
-    setStickers(res.data.data);
+    try {
+      const selectedPO = e.target.value;
+      const response = await axios.get(`pdf/fetch/${selectedPO}`);
+      const stickersData: Stickers = response.data.data;
+      setSelectedStickers(stickersData);
+    } catch (error) {
+      console.error("Error fetching stickers data: ", error);
+    }
   };
 
   return (
     <>
-      {fetched && (
+      {purchaseOrders ? (
         <div className="no-print">
-          <p>Select Po to Download</p>
+          <p>Select PO to Download</p>
           <select onChange={onChange}>
             <option>Select PO</option>
-            {fetched.map((purchase) => (
-              <option key={purchase.purchase_order} value={purchase.purchase_order}>
-                {purchase.purchase_order}
+            {purchaseOrders.map((purchaseOrder) => (
+              <option key={purchaseOrder.purchase_order} value={purchaseOrder.purchase_order}>
+                {purchaseOrder.purchase_order}
               </option>
             ))}
           </select>
         </div>
+      ) : (
+        <p>Fetching orders</p>
       )}
 
-      {!fetched && <p>Fetching orders</p>}
-
-      {stickers && (
+      {selectedStickers && (
         <>
-          {stickers.partNumbers.map((part) => {
-            return (
-              <>
-                <p style={{ textTransform: "uppercase" }}>PO: {stickers.purchaseOrder}</p>
-                <p style={{ textTransform: "uppercase" }}>OR: {stickers.orderRef}</p>
-                <p style={{ textTransform: "uppercase" }}>PN: {part[0]}</p>
-                <p style={{ textTransform: "uppercase" }}>QTY: {part[1]}</p>
+          {selectedStickers.partNumbers.map((part, index) => (
+            <div key={index}>
+              <p style={{ textTransform: "uppercase" }}>PO: {selectedStickers.purchaseOrder}</p>
+              <p style={{ textTransform: "uppercase" }}>OR: {selectedStickers.orderRef}</p>
+              <p style={{ textTransform: "uppercase" }}>PN: {part[0]}</p>
+              <p style={{ textTransform: "uppercase" }}>QTY: {part[1]}</p>
+              {index !== selectedStickers.partNumbers.length - 1 && (
                 <div style={{ breakAfter: "page" }}></div>
-              </>
-            );
-          })}
+              )}
+            </div>
+          ))}
         </>
       )}
     </>
