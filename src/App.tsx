@@ -4,11 +4,9 @@ import Home from "./components/Home";
 import ProcessPdf from "./components/ProcessPdf";
 import DownloadPo from "./components/DownloadPo";
 import { readFromStorage } from "./utils/storage";
-import axios from "axios";
+import axios from "./utils/interceptors";
 import "./Print.css";
 import "./reset.css";
-
-const API_URL = "http://192.168.1.62:6005/account/validate-token";
 
 function App() {
   const [screen, setScreen] = useState(0);
@@ -23,7 +21,7 @@ function App() {
 
       try {
         type Res = { data: { valid: boolean } };
-        const res: Res = await axios.get(`${API_URL}/${token}/${email}`);
+        const res: Res = await axios.get(`account/validate-token/${token}/${email}`);
         setLoggedIn(res.data.valid);
       } catch (error) {
         console.error("Error validating token:", error);

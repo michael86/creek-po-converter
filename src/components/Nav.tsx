@@ -1,7 +1,7 @@
 import { SetStateAction, ReactElement, Dispatch } from "react";
 import "./styles/nav.css";
 import { readFromStorage, deleteFromStorage } from "../utils/storage";
-import axios from "axios";
+import axios from "../utils/interceptors";
 
 type Props = {
   screen: number;
@@ -23,10 +23,7 @@ const Nav: _Nav = ({ screen, setScreen, loggedIn, setLoggedIn }) => {
     }
 
     try {
-      await axios.post(`http://192.168.1.62:6005/account/logout`, {
-        token,
-        email,
-      });
+      await axios.post(`account/logout`);
     } catch (error) {
       console.log("error loggin out", error);
     } finally {

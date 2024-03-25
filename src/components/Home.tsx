@@ -1,5 +1,5 @@
-import { Dispatch, FormEvent, MouseEventHandler, SetStateAction, useState } from "react";
-import axios from "axios";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import axios from "../utils/interceptors";
 import "./styles/home.css";
 import { saveToStorage } from "../utils/storage";
 
@@ -29,7 +29,7 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
 
     if (!formState.email || !formState.password) return;
 
-    const res = await axios.post(`http://192.168.1.62:6005/account/${route}`, { data: formState });
+    const res = await axios.post(`account/${route}`, { data: formState });
 
     switch (route) {
       case "register":

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../utils/interceptors";
 import { useEffect, useState } from "react";
 
 type PurchaseOrders = { purchase_order: string }[];
@@ -13,7 +13,7 @@ const DownloadPo = () => {
 
   useEffect(() => {
     (async () => {
-      const purchaseOrders = await axios.get("http://192.168.1.62:6005/pdf/fetch");
+      const purchaseOrders = await axios.get("pdf/fetch");
       if (purchaseOrders.data.status !== 1)
         console.log("failed to get purchase orders ", purchaseOrders);
 
@@ -23,7 +23,7 @@ const DownloadPo = () => {
 
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
-    const res = await axios.get(`http://192.168.1.62:6005/pdf/fetch/${e.target.value}`);
+    const res = await axios.get(`pdf/fetch/${e.target.value}`);
     if (!res.data.data) return;
     setStickers(res.data.data);
   };
@@ -34,6 +34,7 @@ const DownloadPo = () => {
         <div className="no-print">
           <p>Select Po to Download</p>
           <select onChange={onChange}>
+            <option>Select PO</option>
             {fetched.map((purchase) => (
               <option key={purchase.purchase_order} value={purchase.purchase_order}>
                 {purchase.purchase_order}

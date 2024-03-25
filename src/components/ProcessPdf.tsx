@@ -1,5 +1,5 @@
 import { FormEvent, useRef, useState } from "react";
-import axios from "axios";
+import axios from "../utils/interceptors";
 
 const ProcessPdf = () => {
   const ref = useRef<HTMLInputElement>(null);
@@ -16,7 +16,7 @@ const ProcessPdf = () => {
       formData.append("pdf", file);
 
       try {
-        const result = await axios.post("http://192.168.1.62:6005/pdf/process", formData, {
+        const result = await axios.post("pdf/process", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
