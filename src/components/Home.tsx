@@ -1,4 +1,4 @@
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { Dispatch, FormEvent, MouseEventHandler, SetStateAction, useState } from "react";
 import axios from "axios";
 import "./styles/home.css";
 
@@ -13,6 +13,7 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
     password: "",
   });
   const [status, setStatus] = useState<string | null>(null);
+  const [route, setRoute] = useState<"login" | "register">("register");
 
   const showMessage = (message: string) => {
     setStatus(message);
@@ -24,16 +25,31 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log();
 
-    const res = await axios.post("http://127.0.0.1:6005/account/register", { data: formState });
+    if (!formState.email || !formState.password) return;
 
-    if (res.data.status === 2) {
-      showMessage("Email used");
-      return;
+    const res = await axios.post(`http://192.168.1.62:6005/account/${route}`, { data: formState });
+
+    switch (route) {
+      case "register":
+        if (res.data.status === 2) {
+          showMessage("Email used");
+          return;
+        }
+
+        showMessage("Account created");
+        break;
+      case "login":
+        if (res.data.status === 2) {
+          showMessage("Invalid log in");
+          return;
+        }
+        setLoggedIn(true);
+
+        break;
+      default:
+        break;
     }
-
-    showMessage("Account created");
   };
 
   return (
@@ -58,8 +74,12 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
             onChange={(e) => setFormState({ ...formState, password: e.target.value })}
           />
           <div>
-            <button type="submit">Log in</button>
-            <button type="submit">register</button>
+            <button type="submit" onClick={() => setRoute("login")}>
+              Log in
+            </button>
+            <button type="submit" onClick={() => setRoute("register")}>
+              register
+            </button>
           </div>
           {status && <p>{status}</p>}
         </form>
