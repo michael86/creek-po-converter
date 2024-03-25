@@ -1,6 +1,7 @@
 import { Dispatch, FormEvent, MouseEventHandler, SetStateAction, useState } from "react";
 import axios from "axios";
 import "./styles/home.css";
+import { saveToStorage } from "../utils/storage";
 
 interface HomeProps {
   loggedIn: boolean;
@@ -38,9 +39,11 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
         }
 
         showMessage("Account created");
+        saveToStorage("token", res.data.token);
+        console.log(res.data);
         break;
       case "login":
-        if (res.data.status === 2) {
+        if (res.data.status !== 1) {
           showMessage("Invalid log in");
           return;
         }

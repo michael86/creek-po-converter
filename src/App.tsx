@@ -1,14 +1,28 @@
-import "./Print.css";
-import "./reset.css";
-import { useState } from "react";
-import ProcessPdf from "./components/ProcessPdf";
-import DownloadPo from "./components/DownloadPo";
+import { useEffect, useState } from "react";
 import Nav from "./components/Nav";
 import Home from "./components/Home";
+import axios from "axios";
+import ProcessPdf from "./components/ProcessPdf";
+import DownloadPo from "./components/DownloadPo";
+import { readFromStorage } from "./utils/storage";
+import "./Print.css";
+import "./reset.css";
 
 function App() {
-  const [screen, setScreen] = useState<number>(0);
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [screen, setScreen] = useState(0);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const token = readFromStorage("token");
+      if (!token) return;
+
+      const tokenValid = await axios.get(
+        `http://192.168.1.62:6005/account/validate-token/${token}`
+      );
+      console.log("tokenValid ", tokenValid);
+    })();
+  }, []);
 
   return (
     <>
