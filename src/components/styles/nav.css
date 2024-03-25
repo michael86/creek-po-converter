@@ -21,6 +21,10 @@ nav ul li {
   border-radius: 10px;
 }
 
+nav ul li:last-of-type {
+  margin-left: auto;
+}
+
 nav ul li:hover {
   cursor: pointer;
 }

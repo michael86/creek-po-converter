@@ -37,7 +37,7 @@ function App() {
   return (
     <>
       <header className="no-print">
-        <Nav screen={screen} setScreen={setScreen} loggedIn={loggedIn} />
+        <Nav screen={screen} setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       </header>
 
       {screen === 0 && <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
