@@ -18,3 +18,7 @@
 .sticker p {
   margin: 0.2rem;
 }
+
+.sticker input {
+  width: 100%;
+}

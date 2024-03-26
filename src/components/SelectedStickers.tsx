@@ -1,12 +1,23 @@
 import StickerLocation from "./StickerLocation";
+import { useEffect, useState } from "react";
 import { getDate } from "../utils";
+import StickerButtons from "./StickerButtons";
 
 type Props = {
-  selectedStickers: { purchaseOrder: string; orderRef: string; partNumbers: (string | number)[][] };
+  selectedStickers: { purchaseOrder: string; orderRef: string; partNumbers: [[string, number]] };
 };
 
 const SelectedStickers = ({ selectedStickers }: Props) => {
+  const [qty, setQty] = useState<{ [key: string]: number[] }>({});
+  useEffect(() => {
+    selectedStickers.partNumbers.forEach((part) => {
+      qty[part[0]] = [part[1]];
+      setQty(qty);
+    });
+  }, [selectedStickers, qty]);
+
   console.log(selectedStickers);
+
   return (
     <div className="sticker-container">
       {selectedStickers.partNumbers.map((part, index) => (
@@ -20,7 +31,7 @@ const SelectedStickers = ({ selectedStickers }: Props) => {
           {index !== selectedStickers.partNumbers.length - 1 && (
             <div style={{ breakAfter: "page" }}></div>
           )}
-          <button className="no-print">Change QTY</button>
+          <StickerButtons qty={qty} part={part} setQty={setQty} />
         </div>
       ))}
     </div>
