@@ -1,0 +1,20 @@
+.sticker-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  margin: auto;
+  margin-top: 2rem;
+}
+
+.sticker {
+  margin-right: 1rem;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 1rem;
+  margin-top: 1rem;
+  width: calc(20% - 1rem);
+}
+
+.sticker p {
+  margin: 0.2rem;
+}

@@ -1,5 +1,8 @@
 import axios from "../utils/interceptors";
 import { useEffect, useState } from "react";
+import "./styles/stickers.css";
+
+import SelectedStickers from "./SelectedStickers";
 
 type PurchaseOrder = { purchase_order: string };
 type Stickers = {
@@ -59,21 +62,7 @@ const DownloadPo = () => {
         <p>Fetching orders</p>
       )}
 
-      {selectedStickers && (
-        <>
-          {selectedStickers.partNumbers.map((part, index) => (
-            <div key={index}>
-              <p style={{ textTransform: "uppercase" }}>PO: {selectedStickers.purchaseOrder}</p>
-              <p style={{ textTransform: "uppercase" }}>OR: {selectedStickers.orderRef}</p>
-              <p style={{ textTransform: "uppercase" }}>PN: {part[0]}</p>
-              <p style={{ textTransform: "uppercase" }}>QTY: {part[1]}</p>
-              {index !== selectedStickers.partNumbers.length - 1 && (
-                <div style={{ breakAfter: "page" }}></div>
-              )}
-            </div>
-          ))}
-        </>
-      )}
+      {selectedStickers && <SelectedStickers selectedStickers={selectedStickers} />}
     </>
   );
 };
