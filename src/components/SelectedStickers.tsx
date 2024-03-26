@@ -1,39 +1,44 @@
-import StickerLocation from "./StickerLocation";
-import { useEffect, useState } from "react";
-import { getDate } from "../utils";
-import StickerButtons from "./StickerButtons";
+import { useState } from "react";
+import Sticker from "./Sticker";
 
 type Props = {
-  selectedStickers: { purchaseOrder: string; orderRef: string; partNumbers: [[string, number]] };
+  selectedStickers: {
+    purchaseOrder: string;
+    orderRef: string;
+    partNumbers: [[string, number | number[]]];
+  };
 };
 
 const SelectedStickers = ({ selectedStickers }: Props) => {
-  const [qty, setQty] = useState<{ [key: string]: number[] }>({});
-  useEffect(() => {
-    selectedStickers.partNumbers.forEach((part) => {
-      qty[part[0]] = [part[1]];
-      setQty(qty);
-    });
-  }, [selectedStickers, qty]);
-
-  console.log(selectedStickers);
+  const { partNumbers } = selectedStickers;
+  const [stickerByQty, setStickerByQty] = useState(partNumbers);
 
   return (
     <div className="sticker-container">
-      {selectedStickers.partNumbers.map((part, index) => (
-        <div key={index} className="sticker">
-          <p style={{ textTransform: "uppercase" }}>{part[0]}</p>
-          <p style={{ textTransform: "uppercase" }}>PO: {selectedStickers.purchaseOrder}</p>
-          <p style={{ textTransform: "uppercase" }}>{getDate()}</p>
-          <p style={{ textTransform: "uppercase" }}>QTY: {part[1]}</p>
-          <p style={{ textTransform: "uppercase" }}>REF: {selectedStickers.orderRef}</p>
-          <StickerLocation />
-          {index !== selectedStickers.partNumbers.length - 1 && (
-            <div style={{ breakAfter: "page" }}></div>
-          )}
-          <StickerButtons qty={qty} part={part} setQty={setQty} />
-        </div>
-      ))}
+      {stickerByQty.map((part, index) => {
+        return Array.isArray(part[1]) ? (
+          part[1].map((qty) => {
+            return (
+              <Sticker
+                selectedStickers={selectedStickers}
+                setStickerByQty={setStickerByQty}
+                part={part}
+                index={index}
+                key={index}
+                qty={qty}
+              />
+            );
+          })
+        ) : (
+          <Sticker
+            selectedStickers={selectedStickers}
+            setStickerByQty={setStickerByQty}
+            part={part}
+            index={index}
+            key={index}
+          />
+        );
+      })}
     </div>
   );
 };

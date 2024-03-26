@@ -34,6 +34,7 @@ const DownloadPo = () => {
   }, []);
 
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedStickers(null);
     try {
       const selectedPO = e.target.value;
       const response = await axios.get(`pdf/fetch/${selectedPO}`);
