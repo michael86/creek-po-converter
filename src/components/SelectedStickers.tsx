@@ -5,7 +5,7 @@ type Props = {
   selectedStickers: {
     purchaseOrder: string;
     orderRef: string;
-    partNumbers: [[string, number | number[]]];
+    partNumbers: [[string, number | number[], string]];
   };
 };
 

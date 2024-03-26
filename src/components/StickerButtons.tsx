@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-type PartNumber = [[string, number[] | number]];
+type PartNumber = [[string, number[] | number, string]];
 type Props = {
   partNumbers: PartNumber;
   setStickerByQty: Dispatch<SetStateAction<PartNumber>>;
@@ -20,7 +20,7 @@ const findIndex2D = (arr: PartNumber, targetPart: string) => {
   return index;
 };
 
-const sumUpParcels = (sum: number, target: [string, number | number[]]) => {
+const sumUpParcels = (sum: number, target: [string, number | number[], string]) => {
   if (typeof target[1] === "number") {
     return sum !== target[1] ? (sum > target[1] ? "To many parcels" : "Not enough parcels") : "";
   }

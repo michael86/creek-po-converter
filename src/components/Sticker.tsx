@@ -3,22 +3,24 @@ import StickerLocation from "./StickerLocation";
 import StickerButtons from "./StickerButtons";
 import { Dispatch, SetStateAction } from "react";
 
-type Sticker = [string, number | number[]];
+type _Sticker = [string, number | number[], string];
 
 type Props = {
   selectedStickers: {
     purchaseOrder: string;
     orderRef: string;
-    partNumbers: [[string, number | number[]]];
+    partNumbers: [[string, number | number[], string]];
   };
-  setStickerByQty: Dispatch<SetStateAction<[Sticker]>>;
-  part: Sticker;
+  setStickerByQty: Dispatch<SetStateAction<[_Sticker]>>;
+  part: _Sticker;
   index: number;
   qty?: number;
 };
 
 const Sticker = ({ selectedStickers, setStickerByQty, part, index, qty }: Props) => {
   const { orderRef, partNumbers, purchaseOrder } = selectedStickers;
+
+  console.log(selectedStickers);
 
   return (
     <div className="sticker">
@@ -27,6 +29,7 @@ const Sticker = ({ selectedStickers, setStickerByQty, part, index, qty }: Props)
       <p style={{ textTransform: "uppercase" }}>{getDate()}</p>
       <p style={{ textTransform: "uppercase" }}>QTY: {qty || part[1]}</p>
       <p style={{ textTransform: "uppercase" }}>REF: {orderRef}</p>
+      <p style={{ textTransform: "uppercase" }}>DESC: {part[2]}</p>
 
       <StickerLocation />
       {index !== selectedStickers.partNumbers.length - 1 && (

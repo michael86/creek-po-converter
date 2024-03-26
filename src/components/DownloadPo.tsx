@@ -8,7 +8,7 @@ type PurchaseOrder = { purchase_order: string };
 type Stickers = {
   purchaseOrder: string;
   orderRef: string;
-  partNumbers: [[string, number]];
+  partNumbers: [[string, number, string]];
 };
 
 const DownloadPo = () => {
