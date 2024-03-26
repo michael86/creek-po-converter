@@ -3,7 +3,7 @@ import axios from "../utils/interceptors";
 
 const ProcessPdf = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadStatus, setUploadStatus] = useState<null | "uploaded" | "failed" | "empty">(null);
+  const [uploadStatus, setUploadStatus] = useState<null | string>(null);
 
   const handleUpload = async (e: FormEvent) => {
     e.preventDefault();
@@ -26,11 +26,13 @@ const ProcessPdf = () => {
         const status = result.data.status;
 
         if (status === 1) {
-          setUploadStatus("uploaded");
+          setUploadStatus("File uploaded");
         } else if (status === 3) {
-          setUploadStatus("empty");
+          setUploadStatus("File was empty or couldn't be parsed");
+        } else if (status === 4) {
+          setUploadStatus("This file was previously uploaded");
         } else {
-          setUploadStatus("failed");
+          setUploadStatus("failed - contact michael");
         }
 
         setTimeout(() => setUploadStatus(null), 5000);
@@ -44,7 +46,7 @@ const ProcessPdf = () => {
     <form>
       <input type="file" name="pdf" id="pdf" ref={fileInputRef} />
       <button onClick={handleUpload}>Upload</button>
-      {uploadStatus && <p>File {uploadStatus}</p>}
+      {uploadStatus && <p>{uploadStatus}</p>}
     </form>
   );
 };
