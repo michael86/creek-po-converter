@@ -1,3 +1,7 @@
+import { ReducerType } from "@reduxjs/toolkit";
+import { Dispatch, SetStateAction } from "react";
+import { DispatchProp } from "react-redux";
+
 export const getDate = () => {
   const date = new Date();
   const year = date.getFullYear();
@@ -26,3 +30,57 @@ export const sumUpParcels = (sum: number, target: number | number[]) => {
 
   return;
 };
+
+type InputState = {
+  val: string;
+  error: string;
+};
+
+type OnParcelInput = (
+  value: string,
+  dispatch: Dispatch<SetStateAction<InputState>>,
+  inputState: InputState
+) => void;
+
+export const onParcelInput: OnParcelInput = (value, dispatch, inputState) => {
+  if (!value.match(/^\d*(,\d*)*$/)) return; // Only allow numeric input
+  dispatch({ ...inputState, val: value });
+};
+
+type OnParcelSubmit = (
+  inputState: InputState,
+  partialConfirmed: boolean,
+  setInputState: Dispatch<SetStateAction<InputState>>,
+  dispatch: DispatchProp,
+  setPartCount: ReducerType,
+  qty: number
+) => void;
+
+// export const onParcelSubmit: OnParcelSubmit = (
+//   inputState,
+//   partialConfirmed,
+//   setInputState,
+//   dispatch,
+//   setPartCount,
+//   qty
+// ) => {
+//   const parcels = inputState.val.split(",").map(Number);
+//   const sum = parcels.reduce((partialSum, a) => partialSum + a, 0);
+
+//   const errorMessage = sumUpParcels(sum, qty);
+//   const notEnoughErrorMessage = errorMessage && errorMessage.toLowerCase().includes("not");
+
+//   if (errorMessage && (!notEnoughErrorMessage || !partialConfirmed)) {
+//     setInputState({
+//       ...inputState,
+//       error: errorMessage,
+//     });
+//     return;
+//   }
+
+//   setInputState({ ...inputState, error: "" });
+//   const copy = structuredClone(partNumbers);
+//   copy[index][1] = parcels.length > 1 ? parcels : parcels[0];
+
+//   dispatch(setPartCount(copy));
+// };

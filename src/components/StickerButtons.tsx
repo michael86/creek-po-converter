@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { sumUpParcels } from "../utils";
+import { onParcelInput, sumUpParcels } from "../utils";
 import { Parts, setPartCount } from "../slices/purchaseOrders";
 import { useAppDispatch } from "../hooks";
 
@@ -23,29 +23,31 @@ const LOCATIONS = [
   ["J", 15],
 ];
 
+type InputState = {
+  val: string;
+  error: string;
+};
+
 const StickerButtons = ({ qty, index, partNumbers, setLocation }: Props) => {
   const dispatch = useAppDispatch();
   const partialRef = useRef<HTMLInputElement | null>(null);
-  const [inputState, setInputState] = useState<{
-    val: string;
-    error: string;
-  }>({
+  const [partialConfirmed, setPartialConfirmed] = useState(false);
+  const [inputState, setInputState] = useState<InputState>({
     val: "Enter parcels",
     error: "",
   });
 
-  const onInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (!value.match(/^\d*(,\d*)*$/)) return; // Only allow numeric input
-    setInputState({ ...inputState, val: value });
-  };
+  const onInput = (e: React.ChangeEvent<HTMLInputElement>) =>
+    onParcelInput(e.target.value, setInputState, inputState);
 
   const onSubmit = () => {
     const parcels = inputState.val.split(",").map(Number);
     const sum = parcels.reduce((partialSum, a) => partialSum + a, 0);
 
     const errorMessage = sumUpParcels(sum, qty);
-    if (errorMessage) {
+    const notEnoughErrorMessage = errorMessage && errorMessage.toLowerCase().includes("not");
+
+    if (errorMessage && (!notEnoughErrorMessage || !partialConfirmed)) {
       setInputState({
         ...inputState,
         error: errorMessage,
@@ -64,6 +66,7 @@ const StickerButtons = ({ qty, index, partNumbers, setLocation }: Props) => {
     e.preventDefault();
     if (!partialRef.current || !partialRef.current.checked) return;
     console.log("save as partial");
+    setPartialConfirmed(true);
   };
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => setLocation(e.target.value);
