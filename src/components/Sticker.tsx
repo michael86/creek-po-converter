@@ -1,7 +1,7 @@
 import { getDate } from "../utils";
 import StickerLocation from "./StickerLocation";
 import StickerButtons from "./StickerButtons";
-
+import { useState } from "react";
 import { Parts } from "../slices/purchaseOrders";
 
 type Props = {
@@ -27,19 +27,31 @@ const Sticker = ({
   partNumbers,
   total,
 }: Props) => {
+  const [location, setLocation] = useState<string>("");
+
   return (
-    <div className={`sticker`} style={{ backgroundColor: backgroundColor }}>
-      <p style={{ textTransform: "uppercase" }}>{name}</p>
-      <p style={{ textTransform: "uppercase" }}>PO: {purchaseOrder}</p>
-      <p style={{ textTransform: "uppercase" }}>{getDate()}</p>
-      <p style={{ textTransform: "uppercase" }}>QTY: {qty}</p>
-      <p style={{ textTransform: "uppercase" }}>REF: {orderRef}</p>
-      <p style={{ textTransform: "uppercase" }}>{description}</p>
+    <tr className={`sticker`} style={{ backgroundColor: backgroundColor }}>
+      <td style={{ textTransform: "uppercase" }}>{name}</td>
+      <td style={{ textTransform: "uppercase" }}>{description}</td>
+      <td style={{ textTransform: "uppercase" }}>QTY: {qty}</td>
+      <td style={{ textTransform: "uppercase" }}>PO: {purchaseOrder}</td>
+      <td style={{ textTransform: "uppercase" }}>REF: {orderRef}</td>
+      <td style={{ textTransform: "uppercase" }}>{getDate()}</td>
+      <td style={{ textTransform: "uppercase" }} className="no-print">
+        No
+      </td>
 
-      <StickerLocation />
-
-      <StickerButtons qty={total} index={index} partNumbers={partNumbers} />
-    </div>
+      <StickerLocation location={location} />
+      <div className="pagebreak" />
+      <td className="table-buttons">
+        <StickerButtons
+          qty={total}
+          index={index}
+          partNumbers={partNumbers}
+          setLocation={setLocation}
+        />
+      </td>
+    </tr>
   );
 };
 

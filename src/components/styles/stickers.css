@@ -1,9 +1,9 @@
 .sticker-container {
-  display: flex;
-  flex-wrap: wrap;
   width: 90%;
   margin: auto;
   margin-top: 2rem;
+  border: 1px solid black;
+  text-align: center;
 }
 
 .sticker {

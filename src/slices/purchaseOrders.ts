@@ -4,12 +4,10 @@ export type PurchaseOrder = {
   purchaseOrder: string;
   orderRef: string;
   partNumbers: Parts;
-  split?: SplitParcels;
-  backgroundColor?: string;
   partial: boolean;
 };
 export type PurchaseOrders = string[];
-export type Parts = [string, number | number[], string][];
+export type Parts = [string, number | number[], string, 0 | 1][];
 export type SplitParcels = [string, number[]];
 
 interface InitialState extends PurchaseOrder {
@@ -20,9 +18,7 @@ const initialState: InitialState = {
   purchaseOrders: [], //list of purchase orders available
   purchaseOrder: "", //the order we're working with
   orderRef: "",
-  partNumbers: [["", 0, ""]], //name, count, description
-  split: undefined, //IF order is split into multiple parcels then [name, [parcel, parcel...]]
-  backgroundColor: undefined, //If order split, then link all parcels by color (rgb(x,x,x))
+  partNumbers: [["", 0, "", 0]], //name, count, description, partial
   partial: false,
 };
 

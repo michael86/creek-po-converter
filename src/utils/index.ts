@@ -11,7 +11,7 @@ export const getRandomColor = () => {
     return Math.floor(Math.random() * 255 + 1);
   };
 
-  return `rgb(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()})`;
+  return `rgba(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()},0.5)`;
 };
 
 export const sumUpParcels = (sum: number, target: number | number[]) => {

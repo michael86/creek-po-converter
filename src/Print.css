@@ -1,4 +1,9 @@
 @media print {
+  * {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
   body,
   html {
     margin: 0 !important;
@@ -9,16 +14,24 @@
     display: none;
   }
 
+  table,
+  tr {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 1rem;
+  }
   @page {
     margin: 0 !important;
     padding: 0 !important;
   }
 
-  p {
+  td {
     text-align: center;
-    font-size: 1rem;
-    margin: 0;
-    padding: 0;
   }
 
   p:first-of-type {
@@ -34,20 +47,20 @@
   .sticker-container {
     display: block;
     width: 100%;
-    margin: 0;
   }
 
   .sticker {
-    border: none;
-    margin: 0;
-    padding: 0;
     width: 100%;
-    padding-top: 0.5rem;
+    padding-top: 0.5rem !important;
   }
 
-  .sticker p {
-    margin: 0;
+  .sticker td {
     font-size: 0.8rem;
     font-weight: 700;
+    border: none;
+  }
+
+  .pagebreak {
+    page-break-before: always;
   }
 }

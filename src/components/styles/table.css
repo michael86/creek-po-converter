@@ -1,0 +1,19 @@
+table {
+  gap: 1rem;
+}
+
+td {
+  padding: 1rem 0;
+}
+
+table .table-buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  place-items: center;
+}
+
+table .table-buttons * {
+  width: 50%;
+  margin-bottom: 0.5rem;
+}
