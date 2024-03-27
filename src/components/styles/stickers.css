@@ -22,3 +22,7 @@
 .sticker input {
   width: 100%;
 }
+
+.sticker.split {
+  background-color: rgba(139, 139, 218, 0.5);
+}

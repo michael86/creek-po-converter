@@ -15,15 +15,21 @@ type Props = {
   part: _Sticker;
   index: number;
   qty?: number;
+  backgroundColor?: string;
 };
 
-const Sticker = ({ selectedStickers, setStickerByQty, part, index, qty }: Props) => {
+const Sticker = ({
+  selectedStickers,
+  setStickerByQty,
+  part,
+  index,
+  qty,
+  backgroundColor,
+}: Props) => {
   const { orderRef, partNumbers, purchaseOrder } = selectedStickers;
 
-  console.log(selectedStickers);
-
   return (
-    <div className="sticker">
+    <div className={`sticker`} style={{ backgroundColor: backgroundColor }}>
       <p style={{ textTransform: "uppercase" }}>{part[0]}</p>
       <p style={{ textTransform: "uppercase" }}>PO: {purchaseOrder}</p>
       <p style={{ textTransform: "uppercase" }}>{getDate()}</p>

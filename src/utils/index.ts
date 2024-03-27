@@ -5,3 +5,11 @@ export const getDate = () => {
   const day = date.getDate();
   return `${day}/${month < 10 && "0"}${month + 1}/${year}`;
 };
+
+export const getRandomColor = () => {
+  const getRandomNumber = () => {
+    return Math.floor(Math.random() * 255 + 1);
+  };
+
+  return `rgb(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()})`;
+};

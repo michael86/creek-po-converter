@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Sticker from "./Sticker";
+import { getRandomColor } from "../utils";
 
 type Props = {
   selectedStickers: {
@@ -16,6 +17,7 @@ const SelectedStickers = ({ selectedStickers }: Props) => {
   return (
     <div className="sticker-container">
       {stickerByQty.map((part, index) => {
+        const backgroundColor = Array.isArray(part[1]) ? getRandomColor() : `rgb(255,255,255)`;
         return Array.isArray(part[1]) ? (
           part[1].map((qty) => {
             return (
@@ -26,6 +28,7 @@ const SelectedStickers = ({ selectedStickers }: Props) => {
                 index={index}
                 key={index}
                 qty={qty}
+                backgroundColor={backgroundColor}
               />
             );
           })
