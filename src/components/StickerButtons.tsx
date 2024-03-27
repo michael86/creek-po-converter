@@ -33,12 +33,9 @@ const StickerButtons = ({ qty, index, partNumbers, setLocation }: Props) => {
   const partialRef = useRef<HTMLInputElement | null>(null);
   const [partialConfirmed, setPartialConfirmed] = useState(false);
   const [inputState, setInputState] = useState<InputState>({
-    val: "Enter parcels",
+    val: "",
     error: "",
   });
-
-  const onInput = (e: React.ChangeEvent<HTMLInputElement>) =>
-    onParcelInput(e.target.value, setInputState, inputState);
 
   const onSubmit = () => {
     const parcels = inputState.val.split(",").map(Number);
@@ -75,10 +72,10 @@ const StickerButtons = ({ qty, index, partNumbers, setLocation }: Props) => {
     <>
       <input
         type="text"
-        onInput={onInput}
-        onFocus={() =>
-          inputState.val.includes("Enter") && setInputState({ ...inputState, val: "" })
+        onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+          onParcelInput(e.target.value, setInputState, inputState)
         }
+        placeholder="Enter parcel quantities"
         name="parcel-count"
         value={inputState.val}
       />
