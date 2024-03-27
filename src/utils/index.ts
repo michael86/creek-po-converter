@@ -13,3 +13,16 @@ export const getRandomColor = () => {
 
   return `rgb(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()})`;
 };
+
+export const sumUpParcels = (sum: number, target: number | number[]) => {
+  if (typeof target === "number") {
+    return sum !== target ? (sum > target ? "To many parcels" : "Not enough parcels") : "";
+  }
+
+  if (Array.isArray(target)) {
+    const _sum = target.reduce((partialSum, value) => partialSum + value, 0);
+    return _sum !== sum && (_sum > sum ? "Not enough parcels" : "To many parcels");
+  }
+
+  return;
+};

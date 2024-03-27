@@ -3,13 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type PurchaseOrder = {
   purchaseOrder: string;
   orderRef: string;
-  parts: Parts;
+  partNumbers: Parts;
   split?: SplitParcels;
   backgroundColor?: string;
   partial: boolean;
 };
 export type PurchaseOrders = string[];
-export type Parts = [string, number, string][];
+export type Parts = [string, number | number[], string][];
 export type SplitParcels = [string, number[]];
 
 interface InitialState extends PurchaseOrder {
@@ -20,7 +20,7 @@ const initialState: InitialState = {
   purchaseOrders: [], //list of purchase orders available
   purchaseOrder: "", //the order we're working with
   orderRef: "",
-  parts: [["", 0, ""]], //name, count, description
+  partNumbers: [["", 0, ""]], //name, count, description
   split: undefined, //IF order is split into multiple parcels then [name, [parcel, parcel...]]
   backgroundColor: undefined, //If order split, then link all parcels by color (rgb(x,x,x))
   partial: false,
@@ -37,11 +37,14 @@ export const purchaseSlice = createSlice({
     setPurchaseOrder: (state, action: PayloadAction<PurchaseOrder>) => {
       state.purchaseOrder = action.payload.purchaseOrder;
       state.orderRef = action.payload.orderRef;
-      state.parts = action.payload.parts;
+      state.partNumbers = action.payload.partNumbers;
+    },
+    setPartCount: (state, action: PayloadAction<Parts>) => {
+      state.partNumbers = action.payload;
     },
   },
 });
 
-export const { setPurchaseOrder, setPurchaseOrders } = purchaseSlice.actions;
+export const { setPurchaseOrder, setPurchaseOrders, setPartCount } = purchaseSlice.actions;
 
 export default purchaseSlice.reducer;

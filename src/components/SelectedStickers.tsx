@@ -1,44 +1,42 @@
-import { useState } from "react";
 import Sticker from "./Sticker";
 import { getRandomColor } from "../utils";
+import { useAppSelector } from "../hooks";
 
-type Props = {
-  selectedStickers: {
-    purchaseOrder: string;
-    orderRef: string;
-    partNumbers: [[string, number | number[], string]];
-  };
-};
-
-const SelectedStickers = ({ selectedStickers }: Props) => {
-  const { partNumbers } = selectedStickers;
-  const [stickerByQty, setStickerByQty] = useState(partNumbers);
+const SelectedStickers = () => {
+  const { partNumbers, purchaseOrder, orderRef } = useAppSelector((state) => state.purchase);
 
   return (
     <div className="sticker-container">
-      {stickerByQty.map((part, index) => {
+      {partNumbers.map((part, index) => {
         const backgroundColor = Array.isArray(part[1]) ? getRandomColor() : `rgb(255,255,255)`;
         return Array.isArray(part[1]) ? (
           part[1].map((qty) => {
             return (
               <Sticker
-                selectedStickers={selectedStickers}
-                setStickerByQty={setStickerByQty}
-                part={part}
+                purchaseOrder={purchaseOrder}
+                orderRef={orderRef}
+                name={part[0]}
+                description={part[2]}
+                qty={qty}
                 index={index}
                 key={index}
-                qty={qty}
+                partNumbers={partNumbers}
                 backgroundColor={backgroundColor}
+                total={part[1]}
               />
             );
           })
         ) : (
           <Sticker
-            selectedStickers={selectedStickers}
-            setStickerByQty={setStickerByQty}
-            part={part}
-            index={index}
+            purchaseOrder={purchaseOrder}
+            orderRef={orderRef}
+            name={part[0]}
+            description={part[2]}
+            qty={part[1]}
             key={index}
+            index={index}
+            partNumbers={partNumbers}
+            total={part[1]}
           />
         );
       })}
