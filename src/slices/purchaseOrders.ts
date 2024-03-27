@@ -1,13 +1,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface PurchaseState {
-  value: number;
-  status: "idle" | "loading" | "failed";
+export type PurchaseOrder = {
+  purchaseOrder: string;
+  orderRef: string;
+  parts: Parts;
+  split?: SplitParcels;
+  backgroundColor?: string;
+  partial: boolean;
+};
+export type PurchaseOrders = string[];
+export type Parts = [string, number, string][];
+export type SplitParcels = [string, number[]];
+
+interface InitialState extends PurchaseOrder {
+  purchaseOrders: PurchaseOrders;
 }
 
-const initialState: PurchaseState = {
-  value: 0,
-  status: "idle",
+const initialState: InitialState = {
+  purchaseOrders: [], //list of purchase orders available
+  purchaseOrder: "", //the order we're working with
+  orderRef: "",
+  parts: [["", 0, ""]], //name, count, description
+  split: undefined, //IF order is split into multiple parcels then [name, [parcel, parcel...]]
+  backgroundColor: undefined, //If order split, then link all parcels by color (rgb(x,x,x))
+  partial: false,
 };
 
 export const purchaseSlice = createSlice({
@@ -15,26 +31,17 @@ export const purchaseSlice = createSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
+    setPurchaseOrders: (state, action: PayloadAction<PurchaseOrders>) => {
+      state.purchaseOrders = action.payload;
     },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
-    },
-    setPurchaseOrders: (state, action: PayloadAction<number>) => {
-      state.value = action.payload;
+    setPurchaseOrder: (state, action: PayloadAction<PurchaseOrder>) => {
+      state.purchaseOrder = action.payload.purchaseOrder;
+      state.orderRef = action.payload.orderRef;
+      state.parts = action.payload.parts;
     },
   },
 });
 
-export const { increment, decrement, incrementByAmount, setPurchaseOrders } = purchaseSlice.actions;
+export const { setPurchaseOrder, setPurchaseOrders } = purchaseSlice.actions;
 
 export default purchaseSlice.reducer;

@@ -3,27 +3,34 @@ import { useEffect, useState } from "react";
 import "./styles/stickers.css";
 
 import SelectedStickers from "./SelectedStickers";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { PurchaseOrders, setPurchaseOrders } from "../slices/purchaseOrders";
 
-type PurchaseOrder = { purchase_order: string };
 type Stickers = {
   purchaseOrder: string;
   orderRef: string;
   partNumbers: [[string, number, string]];
 };
 
+type Res = {
+  data: { status: number; data?: PurchaseOrders; token: string };
+  status: number;
+};
+
 const DownloadPo = () => {
-  const [purchaseOrders, setPurchaseOrders] = useState<PurchaseOrder[] | null>(null);
+  const dispatch = useAppDispatch();
+  const { purchaseOrders } = useAppSelector((state) => state.purchase);
   const [selectedStickers, setSelectedStickers] = useState<Stickers | null>(null);
 
   useEffect(() => {
     const fetchPurchaseOrders = async () => {
       try {
-        const response = await axios.get("pdf/fetch");
-        console.log("response ", response);
-        if (response.data.status === 1) {
-          setPurchaseOrders(response.data.data);
+        const res: Res = await axios.get("pdf/fetch");
+
+        if (res.data?.status === 1 && res.data?.data) {
+          dispatch(setPurchaseOrders(res.data.data));
         } else {
-          console.log("Failed to fetch purchase orders: ", response);
+          console.log("Failed to fetch purchase orders: ", res);
         }
       } catch (error) {
         console.error("Error fetching purchase orders: ", error);
@@ -45,6 +52,8 @@ const DownloadPo = () => {
     }
   };
 
+  console.log(purchaseOrders);
+
   return (
     <>
       {purchaseOrders ? (
@@ -52,11 +61,14 @@ const DownloadPo = () => {
           <p>Select PO to Download</p>
           <select onChange={onChange}>
             <option>Select PO</option>
-            {purchaseOrders.map((purchaseOrder) => (
-              <option key={purchaseOrder.purchase_order} value={purchaseOrder.purchase_order}>
-                {purchaseOrder.purchase_order}
-              </option>
-            ))}
+            {purchaseOrders.map((purchaseOrder) => {
+              console.log("purchaseOrder ", purchaseOrder);
+              return (
+                <option key={purchaseOrder} value={purchaseOrder}>
+                  {purchaseOrder}
+                </option>
+              );
+            })}
           </select>
         </div>
       ) : (
