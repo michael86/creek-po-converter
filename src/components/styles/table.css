@@ -9,11 +9,17 @@ td {
 table .table-buttons {
   display: flex;
   flex-direction: column;
-  width: 100%;
   place-items: center;
 }
 
-table .table-buttons * {
-  width: 50%;
+.button-container {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  width: 100%;
+}
+
+.button-container * {
+  width: 70%;
   margin-bottom: 0.5rem;
 }

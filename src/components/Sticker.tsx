@@ -32,10 +32,15 @@ const Sticker = ({
         <td style={{ textTransform: "uppercase" }}>{part.name}</td>
         <td style={{ textTransform: "uppercase" }}>{part.description}</td>
         <td style={{ textTransform: "uppercase" }}>
-          QTY: {qty}{" "}
-          {part.partial && (
-            <div style={{ fontSize: "0.7rem" }}>Total ordered: {part.totalOrdered}</div>
-          )}
+          QTY:{qty}{" "}
+          {part.partial === 1 ? (
+            <>
+              <hr className="no-print" style={{ border: "solid black 1px" }} />
+              <div className="no-print" style={{ fontSize: "0.7rem" }}>
+                Total ordered: {part.totalOrdered}
+              </div>
+            </>
+          ) : null}
         </td>
         <td style={{ textTransform: "uppercase" }}>PO: {purchaseOrder}</td>
         <td style={{ textTransform: "uppercase" }}>REF: {orderRef}</td>

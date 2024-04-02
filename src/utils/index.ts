@@ -9,13 +9,7 @@ export const getDate = () => {
   return `${day}/${month < 10 && "0"}${month + 1}/${year}`;
 };
 
-export const getRandomColor = () => {
-  const getRandomNumber = () => {
-    return Math.floor(Math.random() * 255 + 1);
-  };
-
-  return `rgba(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()},0.5)`;
-};
+export const getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`;
 
 export const sumUpParcels = (sum: number, target: number | number[]) => {
   if (typeof target === "number") {

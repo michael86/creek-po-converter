@@ -1,9 +1,11 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { onParcelInput, sumUpParcels } from "../utils";
-import { setPartCount } from "../slices/purchaseOrders";
+import { setPartCount, setPartPartial } from "../slices/purchaseOrders";
 import { useAppDispatch } from "../hooks";
 import { setToast } from "../slices/alert";
 import axios from "../utils/interceptors";
+import "./styles/sticker_buttons.css";
+import { AxiosResponse } from "axios";
 
 type Props = {
   qty: number;
@@ -35,21 +37,50 @@ const LOCATIONS = [
 const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Props) => {
   const dispatch = useAppDispatch();
   const partialRef = useRef<HTMLInputElement | null>(null);
-  const [partialConfirmed, setPartialConfirmed] = useState(partial);
 
   const [inputState, setInputState] = useState("");
 
-  const onSubmit = () => {
+  const showConfirmationMessage = (setPartial: boolean = false) => {
+    const target = inputState.split(",").reduce((partialSum, value) => +partialSum + +value, 0);
+    const remainingParts = +qty - target;
+
+    const confirmationMessage = setPartial
+      ? "Are you sure you want to set as a partial"
+      : `Please double check the below settings and confirm\nThese commits are permanent\nParts Expected: ${qty}\nParts Received: ${target}\nParts Remaining: ${remainingParts}`;
+
+    return window.confirm(confirmationMessage);
+  };
+
+  const onSubmit = async () => {
     const parcels = inputState.split(",").map(Number);
     const sum = parcels.reduce((partialSum, a) => partialSum + a, 0);
 
     const errorMessage = sumUpParcels(sum, qty);
 
     if (
-      (errorMessage && !partialConfirmed) ||
+      (errorMessage && !partial) ||
       (errorMessage && errorMessage.toLowerCase().includes("to many"))
     ) {
       dispatch(setToast({ show: true, message: errorMessage, type: "error" }));
+      return;
+    }
+
+    if (!showConfirmationMessage()) return;
+
+    const res: AxiosResponse = await axios.put(`/purchase/add-parcel`, {
+      parcels,
+      purchaseOrder,
+      part: part.name,
+    });
+
+    if (res.status !== 200) {
+      dispatch(
+        setToast({
+          type: "error",
+          show: true,
+          message: `Unable to add new parcels to order ${purchaseOrder}, please contact Michael`,
+        })
+      );
       return;
     }
 
@@ -77,22 +108,30 @@ const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Prop
       return;
     }
 
-    if (!partialRef.current || !partialRef.current.checked) return;
-
-    const confirmationMessage = `Are you sure you want to set as a partial\nParts Expected: ${qty}\nParts Received: ${target}\nParts Remaining: ${remainingParts}`;
-
-    if (!window.confirm(confirmationMessage)) return;
+    if (!partialRef.current || !partialRef.current.checked || !showConfirmationMessage(true))
+      return;
 
     const res = await axios.patch(`purchase/set-partial/${purchaseOrder}/${part.name}`);
 
-    setPartialConfirmed(1);
+    if (!res.status) {
+      dispatch(
+        setToast({
+          type: "error",
+          message: `Unable to set as partial, please contact michael with order number ${purchaseOrder} and partnumber: ${part.name}`,
+          show: true,
+        })
+      );
+      return;
+    }
+
+    dispatch(setPartPartial({ key: part.name, partial: 1 }));
     dispatch(setToast({ type: "success", message: "Partial confirmed", show: true }));
   };
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => setLocation(e.target.value);
 
   return (
-    <>
+    <span className="no-print button-container">
       <input
         type="text"
         onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -105,7 +144,7 @@ const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Prop
 
       <button onClick={onSubmit}>Submit Parcels</button>
 
-      <hr />
+      <hr style={{ border: "solid black 1px" }} />
 
       <select className={"no-print"} onChange={onChange}>
         <option>Select Location</option>
@@ -116,25 +155,23 @@ const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Prop
         })}
       </select>
 
-      <hr />
+      <hr style={{ border: "solid black 1px" }} />
 
-      <label htmlFor="partial-order" style={{ color: partialConfirmed ? "red" : "black" }}>
-        Partial Order
-      </label>
+      <p style={{ color: partial ? "red" : "black" }}>Partial Order</p>
 
-      {partialConfirmed === 0 && (
+      {partial === 0 && (
         <>
           <input
             type="checkbox"
             name="partial-order"
             id="partial-order"
             ref={partialRef}
-            disabled={partialConfirmed ? true : false}
+            disabled={partial ? true : false}
           />
           <button onClick={onConfirm}>Confirm</button>
         </>
       )}
-    </>
+    </span>
   );
 };
 
