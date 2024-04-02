@@ -1,18 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type PartNumber = {
+  name: string;
+  quantityAwaited: number[];
+  partial: 1 | 0;
+  totalOrdered: number;
+  description: string;
+};
+
 export type PurchaseOrder = {
   purchaseOrder: string;
   orderRef: string;
   partNumbers: {
-    [key: string]: {
-      name: string;
-      orderRef: string;
-      quantity: number[];
-      partial: 1 | 0;
-      totalOrdered: number;
-    };
+    [key: string]: PartNumber;
   };
 };
+
 export type PurchaseOrders = string[];
 export type Parts = [string, number | number[], string, 0 | 1][];
 
@@ -39,7 +42,7 @@ export const purchaseSlice = createSlice({
     },
     setPartCount: (state, action: PayloadAction<{ key: string; parts: number[] }>) => {
       const key = action.payload.key;
-      state.order!.partNumbers[key].quantity = action.payload.parts;
+      state.order!.partNumbers[key].quantityAwaited = action.payload.parts;
     },
   },
 });

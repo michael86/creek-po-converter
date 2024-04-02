@@ -1,17 +1,22 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { findIndexBySku, onParcelInput, sumUpParcels } from "../utils";
-import { Parts, setPartCount } from "../slices/purchaseOrders";
+import { onParcelInput, sumUpParcels } from "../utils";
+import { setPartCount } from "../slices/purchaseOrders";
 import { useAppDispatch } from "../hooks";
 import { setToast } from "../slices/alert";
 import axios from "../utils/interceptors";
 
 type Props = {
-  qty: number | number[];
-  index: number;
-  partNumbers: Parts;
+  qty: number;
   setLocation: Dispatch<SetStateAction<string>>;
   partial: number;
-  name: string;
+  purchaseOrder: string;
+  part: {
+    name: string;
+    quantityAwaited: number[];
+    partial: 1 | 0;
+    totalOrdered: number;
+    description: string;
+  };
 };
 
 const LOCATIONS = [
@@ -27,7 +32,7 @@ const LOCATIONS = [
   ["J", 15],
 ];
 
-const StickerButtons = ({ qty, index, partNumbers, setLocation, partial, name }: Props) => {
+const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Props) => {
   const dispatch = useAppDispatch();
   const partialRef = useRef<HTMLInputElement | null>(null);
   const [partialConfirmed, setPartialConfirmed] = useState(partial);
@@ -48,19 +53,16 @@ const StickerButtons = ({ qty, index, partNumbers, setLocation, partial, name }:
       return;
     }
 
-    const copy = structuredClone(partNumbers);
-    copy[index][1] = parcels.length > 1 ? parcels : parcels[0];
+    let copy = structuredClone(part.quantityAwaited);
+    copy = parcels;
 
-    dispatch(setPartCount(copy));
+    dispatch(setPartCount({ key: part.name, parts: copy }));
   };
 
   const onConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    const target = inputState
-      .split(",")
-      .map(Number)
-      .reduce((partialSum, value) => partialSum + value, 0);
+    const target = inputState.split(",").reduce((partialSum, value) => +partialSum + +value, 0);
 
     const remainingParts = +qty - target;
 
@@ -81,14 +83,10 @@ const StickerButtons = ({ qty, index, partNumbers, setLocation, partial, name }:
 
     if (!window.confirm(confirmationMessage)) return;
 
-    // const res = await axios.patch('');
+    const res = await axios.patch(`purchase/set-partial/${purchaseOrder}/${part.name}`);
 
     setPartialConfirmed(1);
     dispatch(setToast({ type: "success", message: "Partial confirmed", show: true }));
-    const index = findIndexBySku(partNumbers, name);
-    const copy = structuredClone(partNumbers);
-    copy[index][3] = 1;
-    dispatch(setPartCount(copy));
   };
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => setLocation(e.target.value);

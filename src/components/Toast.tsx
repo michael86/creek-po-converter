@@ -6,10 +6,10 @@ import { setToastShow } from "../slices/alert";
 const Toast = () => {
   const { show, type, message } = useAppSelector((state) => state.alert);
   const dispatch = useAppDispatch();
-  const switchAlert = () => setTimeout(() => dispatch(setToastShow(false)), 1000 * 5);
 
   useEffect(() => {
     if (!show) return;
+    const switchAlert = () => setTimeout(() => dispatch(setToastShow(false)), 1000 * 5);
 
     switch (type) {
       case "success":
@@ -24,7 +24,7 @@ const Toast = () => {
       default:
         break;
     }
-  }, [show, type, message]);
+  }, [show, type, message, dispatch]);
 
   return <ToastContainer />;
 };

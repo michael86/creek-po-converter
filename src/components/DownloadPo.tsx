@@ -9,6 +9,7 @@ import {
   setPurchaseOrders,
   setPurchaseOrder,
 } from "../slices/purchaseOrders";
+import { setToast } from "../slices/alert";
 
 interface Res {
   data: { status: number; data?: PurchaseOrders | PurchaseOrder; token: string };
@@ -43,7 +44,17 @@ const DownloadPo = () => {
       setApiCalled(false);
       const selectedPO = e.target.value;
       const res: Res = await axios.get(`pdf/fetch/${selectedPO}`);
-
+      if (res.status !== 200) {
+        dispatch(
+          setToast({
+            type: "error",
+            show: true,
+            message:
+              "Something went wrong there, please try again or contact Michael with the order number",
+          })
+        );
+        return;
+      }
       dispatch(setPurchaseOrder(res.data?.data as PurchaseOrder));
       setApiCalled(true);
     } catch (error) {

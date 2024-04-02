@@ -4,8 +4,8 @@ import { useAppSelector } from "../hooks";
 import "./styles/table.css";
 
 const SelectedStickers = () => {
-  const { partNumbers, purchaseOrder, orderRef } = useAppSelector((state) => state.purchase);
-
+  const { order } = useAppSelector((state) => state.purchase);
+  if (order && order.partNumbers) console.log("quantities ", order.partNumbers);
   return (
     <table className="sticker-container">
       <thead className="no-print">
@@ -22,25 +22,32 @@ const SelectedStickers = () => {
         </tr>
       </thead>
       <tbody>
-        {partNumbers.map((part, index) => {
-          const backgroundColor = Array.isArray(part[1]) ? getRandomColor() : `rgb(255,255,255)`;
-          const quantities = Array.isArray(part[1]) ? part[1] : [part[1]]; // Ensure quantities is always an array
-          return quantities.map((qty, qtyIndex) => (
-            <Sticker
-              purchaseOrder={purchaseOrder}
-              orderRef={orderRef}
-              name={part[0]}
-              description={part[2]}
-              qty={qty}
-              index={index}
-              key={index + qtyIndex} // Ensure unique keys when mapping over arrays
-              partNumbers={partNumbers}
-              backgroundColor={backgroundColor}
-              total={part[1]}
-              partial={part[3]}
-            />
-          ));
-        })}
+        {order && order.partNumbers
+          ? Object.keys(order.partNumbers).map((key, index) => {
+              const part = order.partNumbers[key];
+
+              const backgroundColor = Array.isArray(part.quantityAwaited)
+                ? getRandomColor()
+                : `rgb(255,255,255)`;
+
+              const quantities = Array.isArray(part.quantityAwaited)
+                ? part.quantityAwaited
+                : [part.quantityAwaited]; // Ensure quantities is always an array
+
+              return quantities.map((qty, qtyIndex) => {
+                return (
+                  <Sticker
+                    purchaseOrder={order.purchaseOrder}
+                    orderRef={order.orderRef}
+                    key={index + qtyIndex} // Ensure unique keys when mapping over arrays
+                    backgroundColor={backgroundColor}
+                    part={order.partNumbers[key]}
+                    qty={qty}
+                  />
+                );
+              });
+            })
+          : null}
       </tbody>
     </table>
   );

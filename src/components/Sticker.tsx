@@ -2,41 +2,41 @@ import { getDate } from "../utils";
 import StickerLocation from "./StickerLocation";
 import StickerButtons from "./StickerButtons";
 import { useState } from "react";
-import { Parts } from "../slices/purchaseOrders";
 
 type Props = {
+  backgroundColor?: string;
+  qty: number;
   purchaseOrder: string;
   orderRef: string;
-  name: string;
-  description: string;
-  qty: number;
-  backgroundColor?: string;
-  index: number;
-  partNumbers: Parts;
-  partial: number;
-  total: number | number[];
+  part: {
+    name: string;
+    quantityAwaited: number[];
+    partial: 1 | 0;
+    totalOrdered: number;
+    description: string;
+  };
 };
 
 const Sticker = ({
-  name,
-  qty,
-  description,
   purchaseOrder,
   orderRef,
   backgroundColor = "rgb(255,255,255)",
-  index,
-  partNumbers,
-  partial,
-  total,
+  part,
+  qty,
 }: Props) => {
   const [location, setLocation] = useState("");
 
   return (
     <>
       <tr className={`sticker`} style={{ backgroundColor: backgroundColor }}>
-        <td style={{ textTransform: "uppercase" }}>{name}</td>
-        <td style={{ textTransform: "uppercase" }}>{description}</td>
-        <td style={{ textTransform: "uppercase" }}>QTY: {qty}</td>
+        <td style={{ textTransform: "uppercase" }}>{part.name}</td>
+        <td style={{ textTransform: "uppercase" }}>{part.description}</td>
+        <td style={{ textTransform: "uppercase" }}>
+          QTY: {qty}{" "}
+          {part.partial && (
+            <div style={{ fontSize: "0.7rem" }}>Total ordered: {part.totalOrdered}</div>
+          )}
+        </td>
         <td style={{ textTransform: "uppercase" }}>PO: {purchaseOrder}</td>
         <td style={{ textTransform: "uppercase" }}>REF: {orderRef}</td>
         <td style={{ textTransform: "uppercase" }}>{getDate()}</td>
@@ -48,12 +48,11 @@ const Sticker = ({
         <div className="pagebreak" />
         <td className="table-buttons">
           <StickerButtons
-            qty={total}
-            index={index}
-            partNumbers={partNumbers}
+            qty={part.totalOrdered}
             setLocation={setLocation}
-            partial={partial}
-            name={name}
+            purchaseOrder={purchaseOrder}
+            partial={part.partial}
+            part={part}
           />
         </td>
       </tr>
