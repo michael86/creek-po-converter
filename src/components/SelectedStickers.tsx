@@ -24,36 +24,21 @@ const SelectedStickers = () => {
       <tbody>
         {partNumbers.map((part, index) => {
           const backgroundColor = Array.isArray(part[1]) ? getRandomColor() : `rgb(255,255,255)`;
-          return Array.isArray(part[1]) ? (
-            part[1].map((qty) => {
-              return (
-                <Sticker
-                  purchaseOrder={purchaseOrder}
-                  orderRef={orderRef}
-                  name={part[0]}
-                  description={part[2]}
-                  qty={qty}
-                  index={index}
-                  key={index}
-                  partNumbers={partNumbers}
-                  backgroundColor={backgroundColor}
-                  total={part[1]}
-                />
-              );
-            })
-          ) : (
+          const quantities = Array.isArray(part[1]) ? part[1] : [part[1]]; // Ensure quantities is always an array
+          return quantities.map((qty, qtyIndex) => (
             <Sticker
               purchaseOrder={purchaseOrder}
               orderRef={orderRef}
               name={part[0]}
               description={part[2]}
-              qty={part[1]}
-              key={index}
+              qty={qty}
               index={index}
+              key={index + qtyIndex} // Ensure unique keys when mapping over arrays
               partNumbers={partNumbers}
+              backgroundColor={backgroundColor}
               total={part[1]}
             />
-          );
+          ));
         })}
       </tbody>
     </table>

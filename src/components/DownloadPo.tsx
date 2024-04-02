@@ -1,5 +1,5 @@
 import axios from "../utils/interceptors";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./styles/stickers.css";
 import SelectedStickers from "./SelectedStickers";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -18,6 +18,7 @@ interface Res {
 const DownloadPo = () => {
   const dispatch = useAppDispatch();
   const { purchaseOrders } = useAppSelector((state) => state.purchase);
+  const [apiCalled, setApiCalled] = useState(false);
 
   useEffect(() => {
     const fetchPurchaseOrders = async () => {
@@ -39,10 +40,12 @@ const DownloadPo = () => {
 
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     try {
+      setApiCalled(false);
       const selectedPO = e.target.value;
       const res: Res = await axios.get(`pdf/fetch/${selectedPO}`);
 
       dispatch(setPurchaseOrder(res.data?.data as PurchaseOrder));
+      setApiCalled(true);
     } catch (error) {
       console.error("Error fetching stickers data: ", error);
     }
@@ -51,7 +54,7 @@ const DownloadPo = () => {
   return (
     <>
       {purchaseOrders ? (
-        <div className="no-print">
+        <div className="no-print select-pdf">
           <p>Select PO to Download</p>
           <select onChange={onChange}>
             <option>Select PO</option>
@@ -66,7 +69,7 @@ const DownloadPo = () => {
         <p>Fetching orders</p>
       )}
 
-      <SelectedStickers />
+      {apiCalled && <SelectedStickers />}
     </>
   );
 };

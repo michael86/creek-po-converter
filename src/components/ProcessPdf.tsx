@@ -1,5 +1,6 @@
 import { FormEvent, useRef, useState } from "react";
 import axios from "../utils/interceptors";
+import "./styles/process.css";
 
 const ProcessPdf = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -43,7 +44,9 @@ const ProcessPdf = () => {
   };
 
   return (
-    <form>
+    <form className="upload-pdf">
+      <h2>Upload PDF</h2>
+      <p>This service only works with PDFs produced by Caliach</p>
       <input type="file" name="pdf" id="pdf" ref={fileInputRef} />
       <button onClick={handleUpload}>Upload</button>
       {uploadStatus && <p>{uploadStatus}</p>}

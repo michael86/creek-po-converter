@@ -1,3 +1,9 @@
+.select-pdf {
+  margin: auto;
+  width: fit-content;
+  text-align: center;
+}
+
 .sticker-container {
   width: 90%;
   margin: auto;
