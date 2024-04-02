@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { Parts } from "../slices/purchaseOrders";
 
 export const getDate = () => {
   const date = new Date();
@@ -18,7 +19,7 @@ export const getRandomColor = () => {
 
 export const sumUpParcels = (sum: number, target: number | number[]) => {
   if (typeof target === "number") {
-    return sum !== target ? (sum > target ? "To many parcels" : "Not enough parcels") : "";
+    return sum !== target ? (sum > target ? "To many parcels" : "Not enough parcels") : undefined;
   }
 
   if (Array.isArray(target)) {
@@ -26,59 +27,15 @@ export const sumUpParcels = (sum: number, target: number | number[]) => {
     return _sum !== sum && (_sum > sum ? "Not enough parcels" : "To many parcels");
   }
 
-  return;
+  return undefined;
 };
 
-type InputState = {
-  val: string;
-  error: string;
-};
+type OnParcelInput = (value: string, dispatch: Dispatch<SetStateAction<string>>) => void;
 
-type OnParcelInput = (
-  value: string,
-  dispatch: Dispatch<SetStateAction<InputState>>,
-  inputState: InputState
-) => void;
-
-export const onParcelInput: OnParcelInput = (value, dispatch, inputState) => {
+export const onParcelInput: OnParcelInput = (value, dispatch) => {
   if (!value.match(/^\d*(,\d*)*$/)) return; // Only allow numeric input
-  dispatch({ ...inputState, val: value });
+  dispatch(value);
 };
 
-// type OnParcelSubmit = (
-//   inputState: InputState,
-//   partialConfirmed: boolean,
-//   setInputState: Dispatch<SetStateAction<InputState>>,
-//   dispatch: DispatchProp,
-//   setPartCount: ReducerType,
-//   qty: number
-// ) => void;
-
-// // export const onParcelSubmit: OnParcelSubmit = (
-// //   inputState,
-// //   partialConfirmed,
-// //   setInputState,
-// //   dispatch,
-// //   setPartCount,
-// //   qty
-// // ) => {
-// //   const parcels = inputState.val.split(",").map(Number);
-// //   const sum = parcels.reduce((partialSum, a) => partialSum + a, 0);
-
-// //   const errorMessage = sumUpParcels(sum, qty);
-// //   const notEnoughErrorMessage = errorMessage && errorMessage.toLowerCase().includes("not");
-
-// //   if (errorMessage && (!notEnoughErrorMessage || !partialConfirmed)) {
-// //     setInputState({
-// //       ...inputState,
-// //       error: errorMessage,
-// //     });
-// //     return;
-// //   }
-
-// //   setInputState({ ...inputState, error: "" });
-// //   const copy = structuredClone(partNumbers);
-// //   copy[index][1] = parcels.length > 1 ? parcels : parcels[0];
-
-// //   dispatch(setPartCount(copy));
-// // };
+export const findIndexBySku = (arr: Parts, sku: string) =>
+  arr.findIndex((part) => part[0].toLowerCase() === sku.toLowerCase());

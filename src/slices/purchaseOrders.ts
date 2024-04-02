@@ -3,23 +3,27 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export type PurchaseOrder = {
   purchaseOrder: string;
   orderRef: string;
-  partNumbers: Parts;
-  partial: boolean;
+  partNumbers: {
+    [key: string]: {
+      name: string;
+      orderRef: string;
+      quantity: number[];
+      partial: 1 | 0;
+      totalOrdered: number;
+    };
+  };
 };
 export type PurchaseOrders = string[];
 export type Parts = [string, number | number[], string, 0 | 1][];
-export type SplitParcels = [string, number[]];
 
-interface InitialState extends PurchaseOrder {
+interface InitialState {
   purchaseOrders: PurchaseOrders;
+  order?: PurchaseOrder;
 }
 
 const initialState: InitialState = {
   purchaseOrders: [], //list of purchase orders available
-  purchaseOrder: "", //the order we're working with
-  orderRef: "",
-  partNumbers: [["", 0, "", 0]], //name, count, description, partial
-  partial: false,
+  order: undefined,
 };
 
 export const purchaseSlice = createSlice({
@@ -31,12 +35,11 @@ export const purchaseSlice = createSlice({
       state.purchaseOrders = action.payload;
     },
     setPurchaseOrder: (state, action: PayloadAction<PurchaseOrder>) => {
-      state.purchaseOrder = action.payload.purchaseOrder;
-      state.orderRef = action.payload.orderRef;
-      state.partNumbers = action.payload.partNumbers;
+      state.order = action.payload;
     },
-    setPartCount: (state, action: PayloadAction<Parts>) => {
-      state.partNumbers = action.payload;
+    setPartCount: (state, action: PayloadAction<{ key: string; parts: number[] }>) => {
+      const key = action.payload.key;
+      state.order!.partNumbers[key].quantity = action.payload.parts;
     },
   },
 });

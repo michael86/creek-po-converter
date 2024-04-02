@@ -13,6 +13,7 @@ type Props = {
   backgroundColor?: string;
   index: number;
   partNumbers: Parts;
+  partial: number;
   total: number | number[];
 };
 
@@ -25,6 +26,7 @@ const Sticker = ({
   backgroundColor = "rgb(255,255,255)",
   index,
   partNumbers,
+  partial,
   total,
 }: Props) => {
   const [location, setLocation] = useState("");
@@ -50,6 +52,8 @@ const Sticker = ({
             index={index}
             partNumbers={partNumbers}
             setLocation={setLocation}
+            partial={partial}
+            name={name}
           />
         </td>
       </tr>

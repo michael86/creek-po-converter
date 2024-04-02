@@ -37,6 +37,7 @@ const SelectedStickers = () => {
               partNumbers={partNumbers}
               backgroundColor={backgroundColor}
               total={part[1]}
+              partial={part[3]}
             />
           ));
         })}
