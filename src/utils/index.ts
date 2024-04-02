@@ -1,6 +1,4 @@
-import { ReducerType } from "@reduxjs/toolkit";
 import { Dispatch, SetStateAction } from "react";
-import { DispatchProp } from "react-redux";
 
 export const getDate = () => {
   const date = new Date();
@@ -47,40 +45,40 @@ export const onParcelInput: OnParcelInput = (value, dispatch, inputState) => {
   dispatch({ ...inputState, val: value });
 };
 
-type OnParcelSubmit = (
-  inputState: InputState,
-  partialConfirmed: boolean,
-  setInputState: Dispatch<SetStateAction<InputState>>,
-  dispatch: DispatchProp,
-  setPartCount: ReducerType,
-  qty: number
-) => void;
+// type OnParcelSubmit = (
+//   inputState: InputState,
+//   partialConfirmed: boolean,
+//   setInputState: Dispatch<SetStateAction<InputState>>,
+//   dispatch: DispatchProp,
+//   setPartCount: ReducerType,
+//   qty: number
+// ) => void;
 
-// export const onParcelSubmit: OnParcelSubmit = (
-//   inputState,
-//   partialConfirmed,
-//   setInputState,
-//   dispatch,
-//   setPartCount,
-//   qty
-// ) => {
-//   const parcels = inputState.val.split(",").map(Number);
-//   const sum = parcels.reduce((partialSum, a) => partialSum + a, 0);
+// // export const onParcelSubmit: OnParcelSubmit = (
+// //   inputState,
+// //   partialConfirmed,
+// //   setInputState,
+// //   dispatch,
+// //   setPartCount,
+// //   qty
+// // ) => {
+// //   const parcels = inputState.val.split(",").map(Number);
+// //   const sum = parcels.reduce((partialSum, a) => partialSum + a, 0);
 
-//   const errorMessage = sumUpParcels(sum, qty);
-//   const notEnoughErrorMessage = errorMessage && errorMessage.toLowerCase().includes("not");
+// //   const errorMessage = sumUpParcels(sum, qty);
+// //   const notEnoughErrorMessage = errorMessage && errorMessage.toLowerCase().includes("not");
 
-//   if (errorMessage && (!notEnoughErrorMessage || !partialConfirmed)) {
-//     setInputState({
-//       ...inputState,
-//       error: errorMessage,
-//     });
-//     return;
-//   }
+// //   if (errorMessage && (!notEnoughErrorMessage || !partialConfirmed)) {
+// //     setInputState({
+// //       ...inputState,
+// //       error: errorMessage,
+// //     });
+// //     return;
+// //   }
 
-//   setInputState({ ...inputState, error: "" });
-//   const copy = structuredClone(partNumbers);
-//   copy[index][1] = parcels.length > 1 ? parcels : parcels[0];
+// //   setInputState({ ...inputState, error: "" });
+// //   const copy = structuredClone(partNumbers);
+// //   copy[index][1] = parcels.length > 1 ? parcels : parcels[0];
 
-//   dispatch(setPartCount(copy));
-// };
+// //   dispatch(setPartCount(copy));
+// // };

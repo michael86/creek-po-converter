@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { onParcelInput, sumUpParcels } from "../utils";
 import { Parts, setPartCount } from "../slices/purchaseOrders";
 import { useAppDispatch } from "../hooks";
+import { setToast } from "../slices/alert";
 
 type Props = {
   qty: number | number[];
@@ -31,7 +32,8 @@ type InputState = {
 const StickerButtons = ({ qty, index, partNumbers, setLocation }: Props) => {
   const dispatch = useAppDispatch();
   const partialRef = useRef<HTMLInputElement | null>(null);
-  const [partialConfirmed, setPartialConfirmed] = useState(false);
+  const [partialConfirmed, setPartialConfirmed] = useState(true);
+
   const [inputState, setInputState] = useState<InputState>({
     val: "",
     error: "",
@@ -61,9 +63,33 @@ const StickerButtons = ({ qty, index, partNumbers, setLocation }: Props) => {
 
   const onConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
+    const target = inputState.val
+      .split(",")
+      .map(Number)
+      .reduce((partialSum, value) => partialSum + value, 0);
+
+    const remainingParts = +qty - target;
+
+    if (remainingParts < 0) {
+      dispatch(
+        setToast({
+          type: "error",
+          message: "You're attempting to book in more than your ordered",
+          show: true,
+        })
+      );
+      return;
+    }
+
     if (!partialRef.current || !partialRef.current.checked) return;
-    console.log("save as partial");
+
+    const confirmationMessage = `Are you sure you want to set as a partial\nParts Expected: ${qty}\nParts Received: ${target}\nParts Remaining: ${remainingParts}`;
+
+    if (!window.confirm(confirmationMessage)) return;
+
     setPartialConfirmed(true);
+    dispatch(setToast({ type: "success", message: "Partial confirmed", show: true }));
   };
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => setLocation(e.target.value);
