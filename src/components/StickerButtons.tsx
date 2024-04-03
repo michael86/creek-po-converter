@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { onParcelInput, sumUpParcels } from "../utils";
+import React, { Dispatch, SetStateAction, useRef, useState, useMemo, useCallback } from "react";
+import { onParcelInput } from "../utils";
 import { setPartCount, setPartPartial } from "../slices/purchaseOrders";
 import { useAppDispatch } from "../hooks";
 import { setToast } from "../slices/alert";
@@ -18,6 +18,7 @@ type Props = {
     partial: 1 | 0;
     totalOrdered: number;
     description: string;
+    partsReceived: number[] | undefined;
   };
 };
 
@@ -37,43 +38,62 @@ const LOCATIONS = [
 const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Props) => {
   const dispatch = useAppDispatch();
   const partialRef = useRef<HTMLInputElement | null>(null);
-
   const [inputState, setInputState] = useState("");
 
-  const showConfirmationMessage = (setPartial: boolean = false) => {
-    const target = inputState.split(",").reduce((partialSum, value) => +partialSum + +value, 0);
-    const remainingParts = +qty - target;
+  const calculateTotalReceived = useMemo(() => {
+    return part.partsReceived ? part.partsReceived.reduce((a, b) => a + b, 0) : 0;
+  }, [part.partsReceived]);
 
-    const confirmationMessage = setPartial
-      ? "Are you sure you want to set as a partial"
-      : `Please double check the below settings and confirm\nThese commits are permanent\nParts Expected: ${qty}\nParts Received: ${target}\nParts Remaining: ${remainingParts}`;
-
-    return window.confirm(confirmationMessage);
-  };
+  const showConfirmationMessage = useCallback(
+    (setPartial: boolean = false) => {
+      const target = inputState.split(",").reduce((partialSum, value) => +partialSum + +value, 0);
+      const partsRemain = part.totalOrdered - calculateTotalReceived;
+      const confirmationMessage = setPartial
+        ? "Are you sure you want to set as a partial"
+        : `Please double check the below settings and confirm\nThese commits are permanent\nParts Expected: ${
+            part.totalOrdered
+          }\nParts Received so far: ${calculateTotalReceived}\nParts Remaining: ${partsRemain}\nNew total: ${
+            partsRemain - target
+          }`;
+      return window.confirm(confirmationMessage);
+    },
+    [calculateTotalReceived, inputState, part.totalOrdered]
+  );
 
   const onSubmit = async () => {
     const parcels = inputState.split(",").map(Number);
-    const sum = parcels.reduce((partialSum, a) => partialSum + a, 0);
-
-    const errorMessage = sumUpParcels(sum, qty);
+    const sum = parcels.reduce((partial, a) => partial + a, 0);
+    const totalReceived = calculateTotalReceived + sum;
 
     if (
-      (errorMessage && !partial) ||
-      (errorMessage && errorMessage.toLowerCase().includes("to many"))
+      totalReceived > part.totalOrdered ||
+      part.totalOrdered - totalReceived < 0 ||
+      (!part.partial && sum !== part.totalOrdered)
     ) {
-      dispatch(setToast({ show: true, message: errorMessage, type: "error" }));
+      const error = totalReceived > part.totalOrdered ? "Too many parcels" : "Not enough Parcels";
+      dispatch(setToast({ show: true, message: error, type: "error" }));
       return;
     }
 
     if (!showConfirmationMessage()) return;
 
-    const res: AxiosResponse = await axios.put(`/purchase/add-parcel`, {
-      parcels,
-      purchaseOrder,
-      part: part.name,
-    });
+    try {
+      const res: AxiosResponse = await axios.put(`/purchase/add-parcel`, {
+        parcels,
+        purchaseOrder,
+        part: part.name,
+      });
 
-    if (res.status !== 200) {
+      if (res.status !== 200)
+        throw new Error(`Unable to add new parcels to order ${purchaseOrder}`);
+
+      const copy = structuredClone(part);
+      copy.quantityAwaited = parcels;
+      copy.partsReceived = copy.partsReceived ? copy.partsReceived.concat(parcels) : parcels;
+
+      dispatch(setPartCount({ key: part.name, part: copy }));
+    } catch (error) {
+      console.error(error);
       dispatch(
         setToast({
           type: "error",
@@ -81,20 +101,13 @@ const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Prop
           message: `Unable to add new parcels to order ${purchaseOrder}, please contact Michael`,
         })
       );
-      return;
     }
-
-    let copy = structuredClone(part.quantityAwaited);
-    copy = parcels;
-
-    dispatch(setPartCount({ key: part.name, parts: copy }));
   };
 
   const onConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const target = inputState.split(",").reduce((partialSum, value) => +partialSum + +value, 0);
-
     const remainingParts = +qty - target;
 
     if (remainingParts < 0) {
@@ -111,21 +124,22 @@ const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Prop
     if (!partialRef.current || !partialRef.current.checked || !showConfirmationMessage(true))
       return;
 
-    const res = await axios.patch(`purchase/set-partial/${purchaseOrder}/${part.name}`);
+    try {
+      const res = await axios.patch(`purchase/set-partial/${purchaseOrder}/${part.name}`);
+      if (!res.status) throw new Error(`Unable to set as partial`);
 
-    if (!res.status) {
+      dispatch(setPartPartial({ key: part.name, partial: 1 }));
+      dispatch(setToast({ type: "success", message: "Partial confirmed", show: true }));
+    } catch (error) {
+      console.error(error);
       dispatch(
         setToast({
           type: "error",
-          message: `Unable to set as partial, please contact michael with order number ${purchaseOrder} and partnumber: ${part.name}`,
+          message: `Unable to set as partial, please contact Michael with order number ${purchaseOrder} and partnumber: ${part.name}`,
           show: true,
         })
       );
-      return;
     }
-
-    dispatch(setPartPartial({ key: part.name, partial: 1 }));
-    dispatch(setToast({ type: "success", message: "Partial confirmed", show: true }));
   };
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => setLocation(e.target.value);

@@ -1,20 +1,14 @@
-import { getDate } from "../utils";
+import { getDate, sumUpParcels } from "../utils";
 import StickerLocation from "./StickerLocation";
 import StickerButtons from "./StickerButtons";
 import { useState } from "react";
+import { PartNumber } from "../slices/purchaseOrders";
 
 type Props = {
   backgroundColor?: string;
-  qty: number;
   purchaseOrder: string;
   orderRef: string;
-  part: {
-    name: string;
-    quantityAwaited: number[];
-    partial: 1 | 0;
-    totalOrdered: number;
-    description: string;
-  };
+  part: PartNumber;
 };
 
 const Sticker = ({
@@ -22,22 +16,35 @@ const Sticker = ({
   orderRef,
   backgroundColor = "rgb(255,255,255)",
   part,
-  qty,
 }: Props) => {
   const [location, setLocation] = useState("");
+  const { partsReceived, totalOrdered } = part;
+
+  const totalReceived = partsReceived
+    ? partsReceived.reduce((partialSum, value) => partialSum + value, 0)
+    : 0;
+
+  const complete = totalReceived >= totalOrdered;
+  backgroundColor = complete ? "green" : backgroundColor;
 
   return (
     <>
-      <tr className={`sticker`} style={{ backgroundColor: backgroundColor }}>
+      <tr
+        className={`sticker${complete && " no-print"} `}
+        style={{ backgroundColor: backgroundColor }}
+      >
         <td style={{ textTransform: "uppercase" }}>{part.name}</td>
         <td style={{ textTransform: "uppercase" }}>{part.description}</td>
         <td style={{ textTransform: "uppercase" }}>
-          QTY:{qty}{" "}
+          QTY:{part.totalOrdered - totalReceived}{" "}
           {part.partial === 1 ? (
             <>
               <hr className="no-print" style={{ border: "solid black 1px" }} />
               <div className="no-print" style={{ fontSize: "0.7rem" }}>
                 Total ordered: {part.totalOrdered}
+              </div>
+              <div className="no-print" style={{ fontSize: "0.7rem" }}>
+                Total reveived: {totalReceived}
               </div>
             </>
           ) : null}
@@ -52,13 +59,17 @@ const Sticker = ({
         <StickerLocation location={location} />
         <div className="pagebreak" />
         <td className="table-buttons">
-          <StickerButtons
-            qty={part.totalOrdered}
-            setLocation={setLocation}
-            purchaseOrder={purchaseOrder}
-            partial={part.partial}
-            part={part}
-          />
+          {!complete ? (
+            <StickerButtons
+              qty={part.totalOrdered}
+              setLocation={setLocation}
+              purchaseOrder={purchaseOrder}
+              partial={part.partial}
+              part={part}
+            />
+          ) : (
+            <p className="no-print">Order Complete</p>
+          )}
         </td>
       </tr>
     </>

@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import { Parts } from "../slices/purchaseOrders";
 
 export const getDate = () => {
   const date = new Date();
@@ -13,12 +12,14 @@ export const getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`;
 
 export const sumUpParcels = (sum: number, target: number | number[]) => {
   if (typeof target === "number") {
-    return sum !== target ? (sum > target ? "To many parcels" : "Not enough parcels") : undefined;
+    console.log("sum !== target ", sum !== target);
+    return sum !== target;
   }
 
   if (Array.isArray(target)) {
     const _sum = target.reduce((partialSum, value) => partialSum + value, 0);
-    return _sum !== sum && (_sum > sum ? "Not enough parcels" : "To many parcels");
+    console.log("sum !== target ", sum !== sum);
+    return _sum !== sum;
   }
 
   return undefined;
@@ -30,6 +31,3 @@ export const onParcelInput: OnParcelInput = (value, dispatch) => {
   if (!value.match(/^\d*(,\d*)*$/)) return; // Only allow numeric input
   dispatch(value);
 };
-
-export const findIndexBySku = (arr: Parts, sku: string) =>
-  arr.findIndex((part) => part[0].toLowerCase() === sku.toLowerCase());

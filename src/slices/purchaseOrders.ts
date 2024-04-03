@@ -6,7 +6,7 @@ export type PartNumber = {
   partial: 1 | 0;
   totalOrdered: number;
   description: string;
-  partsReceived: [];
+  partsReceived: number[] | undefined;
 };
 
 export type PurchaseOrder = {
@@ -18,7 +18,6 @@ export type PurchaseOrder = {
 };
 
 export type PurchaseOrders = string[];
-export type Parts = [string, number | number[], string, 0 | 1][];
 
 interface InitialState {
   purchaseOrders: PurchaseOrders;
@@ -41,9 +40,9 @@ export const purchaseSlice = createSlice({
     setPurchaseOrder: (state, action: PayloadAction<PurchaseOrder>) => {
       state.order = action.payload;
     },
-    setPartCount: (state, action: PayloadAction<{ key: string; parts: number[] }>) => {
+    setPartCount: (state, action: PayloadAction<{ key: string; part: PartNumber }>) => {
       const key = action.payload.key;
-      state.order!.partNumbers[key].quantityAwaited = action.payload.parts;
+      state.order!.partNumbers[key] = action.payload.part;
     },
     setPartPartial: (state, action: PayloadAction<{ key: string; partial: 0 | 1 }>) => {
       const key = action.payload.key;

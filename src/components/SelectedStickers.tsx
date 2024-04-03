@@ -5,7 +5,7 @@ import "./styles/table.css";
 
 const SelectedStickers = () => {
   const { order } = useAppSelector((state) => state.purchase);
-  if (order && order.partNumbers) console.log("quantities ", order.partNumbers);
+
   return (
     <table className="sticker-container">
       <thead className="no-print">
@@ -34,7 +34,7 @@ const SelectedStickers = () => {
                 ? part.quantityAwaited
                 : [part.quantityAwaited]; // Ensure quantities is always an array
 
-              return quantities.map((qty, qtyIndex) => {
+              return quantities.map((_, qtyIndex) => {
                 return (
                   <Sticker
                     purchaseOrder={order.purchaseOrder}
@@ -42,7 +42,6 @@ const SelectedStickers = () => {
                     key={index + qtyIndex} // Ensure unique keys when mapping over arrays
                     backgroundColor={backgroundColor}
                     part={order.partNumbers[key]}
-                    qty={qty}
                   />
                 );
               });
