@@ -12,6 +12,9 @@ type Props = {
   setLocation: Dispatch<SetStateAction<string>>;
   partial: number;
   purchaseOrder: string;
+  complete: boolean;
+  addToPrint: Function;
+
   part: {
     name: string;
     quantityAwaited: number[];
@@ -35,7 +38,15 @@ const LOCATIONS = [
   ["J", 15],
 ];
 
-const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Props) => {
+const StickerButtons = ({
+  qty,
+  setLocation,
+  partial,
+  part,
+  purchaseOrder,
+  complete,
+  addToPrint,
+}: Props) => {
   const dispatch = useAppDispatch();
   const partialRef = useRef<HTMLInputElement | null>(null);
   const [inputState, setInputState] = useState("");
@@ -146,44 +157,50 @@ const StickerButtons = ({ qty, setLocation, partial, part, purchaseOrder }: Prop
 
   return (
     <span className="no-print button-container">
-      <input
-        type="text"
-        onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-          onParcelInput(e.target.value, setInputState)
-        }
-        placeholder="Enter parcel quantities"
-        name="parcel-count"
-        value={inputState}
-      />
-
-      <button onClick={onSubmit}>Submit Parcels</button>
-
-      <hr style={{ border: "solid black 1px" }} />
-
-      <select className={"no-print"} onChange={onChange}>
-        <option>Select Location</option>
-        {LOCATIONS.map((location) => {
-          return Array.from(Array(location[1]).keys()).map((loc) => {
-            return <option key={location[0]}>{`${location[0]}-${loc + 1}`}</option>;
-          });
-        })}
-      </select>
-
-      <hr style={{ border: "solid black 1px" }} />
-
-      <p style={{ color: partial ? "red" : "black" }}>Partial Order</p>
-
-      {partial === 0 && (
+      {!complete ? (
         <>
           <input
-            type="checkbox"
-            name="partial-order"
-            id="partial-order"
-            ref={partialRef}
-            disabled={partial ? true : false}
+            type="text"
+            onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onParcelInput(e.target.value, setInputState)
+            }
+            placeholder="Enter parcel quantities"
+            name="parcel-count"
+            value={inputState}
           />
-          <button onClick={onConfirm}>Confirm</button>
+
+          <button onClick={onSubmit}>Submit Parcels</button>
+
+          <hr style={{ border: "solid black 1px" }} />
+
+          <select className={"no-print"} onChange={onChange}>
+            <option>Select Location</option>
+            {LOCATIONS.map((location) => {
+              return Array.from(Array(location[1]).keys()).map((loc) => {
+                return <option key={location[0]}>{`${location[0]}-${loc + 1}`}</option>;
+              });
+            })}
+          </select>
+
+          <hr style={{ border: "solid black 1px" }} />
+
+          <p style={{ color: partial ? "red" : "black" }}>Partial Order</p>
+
+          {partial === 0 && (
+            <>
+              <input
+                type="checkbox"
+                name="partial-order"
+                id="partial-order"
+                ref={partialRef}
+                disabled={partial ? true : false}
+              />
+              <button onClick={onConfirm}>Confirm</button>
+            </>
+          )}
         </>
+      ) : (
+        <button onClick={() => addToPrint()}>Add to Print</button>
       )}
     </span>
   );

@@ -26,7 +26,7 @@ const Toast = () => {
     }
   }, [show, type, message, dispatch]);
 
-  return <ToastContainer />;
+  return <ToastContainer className={"no-print"} />;
 };
 
 export default Toast;

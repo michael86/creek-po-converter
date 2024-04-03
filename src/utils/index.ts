@@ -10,21 +10,6 @@ export const getDate = () => {
 
 export const getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`;
 
-export const sumUpParcels = (sum: number, target: number | number[]) => {
-  if (typeof target === "number") {
-    console.log("sum !== target ", sum !== target);
-    return sum !== target;
-  }
-
-  if (Array.isArray(target)) {
-    const _sum = target.reduce((partialSum, value) => partialSum + value, 0);
-    console.log("sum !== target ", sum !== sum);
-    return _sum !== sum;
-  }
-
-  return undefined;
-};
-
 type OnParcelInput = (value: string, dispatch: Dispatch<SetStateAction<string>>) => void;
 
 export const onParcelInput: OnParcelInput = (value, dispatch) => {

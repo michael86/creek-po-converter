@@ -34,7 +34,15 @@ const SelectedStickers = () => {
                 ? part.quantityAwaited
                 : [part.quantityAwaited]; // Ensure quantities is always an array
 
-              return quantities.map((_, qtyIndex) => {
+              const { partsReceived } = part;
+
+              const totalReceived = partsReceived
+                ? partsReceived.reduce((partialSum, value) => partialSum + value, 0)
+                : 0;
+
+              const complete = totalReceived === part.totalOrdered;
+              const stickers = complete && part.partsReceived ? part.partsReceived : quantities;
+              return stickers.map((qty, qtyIndex) => {
                 return (
                   <Sticker
                     purchaseOrder={order.purchaseOrder}
@@ -42,6 +50,8 @@ const SelectedStickers = () => {
                     key={index + qtyIndex} // Ensure unique keys when mapping over arrays
                     backgroundColor={backgroundColor}
                     part={order.partNumbers[key]}
+                    qty={qty}
+                    complete={complete}
                   />
                 );
               });
