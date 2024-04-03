@@ -55,6 +55,7 @@ const DownloadPo = () => {
         );
         return;
       }
+      console.log(res.data.data);
       dispatch(setPurchaseOrder(res.data?.data as PurchaseOrder));
       setApiCalled(true);
     } catch (error) {

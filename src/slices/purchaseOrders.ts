@@ -6,6 +6,7 @@ export type PartNumber = {
   partial: 1 | 0;
   totalOrdered: number;
   description: string;
+  partsReceived: [];
 };
 
 export type PurchaseOrder = {
