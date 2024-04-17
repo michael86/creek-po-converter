@@ -36,21 +36,22 @@ const Nav: _Nav = ({ screen, setScreen, loggedIn, setLoggedIn }) => {
     }
   };
 
+  console.log("screen ", screen);
+
   return loggedIn === true ? (
     <nav>
       <ul>
-        {(screen === 1 || screen === 2) && <li onClick={() => setScreen(0)}>Home</li>}
-        {(screen === 0 || screen === 2) && <li onClick={() => setScreen(1)}>Upload new PO</li>}
-        {(screen === 0 || screen === 1) && (
-          <li onClick={() => setScreen(2)}>Download PO/stickers</li>
-        )}
+        <li onClick={() => setScreen(0)}>Home</li>
+        <li onClick={() => setScreen(1)}>Upload new PO</li>
+        <li onClick={() => setScreen(2)}>Download PO/stickers</li>
+
         {role >= 4 && (
           <>
-            <li onClick={() => setScreen(2)}>Add Part Prefix</li>
-            <li onClick={() => setScreen(2)}>Edit Purchase order</li>
+            <li onClick={() => setScreen(3)}>Add Part Prefix</li>
+            <li onClick={() => setScreen(4)}>Edit Purchase order</li>
           </>
         )}
-        {role === 5 && <li onClick={() => setScreen(2)}>View logs</li>}
+        {role === 5 && <li onClick={() => setScreen(5)}>View logs</li>}
         <li onClick={onLogout}>Log out</li>
       </ul>
     </nav>

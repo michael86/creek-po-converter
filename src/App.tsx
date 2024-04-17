@@ -11,6 +11,9 @@ import "./Print.css";
 import "./reset.css";
 import { setRole } from "./slices/user";
 import { useAppDispatch } from "./hooks";
+import AddPrefix from "./components/AddPrefix";
+import EditPo from "./components/EditPo";
+import Logs from "./components/Logs";
 
 function App() {
   const [screen, setScreen] = useState(0);
@@ -51,6 +54,9 @@ function App() {
       {screen === 0 && <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
       {screen === 1 && <ProcessPdf />}
       {screen === 2 && <DownloadPo />}
+      {screen === 3 && <AddPrefix />}
+      {screen === 4 && <EditPo />}
+      {screen === 5 && <Logs />}
     </>
   );
 }
