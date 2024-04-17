@@ -57,7 +57,10 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
         saveToStorage("token", res.data.token);
         saveToStorage("email", formState.email);
 
-        if (res.data.role) return;
+        if (typeof res.data.role !== "number") {
+          dispatch(setRole(0));
+          return;
+        }
 
         dispatch(setRole(res.data.role));
         break;

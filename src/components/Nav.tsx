@@ -5,7 +5,6 @@ import axios from "../utils/interceptors";
 import { useAppSelector } from "../hooks";
 
 type Props = {
-  screen: number;
   setScreen: Dispatch<SetStateAction<number>>;
   loggedIn: boolean;
   setLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -13,7 +12,7 @@ type Props = {
 
 type _Nav = (props: Props) => ReactElement | null;
 
-const Nav: _Nav = ({ screen, setScreen, loggedIn, setLoggedIn }) => {
+const Nav: _Nav = ({ setScreen, loggedIn, setLoggedIn }) => {
   const { role } = useAppSelector((state) => state.user);
 
   const onLogout = async () => {
@@ -28,15 +27,13 @@ const Nav: _Nav = ({ screen, setScreen, loggedIn, setLoggedIn }) => {
     try {
       await axios.post(`account/logout`);
     } catch (error) {
-      console.log("error loggin out", error);
+      console.error("error loggin out", error);
     } finally {
       setLoggedIn(false);
       deleteFromStorage("token");
       deleteFromStorage("email");
     }
   };
-
-  console.log("screen ", screen);
 
   return loggedIn === true ? (
     <nav>

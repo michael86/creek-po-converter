@@ -4,7 +4,7 @@ import Home from "./components/Home";
 import ProcessPdf from "./components/ProcessPdf";
 import DownloadPo from "./components/DownloadPo";
 import Toast from "./components/Toast";
-import { readFromStorage, saveToStorage } from "./utils/storage";
+import { readFromStorage } from "./utils/storage";
 import axios from "./utils/interceptors";
 import "react-toastify/dist/ReactToastify.css";
 import "./Print.css";
@@ -48,7 +48,7 @@ function App() {
     <>
       <Toast />
       <header className="no-print">
-        <Nav screen={screen} setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        <Nav setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       </header>
 
       {screen === 0 && <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
