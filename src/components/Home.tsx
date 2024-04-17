@@ -2,6 +2,8 @@ import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import axios from "../utils/interceptors";
 import "./styles/home.css";
 import { saveToStorage } from "../utils/storage";
+import { useAppDispatch } from "../hooks";
+import { setRole } from "../slices/user";
 
 interface HomeProps {
   loggedIn: boolean;
@@ -9,6 +11,8 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
+  const dispatch = useAppDispatch();
+
   const [formState, setFormState] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
@@ -48,10 +52,14 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
           showMessage("Invalid log in");
           return;
         }
+
         setLoggedIn(true);
         saveToStorage("token", res.data.token);
         saveToStorage("email", formState.email);
 
+        if (res.data.role) return;
+
+        dispatch(setRole(res.data.role));
         break;
       default:
         break;

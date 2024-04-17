@@ -14,7 +14,7 @@ const SelectedStickers = () => {
           <th>description</th>
           <th>count</th>
           <th>Purchase Order</th>
-          <th>Work Order</th>
+
           <th>date received</th>
           <th>Partial Order</th>
           <th>Location</th>

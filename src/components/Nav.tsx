@@ -2,6 +2,7 @@ import { SetStateAction, ReactElement, Dispatch } from "react";
 import "./styles/nav.css";
 import { readFromStorage, deleteFromStorage } from "../utils/storage";
 import axios from "../utils/interceptors";
+import { useAppSelector } from "../hooks";
 
 type Props = {
   screen: number;
@@ -13,6 +14,8 @@ type Props = {
 type _Nav = (props: Props) => ReactElement | null;
 
 const Nav: _Nav = ({ screen, setScreen, loggedIn, setLoggedIn }) => {
+  const { role } = useAppSelector((state) => state.user);
+
   const onLogout = async () => {
     const token = readFromStorage("token");
     const email = readFromStorage("email");
@@ -41,6 +44,13 @@ const Nav: _Nav = ({ screen, setScreen, loggedIn, setLoggedIn }) => {
         {(screen === 0 || screen === 1) && (
           <li onClick={() => setScreen(2)}>Download PO/stickers</li>
         )}
+        {role >= 4 && (
+          <>
+            <li onClick={() => setScreen(2)}>Add Part Prefix</li>
+            <li onClick={() => setScreen(2)}>Edit Purchase order</li>
+          </>
+        )}
+        {role === 5 && <li onClick={() => setScreen(2)}>View logs</li>}
         <li onClick={onLogout}>Log out</li>
       </ul>
     </nav>

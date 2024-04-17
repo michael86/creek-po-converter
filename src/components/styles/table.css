@@ -23,3 +23,6 @@ table .table-buttons {
   width: 70%;
   margin-bottom: 0.5rem;
 }
+.show-print {
+  display: none;
+}

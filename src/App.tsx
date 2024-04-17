@@ -4,15 +4,18 @@ import Home from "./components/Home";
 import ProcessPdf from "./components/ProcessPdf";
 import DownloadPo from "./components/DownloadPo";
 import Toast from "./components/Toast";
-import { readFromStorage } from "./utils/storage";
+import { readFromStorage, saveToStorage } from "./utils/storage";
 import axios from "./utils/interceptors";
 import "react-toastify/dist/ReactToastify.css";
 import "./Print.css";
 import "./reset.css";
+import { setRole } from "./slices/user";
+import { useAppDispatch } from "./hooks";
 
 function App() {
   const [screen, setScreen] = useState(0);
   const [loggedIn, setLoggedIn] = useState(false);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,9 +26,12 @@ function App() {
 
       try {
         const {
-          data: { valid },
+          data: { valid, role },
         } = await axios.get(`account/validate-token/${token}/${email}`);
         setLoggedIn(valid);
+        if (!role) return;
+
+        dispatch(setRole(role));
       } catch (error) {
         console.error("Error validating token:", error);
         setLoggedIn(false);

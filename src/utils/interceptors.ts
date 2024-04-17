@@ -2,7 +2,7 @@ import axios from "axios";
 import { readFromStorage, saveToStorage } from "./storage";
 
 const apiUrl = process.env.REACT_APP_API_URL;
-
+console.log("apiUrl ", apiUrl);
 const instance = axios.create({
   baseURL: apiUrl,
   headers: {

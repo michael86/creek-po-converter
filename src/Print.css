@@ -63,4 +63,25 @@
   .pagebreak {
     page-break-before: always;
   }
+
+  .print-flex:nth-last-of-type(odd) {
+    justify-self: flex-start;
+    align-self: flex-start;
+  }
+
+  .print-flex:nth-last-of-type(even) {
+    justify-self: flex-end;
+    align-self: flex-end;
+    transform: translateY(-100%);
+  }
+
+  .show-print {
+    display: inline-block;
+    font-size: 0.5rem;
+    transform: translate(-3px, -12%);
+  }
+
+  .sticker-location {
+    transform: translateY(-100%);
+  }
 }

@@ -10,15 +10,12 @@ nav ul {
   list-style: none;
 }
 
-nav ul li:first-of-type {
-  margin-right: 0.5rem;
-}
-
 nav ul li {
   background-color: blue;
   color: white;
   padding: 5px;
   border-radius: 10px;
+  margin-right: 0.2rem;
 }
 
 nav ul li:last-of-type {

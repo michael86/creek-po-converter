@@ -60,9 +60,14 @@ const Sticker = ({
             </>
           ) : null}
         </td>
-        <td style={{ textTransform: "uppercase" }}>PO: {purchaseOrder}</td>
-        <td style={{ textTransform: "uppercase" }}>REF: {orderRef}</td>
-        <td style={{ textTransform: "uppercase" }}>{getDate()}</td>
+
+        <td className="print-flex" style={{ textTransform: "uppercase" }}>
+          PO: {purchaseOrder}
+        </td>
+        <td className="print-flex" style={{ textTransform: "uppercase" }}>
+          <span className="show-print">Received: </span>
+          {getDate()}
+        </td>
         <td style={{ textTransform: "uppercase" }} className="no-print">
           No
         </td>
