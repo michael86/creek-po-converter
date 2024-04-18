@@ -41,7 +41,11 @@ const AddPrefix = () => {
     const res = await axios.put(`/parts/prefix/add`, {
       prefix: value,
     });
-    console.log("res", res);
+
+    if (!res.data.inserted) return;
+    setShowButton(false);
+    setValue("");
+    setError("Part added");
   };
 
   return (
