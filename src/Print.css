@@ -46,6 +46,7 @@
 
   .sticker-container {
     display: block;
+
     width: 100%;
   }
 
@@ -61,15 +62,15 @@
   }
 
   .pagebreak {
-    page-break-before: always;
+    page-break-after: always;
   }
 
-  .print-flex:nth-last-of-type(odd) {
+  .print-flex:last-of-type {
     justify-self: flex-start;
     align-self: flex-start;
   }
 
-  .print-flex:nth-last-of-type(even) {
+  .print-flex:first-of-type {
     justify-self: flex-end;
     align-self: flex-end;
     transform: translateY(-100%);

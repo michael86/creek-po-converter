@@ -73,8 +73,8 @@ const Sticker = ({
         </td>
 
         <StickerLocation location={location} />
-        <div className="pagebreak" />
-        <td className="table-buttons">
+
+        <td className="table-buttons pagebreak">
           <StickerButtons
             qty={part.totalOrdered}
             setLocation={setLocation}
