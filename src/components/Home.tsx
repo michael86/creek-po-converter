@@ -8,9 +8,10 @@ import { setRole } from "../slices/user";
 interface HomeProps {
   loggedIn: boolean;
   setLoggedIn: Dispatch<SetStateAction<boolean>>;
+  setScreen: Dispatch<SetStateAction<number>>;
 }
 
-const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
+const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn, setScreen }) => {
   const dispatch = useAppDispatch();
 
   const [formState, setFormState] = useState<{ email: string; password: string }>({
@@ -98,6 +99,7 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn }) => {
               register
             </button>
           </div>
+          <p onClick={() => setScreen(6)}>Forgot pass</p>
           {status && <p>{status}</p>}
         </form>
       )}

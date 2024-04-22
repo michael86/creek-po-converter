@@ -43,6 +43,7 @@ const SelectedStickers = () => {
               const complete = totalReceived === part.totalOrdered;
               const stickers = complete && part.partsReceived ? part.partsReceived : quantities;
               return stickers.map((qty, qtyIndex) => {
+                console.log(qty);
                 return (
                   <Sticker
                     purchaseOrder={order.purchaseOrder}

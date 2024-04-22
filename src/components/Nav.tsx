@@ -16,14 +16,6 @@ const Nav: _Nav = ({ setScreen, loggedIn, setLoggedIn }) => {
   const { role } = useAppSelector((state) => state.user);
 
   const onLogout = async () => {
-    const token = readFromStorage("token");
-    const email = readFromStorage("email");
-
-    if (!token || !email) {
-      setLoggedIn(false);
-      return;
-    }
-
     try {
       await axios.post(`account/logout`);
     } catch (error) {

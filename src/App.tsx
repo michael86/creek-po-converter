@@ -14,6 +14,7 @@ import { useAppDispatch } from "./hooks";
 import AddPrefix from "./components/AddPrefix";
 import EditPo from "./components/EditPo";
 import Logs from "./components/Logs";
+import ForgotPass from "./components/ForgotPass";
 
 function App() {
   const [screen, setScreen] = useState(0);
@@ -51,12 +52,13 @@ function App() {
         <Nav setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       </header>
 
-      {screen === 0 && <Home loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+      {screen === 0 && <Home setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
       {screen === 1 && <ProcessPdf />}
       {screen === 2 && <DownloadPo />}
       {screen === 3 && <AddPrefix />}
       {screen === 4 && <EditPo />}
       {screen === 5 && <Logs />}
+      {screen === 6 && <ForgotPass />}
     </>
   );
 }
