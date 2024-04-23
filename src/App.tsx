@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Nav from "./components/Nav";
-import Home from "./components/Home";
-import ProcessPdf from "./components/ProcessPdf";
-import DownloadPo from "./components/DownloadPo";
+import Home from "./pages/Home";
+import ProcessPdf from "./pages/ProcessPdf";
+import DownloadPo from "./pages/DownloadPo";
 import Toast from "./components/Toast";
 import { readFromStorage } from "./utils/storage";
 import axios from "./utils/interceptors";
@@ -11,10 +11,10 @@ import "./Print.css";
 import "./reset.css";
 import { setRole } from "./slices/user";
 import { useAppDispatch } from "./hooks";
-import AddPrefix from "./components/AddPrefix";
-import EditPo from "./components/EditPo";
-import Logs from "./components/Logs";
-import ForgotPass from "./components/ForgotPass";
+import AddPrefix from "./pages/AddPrefix";
+import EditPo from "./pages/EditPo";
+import Logs from "./pages/Logs";
+import ForgotPass from "./pages/ForgotPass";
 
 function App() {
   const [screen, setScreen] = useState(0);

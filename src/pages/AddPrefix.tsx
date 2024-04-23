@@ -43,6 +43,7 @@ const AddPrefix = () => {
     });
 
     if (!res.data.inserted) return;
+
     setShowButton(false);
     setValue("");
     setError("Part added");

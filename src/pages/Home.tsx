@@ -1,6 +1,6 @@
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import axios from "../utils/interceptors";
-import "./styles/home.css";
+import "../styles/home.css";
 import { saveToStorage } from "../utils/storage";
 import { useAppDispatch } from "../hooks";
 import { setRole } from "../slices/user";

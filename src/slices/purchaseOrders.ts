@@ -2,11 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type PartNumber = {
   name: string;
-  quantityAwaited: number[];
   partial: 1 | 0;
   totalOrdered: number;
   description: string;
-  partsReceived: number[] | undefined;
+  partsReceived: number[];
 };
 
 export type PurchaseOrder = {

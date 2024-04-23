@@ -26,3 +26,8 @@ table .table-buttons {
 .show-print {
   display: none;
 }
+
+.table-purchase,
+.table-order {
+  text-align: center;
+}

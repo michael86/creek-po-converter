@@ -2,36 +2,24 @@ import { getDate } from "../utils";
 import StickerLocation from "./StickerLocation";
 import StickerButtons from "./StickerButtons";
 import { useState } from "react";
-import { PartNumber } from "../slices/purchaseOrders";
+
 import { useAppDispatch } from "../hooks";
 import { setToast } from "../slices/alert";
+import { PartNumber, PurchaseOrder } from "../slices/purchaseOrders";
 
 type Props = {
-  backgroundColor?: string;
-  purchaseOrder: string;
-  orderRef: string;
-  part: PartNumber;
   qty: number;
-  complete: boolean;
+  isReceived: boolean;
+  order: PurchaseOrder;
+  part: PartNumber;
 };
 
-const Sticker = ({
-  purchaseOrder,
-  orderRef,
-  backgroundColor = "rgb(255,255,255)",
-  part,
-  qty,
-  complete,
-}: Props) => {
+const StickerRow = ({ qty, isReceived, order, part }: Props) => {
   const [location, setLocation] = useState("");
   const [print, setPrint] = useState(false);
-  const { partsReceived } = part;
   const dispatch = useAppDispatch();
-  const totalReceived = partsReceived
-    ? partsReceived.reduce((partialSum, value) => partialSum + value, 0)
-    : 0;
 
-  backgroundColor = complete ? "green" : backgroundColor;
+  const totalReceived = part.partsReceived.reduce((a, b) => a + b, 0);
 
   const addToPrint = () => {
     setPrint(true);
@@ -41,29 +29,24 @@ const Sticker = ({
   return (
     <>
       <tr
-        className={`sticker${complete && !print ? " no-print" : ""} `}
-        style={{ backgroundColor: backgroundColor }}
+        className={`sticker${isReceived && !print ? " no-print" : ""} `}
+        style={{ backgroundColor: isReceived ? "green" : "white" }}
       >
         <td style={{ textTransform: "uppercase" }}>{part.name}</td>
         <td style={{ textTransform: "uppercase" }}>{part.description}</td>
         <td style={{ textTransform: "uppercase" }}>
           QTY:{qty}
-          {part.partial === 1 || complete ? (
-            <>
-              <hr className="no-print" style={{ border: "solid black 1px" }} />
-              <div className="no-print" style={{ fontSize: "0.7rem" }}>
-                Total ordered: {part.totalOrdered}
-              </div>
-              <div className="no-print" style={{ fontSize: "0.7rem" }}>
-                Total reveived: {totalReceived}
-              </div>
-            </>
-          ) : null}
+          <>
+            <hr className="no-print" style={{ border: "solid black 1px" }} />
+            <div className="no-print" style={{ fontSize: "0.7rem" }}>
+              Total ordered: {part.totalOrdered}
+            </div>
+            <div className="no-print" style={{ fontSize: "0.7rem" }}>
+              Total received: {totalReceived}
+            </div>
+          </>
         </td>
 
-        <td className="print-flex" style={{ textTransform: "uppercase" }}>
-          PO: {purchaseOrder}
-        </td>
         <td className="print-flex" style={{ textTransform: "uppercase" }}>
           <span className="show-print">Received: </span>
           {getDate()}
@@ -78,11 +61,14 @@ const Sticker = ({
           <StickerButtons
             qty={part.totalOrdered}
             setLocation={setLocation}
-            purchaseOrder={purchaseOrder}
+            purchaseOrder={order.purchaseOrder}
             partial={part.partial}
-            part={part}
-            complete={complete}
+            name={part.name}
+            complete={totalReceived === 0}
             addToPrint={addToPrint}
+            totalReceived={totalReceived}
+            totalOrdered={part.totalOrdered}
+            totalRemaining={totalReceived}
           />
         </td>
       </tr>
@@ -90,4 +76,4 @@ const Sticker = ({
   );
 };
 
-export default Sticker;
+export default StickerRow;

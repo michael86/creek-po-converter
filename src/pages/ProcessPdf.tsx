@@ -1,6 +1,6 @@
 import { FormEvent, useRef, useState } from "react";
 import axios from "../utils/interceptors";
-import "./styles/process.css";
+import "../styles/process.css";
 
 const ProcessPdf = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);

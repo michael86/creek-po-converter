@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useRef, useState, useMemo, useCallback } from "react";
 import { onParcelInput } from "../utils";
-import { setPartCount, setPartPartial } from "../slices/purchaseOrders";
+import { setPartPartial } from "../slices/purchaseOrders";
 import { useAppDispatch } from "../hooks";
 import { setToast } from "../slices/alert";
 import axios from "../utils/interceptors";
@@ -14,15 +14,10 @@ type Props = {
   purchaseOrder: string;
   complete: boolean;
   addToPrint: Function;
-
-  part: {
-    name: string;
-    quantityAwaited: number[];
-    partial: 1 | 0;
-    totalOrdered: number;
-    description: string;
-    partsReceived: number[] | undefined;
-  };
+  totalReceived: number;
+  totalRemaining: number;
+  totalOrdered: number;
+  name: string;
 };
 
 const LOCATIONS = [
@@ -42,46 +37,42 @@ const StickerButtons = ({
   qty,
   setLocation,
   partial,
-  part,
+  name,
   purchaseOrder,
   complete,
   addToPrint,
+  totalReceived,
+  totalRemaining,
+  totalOrdered,
 }: Props) => {
   const dispatch = useAppDispatch();
   const partialRef = useRef<HTMLInputElement | null>(null);
   const [inputState, setInputState] = useState("");
 
-  const calculateTotalReceived = useMemo(() => {
-    return part.partsReceived ? part.partsReceived.reduce((a, b) => a + b, 0) : 0;
-  }, [part.partsReceived]);
-
   const showConfirmationMessage = useCallback(
     (setPartial: boolean = false) => {
       const target = inputState.split(",").reduce((partialSum, value) => +partialSum + +value, 0);
-      const partsRemain = part.totalOrdered - calculateTotalReceived;
+
       const confirmationMessage = setPartial
         ? "Are you sure you want to set as a partial"
-        : `Please double check the below settings and confirm\nThese commits are permanent\nParts Expected: ${
-            part.totalOrdered
-          }\nParts Received so far: ${calculateTotalReceived}\nParts Remaining: ${partsRemain}\nNew total: ${
-            partsRemain - target
+        : `Please double check the below settings and confirm\nThese commits are permanent\nParts Expected: ${totalOrdered}\nParts Received so far: ${totalReceived}\nParts Remaining: ${totalRemaining}\nNew total: ${
+            totalRemaining - target
           }`;
       return window.confirm(confirmationMessage);
     },
-    [calculateTotalReceived, inputState, part.totalOrdered]
+    [inputState]
   );
 
   const onSubmit = async () => {
     const parcels = inputState.split(",").map(Number);
     const sum = parcels.reduce((partial, a) => partial + a, 0);
-    const totalReceived = calculateTotalReceived + sum;
 
     if (
-      totalReceived > part.totalOrdered ||
-      part.totalOrdered - totalReceived < 0 ||
-      (!part.partial && sum !== part.totalOrdered)
+      totalReceived > totalOrdered ||
+      totalOrdered - totalReceived < 0 ||
+      (!partial && sum !== totalOrdered)
     ) {
-      const error = totalReceived > part.totalOrdered ? "Too many parcels" : "Not enough Parcels";
+      const error = totalReceived > totalOrdered ? "Too many parcels" : "Not enough Parcels";
       dispatch(setToast({ show: true, message: error, type: "error" }));
       return;
     }
@@ -92,17 +83,17 @@ const StickerButtons = ({
       const res: AxiosResponse = await axios.put(`/purchase/add-parcel`, {
         parcels,
         purchaseOrder,
-        part: part.name,
+        part: name,
       });
 
       if (res.status !== 200)
         throw new Error(`Unable to add new parcels to order ${purchaseOrder}`);
 
-      const copy = structuredClone(part);
-      copy.quantityAwaited = parcels;
-      copy.partsReceived = copy.partsReceived ? copy.partsReceived.concat(parcels) : parcels;
+      // const newStructure = {}
+      // copy.quantityAwaited = parcels;
+      // copy.partsReceived = copy.partsReceived ? copy.partsReceived.concat(parcels) : parcels;
 
-      dispatch(setPartCount({ key: part.name, part: copy }));
+      // dispatch(setPartCount({ key: name, part: {quantityAwaited: parcels, partsReceived: } }));
     } catch (error) {
       console.error(error);
       dispatch(
@@ -136,17 +127,17 @@ const StickerButtons = ({
       return;
 
     try {
-      const res = await axios.patch(`purchase/set-partial/${purchaseOrder}/${part.name}`);
+      const res = await axios.patch(`purchase/set-partial/${purchaseOrder}/${name}`);
       if (!res.status) throw new Error(`Unable to set as partial`);
 
-      dispatch(setPartPartial({ key: part.name, partial: 1 }));
+      dispatch(setPartPartial({ key: name, partial: 1 }));
       dispatch(setToast({ type: "success", message: "Partial confirmed", show: true }));
     } catch (error) {
       console.error(error);
       dispatch(
         setToast({
           type: "error",
-          message: `Unable to set as partial, please contact Michael with order number ${purchaseOrder} and partnumber: ${part.name}`,
+          message: `Unable to set as partial, please contact Michael with order number ${purchaseOrder} and partnumber: ${name}`,
           show: true,
         })
       );

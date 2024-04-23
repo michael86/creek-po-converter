@@ -1,7 +1,7 @@
 import axios from "../utils/interceptors";
 import { useEffect, useState } from "react";
-import "./styles/stickers.css";
-import SelectedStickers from "./SelectedStickers";
+import "../styles/stickers.css";
+import SelectedStickers from "../components/StickerTable";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import {
   PurchaseOrder,
