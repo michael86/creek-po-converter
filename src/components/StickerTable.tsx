@@ -1,4 +1,4 @@
-import Sticker from "./StickerRow";
+import StickerRow from "./StickerRow";
 import { useAppSelector } from "../hooks";
 import "./styles/table.css";
 import { ReactElement } from "react";
@@ -35,7 +35,7 @@ const StickerTable = () => {
               console.log("parts received", partsReceived);
               partsReceived.forEach((received, index) => {
                 stickers.push(
-                  <Sticker
+                  <StickerRow
                     key={`${index}-${name}_${received}`} // Ensure unique keys when mapping over arrays
                     qty={received}
                     isReceived={true}
@@ -47,7 +47,7 @@ const StickerTable = () => {
 
               amountWaited > 0 &&
                 stickers.push(
-                  <Sticker
+                  <StickerRow
                     key={`${index}-${name}_${amountWaited}`} // Ensure unique keys when mapping over arrays
                     qty={totalOrdered - totalReceived}
                     isReceived={false}

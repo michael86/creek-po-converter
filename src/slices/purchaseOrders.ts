@@ -39,7 +39,7 @@ export const purchaseSlice = createSlice({
     setPurchaseOrder: (state, action: PayloadAction<PurchaseOrder>) => {
       state.order = action.payload;
     },
-    setPartCount: (state, action: PayloadAction<{ key: string; part: PartNumber }>) => {
+    setPart: (state, action: PayloadAction<{ key: string; part: PartNumber }>) => {
       const key = action.payload.key;
       state.order!.partNumbers[key] = action.payload.part;
     },
@@ -50,7 +50,7 @@ export const purchaseSlice = createSlice({
   },
 });
 
-export const { setPurchaseOrder, setPurchaseOrders, setPartCount, setPartPartial } =
+export const { setPurchaseOrder, setPurchaseOrders, setPart, setPartPartial } =
   purchaseSlice.actions;
 
 export default purchaseSlice.reducer;

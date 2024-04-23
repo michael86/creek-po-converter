@@ -1,6 +1,6 @@
 import { getDate } from "../utils";
 import StickerLocation from "./StickerLocation";
-import StickerButtons from "./StickerButtons";
+import StickerButtons from "./tableButtons/StickerButtons";
 import { useState } from "react";
 
 import { useAppDispatch } from "../hooks";
@@ -58,18 +58,7 @@ const StickerRow = ({ qty, isReceived, order, part }: Props) => {
         <StickerLocation location={location} />
 
         <td className="table-buttons pagebreak">
-          <StickerButtons
-            qty={part.totalOrdered}
-            setLocation={setLocation}
-            purchaseOrder={order.purchaseOrder}
-            partial={part.partial}
-            name={part.name}
-            complete={totalReceived === 0}
-            addToPrint={addToPrint}
-            totalReceived={totalReceived}
-            totalOrdered={part.totalOrdered}
-            totalRemaining={totalReceived}
-          />
+          <StickerButtons setLocation={setLocation} name={part.name} addToPrint={addToPrint} />
         </td>
       </tr>
     </>

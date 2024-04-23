@@ -1,6 +1,6 @@
 import { SetStateAction, ReactElement, Dispatch } from "react";
-import "./styles/nav.css";
-import { readFromStorage, deleteFromStorage } from "../utils/storage";
+import "../styles/nav.css";
+import { deleteFromStorage } from "../utils/storage";
 import axios from "../utils/interceptors";
 import { useAppSelector } from "../hooks";
 

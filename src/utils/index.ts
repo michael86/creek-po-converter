@@ -16,3 +16,4 @@ export const onParcelInput: OnParcelInput = (value, dispatch) => {
   if (!value.match(/^\d*(,\d*)*$/)) return; // Only allow numeric input
   dispatch(value);
 };
+
