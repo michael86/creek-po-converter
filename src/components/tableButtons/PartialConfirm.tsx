@@ -40,6 +40,14 @@ const PartialConfirm: React.FC<Props> = ({ name }) => {
     const copy = structuredClone(part);
     copy.partial = 1;
     dispatch(setPart({ key: name, part: copy }));
+
+    dispatch(
+      setToast({
+        type: "success",
+        message: "partial status set successfully",
+        show: true,
+      })
+    );
   };
 
   return (

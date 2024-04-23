@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setToast } from "../../slices/alert";
 import { setPart } from "../../slices/purchaseOrders";
+import axios from "../../utils/interceptors";
+import { AxiosResponse } from "axios";
 
 type Props = {
   name: string;
@@ -10,7 +12,7 @@ type Props = {
 const SubmitParcels: React.FC<Props> = ({ name }) => {
   const dispatch = useAppDispatch();
   const [state, setState] = useState("");
-  const { partNumbers } = useAppSelector((state) => state.purchase.order!);
+  const { partNumbers, purchaseOrder } = useAppSelector((state) => state.purchase.order!);
   const part = partNumbers[name];
   const { totalOrdered, partial } = part;
   const totalReceived = part.partsReceived.reduce((a, b) => a + b, 0);
@@ -18,9 +20,11 @@ const SubmitParcels: React.FC<Props> = ({ name }) => {
 
   const onSubmit = async () => {
     if (!state.length) return;
+
     const newParcels = state.split(",").map((parcel) => +parcel);
     const newParcelsTotal = newParcels.reduce((a, b) => a + b, 0);
     const isGreaterThanZero = totalAwaited - newParcelsTotal >= 0;
+
     if (!isGreaterThanZero) {
       return dispatch(setToast({ type: "error", message: "To many parcels entered", show: true }));
     }
@@ -36,10 +40,32 @@ const SubmitParcels: React.FC<Props> = ({ name }) => {
     }
 
     //Call api
+    type CustomResponse = { status: number; token: string };
+    const res: AxiosResponse<CustomResponse> = await axios.put("/purchase/add-parcel", {
+      parcels: newParcels,
+      purchaseOrder,
+      part: name,
+    });
+
+    if (res.status !== 200 || res.data.status) {
+      return dispatch(
+        setToast({
+          type: "error",
+          message:
+            "oops!! Something went wrong there, contact michael with the order reference and what part you tried to book parcels in for",
+          show: true,
+        })
+      );
+    }
 
     const copy = structuredClone(part);
     copy.partsReceived = [...copy.partsReceived, ...newParcels];
     dispatch(setPart({ key: name, part: copy }));
+    setToast({
+      type: "success",
+      message: "Parcels added",
+      show: true,
+    });
   };
 
   const onInput = (e: React.ChangeEvent<HTMLInputElement>) => {
