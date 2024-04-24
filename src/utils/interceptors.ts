@@ -2,7 +2,7 @@ import axios from "axios";
 import { readFromStorage, saveToStorage } from "./storage";
 
 const apiUrl = process.env.REACT_APP_API_URL;
-console.log("apiUrl ", apiUrl);
+
 const instance = axios.create({
   baseURL: apiUrl,
   headers: {
@@ -20,7 +20,7 @@ instance.interceptors.request.use(
     return config;
   },
   (error) => {
-    console.log("error", error);
+    console.error("error", error);
     return Promise.reject(error);
   }
 );
@@ -34,7 +34,7 @@ instance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log("error", error);
+    console.error("error", error);
     return Promise.reject(error);
   }
 );

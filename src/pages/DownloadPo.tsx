@@ -29,7 +29,7 @@ const DownloadPo = () => {
         if (res.data?.status === 1 && res.data?.data) {
           dispatch(setPurchaseOrders(res.data.data as PurchaseOrders));
         } else {
-          console.log("Failed to fetch purchase orders: ", res);
+          console.error("Failed to fetch purchase orders: ", res);
         }
       } catch (error) {
         console.error("Error fetching purchase orders: ", error);
@@ -55,7 +55,7 @@ const DownloadPo = () => {
         );
         return;
       }
-      console.log(res.data.data);
+
       dispatch(setPurchaseOrder(res.data?.data as PurchaseOrder));
       setApiCalled(true);
     } catch (error) {
