@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { useAppDispatch } from "../hooks";
 import { setToast } from "../slices/alert";
-import { PartNumber, PurchaseOrder } from "../slices/purchaseOrders";
+import { PartNumber } from "../slices/purchaseOrders";
 
 type Props = {
   qty: number;

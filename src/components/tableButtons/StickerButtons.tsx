@@ -1,5 +1,4 @@
-import { Dispatch, SetStateAction, useRef } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useAppSelector } from "../../hooks";
 import SubmitParcels from "./SubmitParcels";
 import SelectLocation from "./SelectLocation";
 import PartialConfirm from "./PartialConfirm";
