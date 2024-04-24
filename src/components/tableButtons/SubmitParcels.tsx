@@ -39,7 +39,6 @@ const SubmitParcels: React.FC<Props> = ({ name }) => {
       );
     }
 
-    //Call api
     type CustomResponse = { status: number; token: string };
     const res: AxiosResponse<CustomResponse> = await axios.put("/purchase/add-parcel", {
       parcels: newParcels,
@@ -47,7 +46,7 @@ const SubmitParcels: React.FC<Props> = ({ name }) => {
       part: name,
     });
 
-    if (res.status !== 200 || res.data.status) {
+    if (res.status !== 200 || !res.data.status) {
       return dispatch(
         setToast({
           type: "error",
