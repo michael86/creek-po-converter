@@ -1,6 +1,6 @@
 import StickerRow from "./StickerRow";
 import { useAppSelector } from "../hooks";
-import "./styles/table.css";
+import "../styles/table.css";
 import { ReactElement } from "react";
 
 const StickerTable = () => {

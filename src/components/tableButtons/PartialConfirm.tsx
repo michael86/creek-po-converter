@@ -21,6 +21,14 @@ const PartialConfirm: React.FC<Props> = ({ name }) => {
 
     if (!ref.current || !ref.current.checked) return;
 
+    if (
+      !window.confirm(
+        "Are you sure you want to set as a partial? \nDoing so will allow multiple parts to be drip fed into the system"
+      )
+    ) {
+      return;
+    }
+
     type StatusRes = { status: number; token: string };
     const res: AxiosResponse<StatusRes> = await axios.patch(
       `/purchase/set-partial/${purchaseOrder}/${name}`
