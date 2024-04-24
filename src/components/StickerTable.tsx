@@ -31,7 +31,6 @@ const StickerTable = () => {
               const totalReceived = partsReceived.reduce((a, b) => a + b, 0);
               const amountWaited = totalOrdered - totalReceived;
 
-              console.log("parts received", partsReceived);
               partsReceived.forEach((received, index) => {
                 stickers.push(
                   <StickerRow

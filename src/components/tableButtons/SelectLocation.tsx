@@ -1,4 +1,7 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
+import axios from "../../utils/interceptors";
+import { useAppDispatch } from "../../hooks";
+import { setToast } from "../../slices/alert";
 
 const LOCATIONS = [
   ["A", 4],
@@ -15,11 +18,40 @@ const LOCATIONS = [
 
 type Props = {
   setLocation: Dispatch<SetStateAction<string>>;
-  name: string;
+  order: string;
+  part: string;
 };
 
-const SelectLocation: React.FC<Props> = ({ setLocation, name }) => {
-  const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => setLocation(e.target.value);
+const SelectLocation: React.FC<Props> = ({ setLocation, order, part }) => {
+  const dispatch = useAppDispatch();
+
+  const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const res = await axios.post("/locations/update", {
+      order,
+      part,
+      location: e.target.value,
+    });
+
+    if (res.status !== 200) {
+      dispatch(
+        setToast({
+          type: "error",
+          message: "Something went wrong there, contact michael",
+          show: true,
+        })
+      );
+    }
+
+    dispatch(
+      setToast({
+        type: "success",
+        message: "Location updated",
+        show: true,
+      })
+    );
+    setLocation(e.target.value);
+  };
+
   return (
     <>
       <select className={"no-print"} onChange={onChange}>

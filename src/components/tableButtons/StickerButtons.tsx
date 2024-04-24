@@ -24,7 +24,7 @@ const StickerButtons: React.FC<Props> = ({ setLocation, name, addToPrint }) => {
         <>
           <SubmitParcels name={name} />
           <hr style={{ border: "solid black 1px" }} />
-          <SelectLocation name={name} setLocation={setLocation} />
+          <SelectLocation part={name} order={order!.purchaseOrder} setLocation={setLocation} />
           <hr style={{ border: "solid black 1px" }} />
           <PartialConfirm name={name} />
         </>
