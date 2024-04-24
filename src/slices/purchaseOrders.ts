@@ -6,6 +6,7 @@ export type PartNumber = {
   totalOrdered: number;
   description: string;
   partsReceived: number[];
+  location?: string;
 };
 
 export type PurchaseOrder = {

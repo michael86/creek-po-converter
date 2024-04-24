@@ -6,12 +6,11 @@ import PartialConfirm from "./PartialConfirm";
 
 import "../../styles/sticker_buttons.css";
 type Props = {
-  setLocation: Dispatch<SetStateAction<string>>;
   name: string;
   addToPrint: Function;
 };
 
-const StickerButtons: React.FC<Props> = ({ setLocation, name, addToPrint }) => {
+const StickerButtons: React.FC<Props> = ({ name, addToPrint }) => {
   const { order } = useAppSelector((state) => state.purchase);
 
   const part = order!.partNumbers[name];
@@ -24,7 +23,7 @@ const StickerButtons: React.FC<Props> = ({ setLocation, name, addToPrint }) => {
         <>
           <SubmitParcels name={name} />
           <hr style={{ border: "solid black 1px" }} />
-          <SelectLocation part={name} order={order!.purchaseOrder} setLocation={setLocation} />
+          <SelectLocation part={name} orderNumber={order!.purchaseOrder} />
           <hr style={{ border: "solid black 1px" }} />
           <PartialConfirm name={name} />
         </>

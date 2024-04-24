@@ -37,7 +37,6 @@ const StickerTable = () => {
                     key={`${index}-${name}_${received}`} // Ensure unique keys when mapping over arrays
                     qty={received}
                     isReceived={true}
-                    order={order}
                     part={order.partNumbers[key]}
                   />
                 );
@@ -49,7 +48,6 @@ const StickerTable = () => {
                     key={`${index}-${name}_${amountWaited}`} // Ensure unique keys when mapping over arrays
                     qty={totalOrdered - totalReceived}
                     isReceived={false}
-                    order={order}
                     part={order.partNumbers[key]}
                   />
                 );

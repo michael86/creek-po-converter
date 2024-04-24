@@ -10,12 +10,10 @@ import { PartNumber, PurchaseOrder } from "../slices/purchaseOrders";
 type Props = {
   qty: number;
   isReceived: boolean;
-  order: PurchaseOrder;
   part: PartNumber;
 };
 
-const StickerRow = ({ qty, isReceived, order, part }: Props) => {
-  const [location, setLocation] = useState("");
+const StickerRow = ({ qty, isReceived, part }: Props) => {
   const [print, setPrint] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -52,10 +50,10 @@ const StickerRow = ({ qty, isReceived, order, part }: Props) => {
           {getDate()}
         </td>
 
-        <StickerLocation location={location} />
+        <StickerLocation location={part.location} />
 
         <td className="table-buttons pagebreak">
-          <StickerButtons setLocation={setLocation} name={part.name} addToPrint={addToPrint} />
+          <StickerButtons name={part.name} addToPrint={addToPrint} />
         </td>
       </tr>
     </>

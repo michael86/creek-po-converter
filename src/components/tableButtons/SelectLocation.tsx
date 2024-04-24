@@ -1,7 +1,8 @@
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import axios from "../../utils/interceptors";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setToast } from "../../slices/alert";
+import { setPart } from "../../slices/purchaseOrders";
 
 const LOCATIONS = [
   ["A", 4],
@@ -17,17 +18,17 @@ const LOCATIONS = [
 ];
 
 type Props = {
-  setLocation: Dispatch<SetStateAction<string>>;
-  order: string;
+  orderNumber: string;
   part: string;
 };
 
-const SelectLocation: React.FC<Props> = ({ setLocation, order, part }) => {
+const SelectLocation: React.FC<Props> = ({ orderNumber, part }) => {
   const dispatch = useAppDispatch();
+  const { order } = useAppSelector((state) => state.purchase);
 
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const res = await axios.post("/locations/update", {
-      order,
+      order: orderNumber,
       part,
       location: e.target.value,
     });
@@ -49,7 +50,11 @@ const SelectLocation: React.FC<Props> = ({ setLocation, order, part }) => {
         show: true,
       })
     );
-    setLocation(e.target.value);
+
+    if (!order) return;
+    const copy = structuredClone(order);
+    copy.partNumbers[part].location = e.target.value;
+    dispatch(setPart({ key: part, part: copy.partNumbers[part] }));
   };
 
   return (
