@@ -17,7 +17,6 @@ const StickerTable = () => {
             <th>description</th>
             <th>count</th>
             <th>date received</th>
-            <th>Partial Order</th>
             <th>Location</th>
             <th>buttons</th>
           </tr>

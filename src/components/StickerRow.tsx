@@ -51,9 +51,6 @@ const StickerRow = ({ qty, isReceived, order, part }: Props) => {
           <span className="show-print">Received: </span>
           {getDate()}
         </td>
-        <td style={{ textTransform: "uppercase" }} className="no-print">
-          No
-        </td>
 
         <StickerLocation location={location} />
 
