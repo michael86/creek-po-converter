@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export type Parcel = { dateReceived?: number; amountReceived: number };
+
 export type PartNumber = {
   name: string;
   partial: 1 | 0;
   totalOrdered: number;
   description: string;
-  partsReceived: number[];
+  partsReceived: Parcel[];
   location?: string;
 };
 

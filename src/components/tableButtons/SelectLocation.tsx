@@ -62,8 +62,8 @@ const SelectLocation: React.FC<Props> = ({ orderNumber, part }) => {
       <select className={"no-print"} onChange={onChange}>
         <option>Select Location</option>
         {LOCATIONS.map((location) => {
-          return Array.from(Array(location[1]).keys()).map((loc) => {
-            return <option key={location[0]}>{`${location[0]}-${loc + 1}`}</option>;
+          return [...Array(location[1]).keys()].map((loc, i) => {
+            return <option key={`${location[0]}-${i}`}>{`${location[0]}-${loc + 1}`}</option>;
           });
         })}
       </select>

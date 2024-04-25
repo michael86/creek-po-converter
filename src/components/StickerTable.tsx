@@ -8,8 +8,8 @@ const StickerTable = () => {
 
   return order ? (
     <>
-      <h2 className="table-purchase">Purchase Order: {order.purchaseOrder}</h2>
-      <h2 className="table-order">Order Ref: {order.orderRef}</h2>
+      <h2 className="table-purchase no-print">Purchase Order: {order.purchaseOrder}</h2>
+      <h2 className="table-order no-print">Order Ref: {order.orderRef}</h2>
       <table className="sticker-container">
         <thead className="no-print">
           <tr>
@@ -28,16 +28,17 @@ const StickerTable = () => {
 
               const { name, totalOrdered, partsReceived } = order.partNumbers[key];
 
-              const totalReceived = partsReceived.reduce((a, b) => a + b, 0);
+              const totalReceived = partsReceived.reduce((a, b) => a + b.amountReceived, 0);
               const amountWaited = totalOrdered - totalReceived;
 
               partsReceived.forEach((received, index) => {
                 stickers.push(
                   <StickerRow
                     key={`${index}-${name}_${received}`} // Ensure unique keys when mapping over arrays
-                    qty={received}
+                    qty={received.amountReceived}
                     isReceived={true}
                     part={order.partNumbers[key]}
+                    date={received.dateReceived}
                   />
                 );
               });

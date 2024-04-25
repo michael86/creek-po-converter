@@ -99,7 +99,7 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn, setScreen }) => {
               register
             </button>
           </div>
-          <p onClick={() => setScreen(6)}>Forgot pass</p>
+          {/* <p onClick={() => setScreen(6)}>Forgot pass</p> */}
           {status && <p>{status}</p>}
         </form>
       )}

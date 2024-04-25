@@ -4,6 +4,7 @@ import { setToast } from "../../slices/alert";
 import { setPart } from "../../slices/purchaseOrders";
 import axios from "../../utils/interceptors";
 import { AxiosResponse } from "axios";
+import { getDateAsUnix } from "../../utils";
 
 type Props = {
   name: string;
@@ -15,7 +16,7 @@ const SubmitParcels: React.FC<Props> = ({ name }) => {
   const { partNumbers, purchaseOrder } = useAppSelector((state) => state.purchase.order!);
   const part = partNumbers[name];
   const { totalOrdered, partial } = part;
-  const totalReceived = part.partsReceived.reduce((a, b) => a + b, 0);
+  const totalReceived = part.partsReceived.reduce((a, b) => a + b.amountReceived, 0);
   const totalAwaited = totalOrdered - totalReceived;
 
   const onSubmit = async () => {
@@ -58,7 +59,15 @@ const SubmitParcels: React.FC<Props> = ({ name }) => {
     }
 
     const copy = structuredClone(part);
-    copy.partsReceived = [...copy.partsReceived, ...newParcels];
+    copy.partsReceived = [
+      ...copy.partsReceived,
+      ...newParcels.map((parcel) => {
+        return {
+          amountReceived: parcel,
+          dateReceived: getDateAsUnix(),
+        };
+      }),
+    ];
     dispatch(setPart({ key: name, part: copy }));
     setToast({
       type: "success",

@@ -11,13 +11,14 @@ type Props = {
   qty: number;
   isReceived: boolean;
   part: PartNumber;
+  date?: number;
 };
 
-const StickerRow = ({ qty, isReceived, part }: Props) => {
+const StickerRow = ({ qty, isReceived, part, date }: Props) => {
   const [print, setPrint] = useState(false);
   const dispatch = useAppDispatch();
 
-  const totalReceived = part.partsReceived.reduce((a, b) => a + b, 0);
+  const totalReceived = part.partsReceived.reduce((a, b) => a + b.amountReceived, 0);
 
   const addToPrint = () => {
     setPrint(true);
@@ -45,9 +46,9 @@ const StickerRow = ({ qty, isReceived, part }: Props) => {
           </>
         </td>
 
-        <td className="print-flex" style={{ textTransform: "uppercase" }}>
+        <td className="date-received" style={{ textTransform: "uppercase" }}>
           <span className="show-print">Received: </span>
-          {getDate()}
+          {getDate(date)}
         </td>
 
         <StickerLocation location={part.location} />

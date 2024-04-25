@@ -14,7 +14,7 @@ const StickerButtons: React.FC<Props> = ({ name, addToPrint }) => {
 
   const part = order!.partNumbers[name];
   const totalOrdered = part.totalOrdered;
-  const totalReceived = part.partsReceived.reduce((a, b) => a + b, 0);
+  const totalReceived = part.partsReceived.reduce((a, b) => a + b.amountReceived, 0);
 
   return (
     <span className="no-print button-container">
