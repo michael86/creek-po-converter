@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import "../styles/stickers.css";
 import SelectedStickers from "../components/StickerTable";
 import { useAppDispatch, useAppSelector } from "../hooks";
+import ReactLoading from "react-loading";
 import {
   PurchaseOrder,
   PurchaseOrders,
@@ -19,6 +20,7 @@ interface Res {
 const DownloadPo = () => {
   const dispatch = useAppDispatch();
   const { purchaseOrders } = useAppSelector((state) => state.purchase);
+  const [loading, setLoading] = useState(false);
   const [apiCalled, setApiCalled] = useState(false);
 
   useEffect(() => {
@@ -42,6 +44,7 @@ const DownloadPo = () => {
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     try {
       setApiCalled(false);
+      setLoading(true);
       const selectedPO = e.target.value;
       const res: Res = await axios.get(`pdf/fetch/${selectedPO}`);
       if (res.status !== 200) {
@@ -57,6 +60,7 @@ const DownloadPo = () => {
       }
 
       dispatch(setPurchaseOrder(res.data?.data as PurchaseOrder));
+      setLoading(false);
       setApiCalled(true);
     } catch (error) {
       console.error("Error fetching stickers data: ", error);
@@ -81,6 +85,12 @@ const DownloadPo = () => {
         <p>Fetching orders</p>
       )}
 
+      {loading && (
+        <div className="flex flex-center">
+          <ReactLoading type="balls" color="blue" />
+          <p>Fetching data</p>
+        </div>
+      )}
       {apiCalled && <SelectedStickers />}
     </>
   );

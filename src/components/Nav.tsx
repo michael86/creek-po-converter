@@ -34,12 +34,8 @@ const Nav: _Nav = ({ setScreen, loggedIn, setLoggedIn }) => {
         <li onClick={() => setScreen(1)}>Upload new PO</li>
         <li onClick={() => setScreen(2)}>Download PO/stickers</li>
 
-        {role >= 4 && (
-          <>
-            <li onClick={() => setScreen(3)}>Add Part Prefix</li>
-            <li onClick={() => setScreen(4)}>Edit Purchase order</li>
-          </>
-        )}
+        {role >= 2 && <li onClick={() => setScreen(3)}>Add Part Prefix</li>}
+        {role >= 3 && <li onClick={() => setScreen(4)}>Edit Purchase order</li>}
         {role === 5 && <li onClick={() => setScreen(5)}>View logs</li>}
         <li onClick={onLogout}>Log out</li>
       </ul>

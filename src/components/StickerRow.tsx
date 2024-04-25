@@ -31,9 +31,9 @@ const StickerRow = ({ qty, isReceived, part, date }: Props) => {
         className={`sticker${isReceived && !print ? " no-print" : ""} `}
         style={{ backgroundColor: isReceived ? "green" : "white" }}
       >
-        <td style={{ textTransform: "uppercase" }}>{part.name}</td>
-        <td style={{ textTransform: "uppercase" }}>{part.description}</td>
-        <td style={{ textTransform: "uppercase" }}>
+        <td className="sticker-part">{part.name}</td>
+        <td className="sticker-description">{part.description}</td>
+        <td className="sticker-qty">
           QTY:{qty}
           <>
             <hr className="no-print" style={{ border: "solid black 1px" }} />

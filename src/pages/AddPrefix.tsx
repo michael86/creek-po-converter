@@ -1,10 +1,12 @@
 import { DebounceInput } from "react-debounce-input";
 import axios from "../utils/interceptors";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import ReactLoading from "react-loading";
 
 const AddPrefix = () => {
   const [error, setError] = useState("");
   const [showButton, setShowButton] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
 
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,9 +19,9 @@ const AddPrefix = () => {
     }
 
     setError("");
-
+    setLoading(true);
     const res = await axios.get(`parts/prefix/is-valid/${value}`);
-
+    setLoading(false);
     if (typeof res.data.valid !== "boolean") {
       setError("Something went wrong, try again");
       return;
@@ -50,12 +52,18 @@ const AddPrefix = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-center">
       <h2>Add Prefix</h2>
       <DebounceInput debounceTimeout={800} onChange={onChange} />
+      {loading && (
+        <div className="flex flex-center">
+          <ReactLoading type="balls" color="#blue" />
+          <p>Validating prefix</p>
+        </div>
+      )}
       {showButton && <button onClick={onClick}>Save</button>}
       {error.length > 0 && <p>{error}</p>}
-    </>
+    </div>
   );
 };
 

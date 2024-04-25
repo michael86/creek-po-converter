@@ -56,8 +56,6 @@
   }
 
   .sticker td {
-    font-size: 0.8rem;
-    font-weight: 700;
     border: none;
   }
 
@@ -82,7 +80,13 @@
     transform: translate(-3px, -12%);
   }
 
-  .sticker-location {
-    transform: translateY(-100%);
+  .sticker-description {
+    font-size: 0.5rem;
+  }
+
+  .sticker-qty,
+  .sticker-part {
+    font-size: 1.8rem;
+    font-weight: 500;
   }
 }
