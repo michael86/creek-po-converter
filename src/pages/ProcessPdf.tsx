@@ -1,6 +1,7 @@
 import { FormEvent, useRef, useState } from "react";
 import axios from "../utils/interceptors";
 import "../styles/process.css";
+import { Button, Input, TextField } from "@mui/material";
 
 const ProcessPdf = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -47,8 +48,14 @@ const ProcessPdf = () => {
     <form className="upload-pdf">
       <h2>Upload PDF</h2>
       <p>This service only works with PDFs produced by Caliach</p>
-      <input type="file" name="pdf" id="pdf" ref={fileInputRef} />
-      <button onClick={handleUpload}>Upload</button>
+      <TextField type="file" name="pdf" id="pdf" ref={fileInputRef} variant="outlined" />
+
+      <div style={{ marginTop: "1rem" }}>
+        <Button onClick={handleUpload} variant="contained">
+          Upload
+        </Button>
+      </div>
+
       {uploadStatus && <p>{uploadStatus}</p>}
     </form>
   );

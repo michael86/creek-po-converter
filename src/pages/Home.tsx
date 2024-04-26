@@ -4,6 +4,7 @@ import "../styles/home.css";
 import { saveToStorage } from "../utils/storage";
 import { useAppDispatch } from "../hooks";
 import { setRole } from "../slices/user";
+import { Box, Button, TextField } from "@mui/material";
 
 interface HomeProps {
   loggedIn: boolean;
@@ -74,30 +75,40 @@ const Home: React.FC<HomeProps> = ({ loggedIn, setLoggedIn, setScreen }) => {
     <section className="home">
       <h1>Creekview Purchase Order and Sticker Creator</h1>
       {!loggedIn && (
-        <form onSubmit={onSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
+        <form className="form" onSubmit={onSubmit}>
+          <TextField
             type="email"
-            name="email"
-            id="email"
-            value={formState.email}
+            label="email"
+            name="label"
             onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+            variant="filled"
+            required
           />
-          <label htmlFor="password">Password</label>
-          <input
+
+          <TextField
             type="password"
             name="password"
             id="password"
             value={formState.password}
             onChange={(e) => setFormState({ ...formState, password: e.target.value })}
+            variant="filled"
+            label="password"
+            required
+            style={{ marginTop: "1rem" }}
           />
+
           <div>
-            <button type="submit" onClick={() => setRoute("login")}>
+            <Button
+              type="submit"
+              onClick={() => setRoute("login")}
+              variant="contained"
+              style={{ marginRight: "1rem" }}
+            >
               Log in
-            </button>
-            <button type="submit" onClick={() => setRoute("register")}>
-              register
-            </button>
+            </Button>
+            <Button type="submit" onClick={() => setRoute("register")} variant="contained">
+              Register
+            </Button>
           </div>
           {/* <p onClick={() => setScreen(6)}>Forgot pass</p> */}
           {status && <p>{status}</p>}

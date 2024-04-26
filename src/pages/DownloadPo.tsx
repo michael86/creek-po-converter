@@ -11,6 +11,7 @@ import {
   setPurchaseOrder,
 } from "../slices/purchaseOrders";
 import { setToast } from "../slices/alert";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 interface Res {
   data: { status: number; data?: PurchaseOrders | PurchaseOrder; token: string };
@@ -22,6 +23,7 @@ const DownloadPo = () => {
   const { purchaseOrders } = useAppSelector((state) => state.purchase);
   const [loading, setLoading] = useState(false);
   const [apiCalled, setApiCalled] = useState(false);
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     const fetchPurchaseOrders = async () => {
@@ -41,11 +43,12 @@ const DownloadPo = () => {
     fetchPurchaseOrders();
   }, [dispatch]);
 
-  const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChange = async (e: SelectChangeEvent) => {
     try {
       setApiCalled(false);
       setLoading(true);
       const selectedPO = e.target.value;
+      setValue(selectedPO);
       const res: Res = await axios.get(`pdf/fetch/${selectedPO}`);
       if (res.status !== 200) {
         dispatch(
@@ -72,14 +75,22 @@ const DownloadPo = () => {
       {purchaseOrders ? (
         <div className="no-print select-pdf">
           <p>Select PO to Download</p>
-          <select onChange={onChange}>
-            <option>Select PO</option>
-            {purchaseOrders.map((purchaseOrder) => (
-              <option key={purchaseOrder} value={purchaseOrder}>
-                {purchaseOrder}
-              </option>
-            ))}
-          </select>
+          <FormControl className="select-pdf">
+            <InputLabel id="select-po-label">Select Po</InputLabel>
+            <Select
+              onChange={onChange}
+              labelId="select-po-label"
+              id="select-po"
+              label="Age"
+              value={value}
+            >
+              {purchaseOrders.map((purchaseOrder) => (
+                <MenuItem key={purchaseOrder} value={purchaseOrder}>
+                  {purchaseOrder}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
       ) : (
         <p>Fetching orders</p>
