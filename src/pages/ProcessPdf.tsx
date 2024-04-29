@@ -9,10 +9,13 @@ const ProcessPdf = () => {
 
   const handleUpload = async (e: FormEvent) => {
     e.preventDefault();
+    console.log("er are uploading");
+    //@ts-ignore
+    const file = fileInputRef.current?.children[0].children[0].files[0];
+    if (!file) return;
 
-    if (!fileInputRef.current || !fileInputRef.current.files) return;
-
-    const file = fileInputRef.current.files[0];
+    // console.log("here");
+    // const file = fileInputRef.current.files[0];
 
     if (file) {
       const formData = new FormData();

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import ProcessPdf from "./pages/ProcessPdf";
 import DownloadPo from "./pages/DownloadPo";
@@ -15,6 +14,7 @@ import AddPrefix from "./pages/AddPrefix";
 import EditPo from "./pages/EditPo";
 import Logs from "./pages/Logs";
 import ForgotPass from "./pages/ForgotPass";
+import NavDrawer from "./components/NavDrawer";
 
 function App() {
   const [screen, setScreen] = useState(0);
@@ -49,7 +49,7 @@ function App() {
     <>
       <Toast />
       <header className="no-print">
-        <Nav setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
+        {loggedIn && <NavDrawer setScreen={setScreen} setLoggedIn={setLoggedIn} />}
       </header>
 
       {screen === 0 && <Home setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
