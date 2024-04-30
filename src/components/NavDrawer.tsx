@@ -5,7 +5,6 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
@@ -97,7 +96,7 @@ const NavDrawer: React.FC<Props> = ({ setScreen, setLoggedIn }) => {
         <>
           <Divider />
           <List>
-            {[{ text: "View Logs", icon: VisibilityIcon, screen: 5 }].map((entry, index) => (
+            {[{ text: "View Logs", icon: VisibilityIcon, screen: 5 }].map((entry) => (
               <ListItem key={entry.text} disablePadding onClick={() => setScreen(entry.screen)}>
                 <ListItemButton>
                   <entry.icon />
@@ -110,7 +109,7 @@ const NavDrawer: React.FC<Props> = ({ setScreen, setLoggedIn }) => {
       )}
       <Divider />
       <List>
-        {[{ text: "Log Out", icon: LogoutIcon }].map((entry, index) => (
+        {[{ text: "Log Out", icon: LogoutIcon }].map((entry) => (
           <ListItem key={entry.text} disablePadding onClick={onLogout}>
             <ListItemButton>
               <entry.icon />

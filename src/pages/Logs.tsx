@@ -1,4 +1,3 @@
-import * as React from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { useEffect, useState } from "react";
@@ -41,7 +40,7 @@ const Logs = () => {
     };
 
     fetchLogs();
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

@@ -9,9 +9,11 @@ export type PartNumber = {
   description: string;
   partsReceived: Parcel[];
   location?: string;
+  lastEdited?: number;
 };
 
 export type PurchaseOrder = {
+  dateCreated: number;
   purchaseOrder: string;
   orderRef: string;
   partNumbers: {

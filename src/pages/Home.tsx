@@ -4,7 +4,7 @@ import "../styles/home.css";
 import { saveToStorage } from "../utils/storage";
 import { useAppDispatch } from "../hooks";
 import { setRole } from "../slices/user";
-import { Box, Button, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 interface HomeProps {
   loggedIn: boolean;

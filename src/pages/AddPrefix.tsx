@@ -31,7 +31,6 @@ const AddPrefix = () => {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState("");
 
-  const [debouncedValue, setDebouncedValue] = useState("");
   const handleDebounce = async (value: string) => {
     setValue("");
 
@@ -71,7 +70,6 @@ const AddPrefix = () => {
     setShowButton(false);
     setValue("");
     setMessage("Part added");
-    setDebouncedValue("Part added");
   };
 
   return (
