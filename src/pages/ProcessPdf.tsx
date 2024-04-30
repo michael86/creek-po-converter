@@ -1,7 +1,7 @@
 import { FormEvent, useRef, useState } from "react";
 import axios from "../utils/interceptors";
 import "../styles/process.css";
-import { Button, Input, TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 
 const ProcessPdf = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -9,15 +9,14 @@ const ProcessPdf = () => {
 
   const handleUpload = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("er are uploading");
+
     if (!fileInputRef.current) return;
     const f = fileInputRef.current.children[0].children[0] as HTMLInputElement;
+
     if (!f.files) return;
+
     const file = f.files[0];
     if (!file) return;
-
-    // console.log("here");
-    // const file = fileInputRef.current.files[0];
 
     if (file) {
       const formData = new FormData();
