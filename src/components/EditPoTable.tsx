@@ -1,12 +1,35 @@
-import { Button, Input, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Button, Typography } from "@mui/material";
 import { useAppSelector } from "../hooks";
-import { getDate } from "../utils";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
 import AddIcon from "@mui/icons-material/Add";
+import EditPoRow from "./EditPoRow";
 
 const EditPoTable = () => {
   const { order } = useAppSelector((state) => state.purchase);
+  const [newRows, setNewRows] = useState<
+    { name: string; description: string; totalOrdered: number }[]
+  >([]);
+
+  const handleAddRow = () => {
+    const newRow = { name: "", description: "", totalOrdered: 0 };
+    setNewRows([...newRows, newRow]);
+  };
+
+  const renderNewRow = () => {
+    if (newRows.length === 0) return null;
+
+    //Use index to call back what row to save to database
+    return newRows.map((row, index) => {
+      return (
+        <EditPoRow
+          key={`new-row`}
+          name={row.name}
+          description={row.description}
+          totalOrdered={row.totalOrdered}
+        />
+      );
+    });
+  };
 
   return (
     <>
@@ -24,9 +47,7 @@ const EditPoTable = () => {
                 <th>
                   <Typography variant="subtitle2">Count</Typography>
                 </th>
-                <th>
-                  <Typography variant="subtitle2">Date Uploaded</Typography>
-                </th>
+
                 <th>
                   <Typography variant="subtitle2">Last Edited</Typography>
                 </th>
@@ -38,46 +59,27 @@ const EditPoTable = () => {
 
             <tbody>
               {Object.keys(order.partNumbers).map((part, index) => {
+                const { name, description, totalOrdered, lastEdited } = order.partNumbers[part];
+
                 return (
-                  <tr key={`${part}-${index}`}>
-                    <td>
-                      <Typography variant="subtitle2">{order.partNumbers[part].name}</Typography>
-                    </td>
-
-                    <td>
-                      <Input type="text" value={order.partNumbers[part].description} />
-                    </td>
-                    <td>
-                      <Input type="text" value={order.partNumbers[part].totalOrdered} />
-                    </td>
-
-                    <td>
-                      <Typography variant="subtitle2">{getDate(order.dateCreated)}</Typography>
-                    </td>
-                    <td>
-                      <Typography variant="subtitle2">
-                        {order.partNumbers[part].lastEdited
-                          ? getDate(order.partNumbers[part].lastEdited)
-                          : "Not edited before"}
-                      </Typography>
-                    </td>
-                    <td>
-                      <Button variant="contained" endIcon={<SaveIcon />}>
-                        save
-                      </Button>
-                      <Button variant="contained" endIcon={<DeleteIcon />}>
-                        delete
-                      </Button>
-                    </td>
-                  </tr>
+                  <EditPoRow
+                    key={`${part}-${index}`}
+                    name={name}
+                    description={description}
+                    totalOrdered={totalOrdered}
+                    lastEdited={lastEdited}
+                  />
                 );
               })}
+
+              {/* Render new row */}
+              {renderNewRow()}
             </tbody>
           </table>
 
           <div className="add-new-item-container">
-            <Button variant="contained" endIcon={<AddIcon />}>
-              Add new Icon
+            <Button variant="contained" endIcon={<AddIcon />} onClick={handleAddRow}>
+              Add new Item
             </Button>
           </div>
         </>
