@@ -12,13 +12,15 @@ export type PartNumber = {
   lastEdited?: number;
 };
 
+export type PartNumbers = {
+  [key: string]: PartNumber;
+};
+
 export type PurchaseOrder = {
   dateCreated: number;
   purchaseOrder: string;
   orderRef: string;
-  partNumbers: {
-    [key: string]: PartNumber;
-  };
+  partNumbers: PartNumbers;
 };
 
 export type PurchaseOrders = string[];
@@ -52,10 +54,13 @@ export const purchaseSlice = createSlice({
       const key = action.payload.key;
       state.order!.partNumbers[key].partial = action.payload.partial;
     },
+    setPartNumbers: (state, action: PayloadAction<PartNumbers>) => {
+      state.order!.partNumbers = action.payload;
+    },
   },
 });
 
-export const { setPurchaseOrder, setPurchaseOrders, setPart, setPartPartial } =
+export const { setPurchaseOrder, setPurchaseOrders, setPart, setPartPartial, setPartNumbers } =
   purchaseSlice.actions;
 
 export default purchaseSlice.reducer;

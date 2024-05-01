@@ -7,11 +7,11 @@ import EditPoRow from "./EditPoRow";
 const EditPoTable = () => {
   const { order } = useAppSelector((state) => state.purchase);
   const [newRows, setNewRows] = useState<
-    { name: string; description: string; totalOrdered: number }[]
+    { name: string; description: string; totalOrdered: string }[]
   >([]);
 
   const handleAddRow = () => {
-    const newRow = { name: "", description: "", totalOrdered: 0 };
+    const newRow = { name: "", description: "", totalOrdered: "" };
     setNewRows([...newRows, newRow]);
   };
 
@@ -25,7 +25,7 @@ const EditPoTable = () => {
           key={`new-row`}
           name={row.name}
           description={row.description}
-          totalOrdered={row.totalOrdered}
+          quantity={+row.totalOrdered}
         />
       );
     });
@@ -66,7 +66,7 @@ const EditPoTable = () => {
                     key={`${part}-${index}`}
                     name={name}
                     description={description}
-                    totalOrdered={totalOrdered}
+                    quantity={totalOrdered}
                     lastEdited={lastEdited}
                   />
                 );
