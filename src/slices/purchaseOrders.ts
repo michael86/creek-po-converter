@@ -8,19 +8,17 @@ export type PartNumber = {
   totalOrdered: number;
   description: string;
   partsReceived: Parcel[];
-  location?: string;
+  location: string | null;
   lastEdited?: number;
-};
-
-export type PartNumbers = {
-  [key: string]: PartNumber;
+  dateDue: number;
+  lineId: number;
 };
 
 export type PurchaseOrder = {
   dateCreated: number;
   purchaseOrder: string;
   orderRef: string;
-  partNumbers: PartNumbers;
+  partNumbers: PartNumber[];
 };
 
 export type PurchaseOrders = string[];
@@ -46,15 +44,15 @@ export const purchaseSlice = createSlice({
     setPurchaseOrder: (state, action: PayloadAction<PurchaseOrder>) => {
       state.order = action.payload;
     },
-    setPart: (state, action: PayloadAction<{ key: string; part: PartNumber }>) => {
-      const key = action.payload.key;
-      state.order!.partNumbers[key] = action.payload.part;
+    setPart: (state, action: PayloadAction<{ index: number; part: PartNumber }>) => {
+      const { index } = action.payload;
+      state.order!.partNumbers[index] = action.payload.part;
     },
-    setPartPartial: (state, action: PayloadAction<{ key: string; partial: 0 | 1 }>) => {
-      const key = action.payload.key;
-      state.order!.partNumbers[key].partial = action.payload.partial;
+    setPartPartial: (state, action: PayloadAction<{ index: number; partial: 0 | 1 }>) => {
+      const { index } = action.payload;
+      state.order!.partNumbers[index].partial = action.payload.partial;
     },
-    setPartNumbers: (state, action: PayloadAction<PartNumbers>) => {
+    setPartNumbers: (state, action: PayloadAction<PartNumber[]>) => {
       state.order!.partNumbers = action.payload;
     },
   },

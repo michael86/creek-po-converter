@@ -16,18 +16,18 @@ const StickerTable = () => {
             <th>part number</th>
             <th>description</th>
             <th>count</th>
+            <th>date due</th>
             <th>date received</th>
             <th>Location</th>
             <th>buttons</th>
           </tr>
         </thead>
         <tbody>
-          {Object.keys(order.partNumbers)
-            .map((key, index) => {
+          {order.partNumbers
+            .map((entry, index) => {
               const stickers: ReactElement[] = [];
 
-              const { name, totalOrdered, partsReceived } = order.partNumbers[key];
-
+              const { name, totalOrdered, partsReceived } = entry;
               const totalReceived = partsReceived.reduce((a, b) => a + b.amountReceived, 0);
               const amountWaited = totalOrdered - totalReceived;
 
@@ -37,8 +37,9 @@ const StickerTable = () => {
                     key={`${index}-${name}_${received}`} // Ensure unique keys when mapping over arrays
                     qty={received.amountReceived}
                     isReceived={true}
-                    part={order.partNumbers[key]}
+                    part={entry}
                     date={received.dateReceived}
+                    index={index}
                   />
                 );
               });
@@ -49,7 +50,8 @@ const StickerTable = () => {
                     key={`${index}-${name}_${amountWaited}`} // Ensure unique keys when mapping over arrays
                     qty={totalOrdered - totalReceived}
                     isReceived={false}
-                    part={order.partNumbers[key]}
+                    part={entry}
+                    index={index}
                   />
                 );
               return stickers;

@@ -8,13 +8,14 @@ import { getDateAsUnix } from "../../utils";
 
 type Props = {
   name: string;
+  index: number;
 };
 
-const SubmitParcels: React.FC<Props> = ({ name }) => {
+const SubmitParcels: React.FC<Props> = ({ name, index }) => {
   const dispatch = useAppDispatch();
   const [state, setState] = useState("");
   const { partNumbers, purchaseOrder } = useAppSelector((state) => state.purchase.order!);
-  const part = partNumbers[name];
+  const part = partNumbers[index];
   const { totalOrdered, partial } = part;
   const totalReceived = part.partsReceived.reduce((a, b) => a + b.amountReceived, 0);
   const totalAwaited = totalOrdered - totalReceived;
@@ -68,7 +69,7 @@ const SubmitParcels: React.FC<Props> = ({ name }) => {
         };
       }),
     ];
-    dispatch(setPart({ key: name, part: copy }));
+    dispatch(setPart({ index, part: copy }));
     setToast({
       type: "success",
       message: "Parcels added",

@@ -12,9 +12,10 @@ type Props = {
   isReceived: boolean;
   part: PartNumber;
   date?: number;
+  index: number;
 };
 
-const StickerRow = ({ qty, isReceived, part, date }: Props) => {
+const StickerRow = ({ qty, isReceived, part, date, index }: Props) => {
   const [print, setPrint] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -45,7 +46,10 @@ const StickerRow = ({ qty, isReceived, part, date }: Props) => {
             </div>
           </>
         </td>
-
+        <td className="due-date" style={{ textTransform: "uppercase" }}>
+          <span className="show-print">Due: </span>
+          {getDate(part.dateDue)}
+        </td>
         <td className="date-received" style={{ textTransform: "uppercase" }}>
           <span className="show-print">Received: </span>
           {getDate(date)}
@@ -54,7 +58,7 @@ const StickerRow = ({ qty, isReceived, part, date }: Props) => {
         <StickerLocation location={part.location} />
 
         <td className="table-buttons pagebreak">
-          <StickerButtons name={part.name} addToPrint={addToPrint} />
+          <StickerButtons name={part.name} addToPrint={addToPrint} index={index} />
         </td>
       </tr>
     </>

@@ -18,19 +18,19 @@ const LOCATIONS = [
 ];
 
 type Props = {
-  orderNumber: string;
-  part: string;
+  index: number;
 };
 
-const SelectLocation: React.FC<Props> = ({ orderNumber, part }) => {
+const SelectLocation: React.FC<Props> = ({ index }) => {
   const dispatch = useAppDispatch();
   const { order } = useAppSelector((state) => state.purchase);
 
   const onChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (!order) return;
+
     const res = await axios.post("/locations/update", {
-      order: orderNumber,
-      part,
       location: e.target.value,
+      line: order.partNumbers[index].lineId,
     });
 
     if (res.status !== 200) {
@@ -53,8 +53,8 @@ const SelectLocation: React.FC<Props> = ({ orderNumber, part }) => {
 
     if (!order) return;
     const copy = structuredClone(order);
-    copy.partNumbers[part].location = e.target.value;
-    dispatch(setPart({ key: part, part: copy.partNumbers[part] }));
+    copy.partNumbers[index].location = e.target.value;
+    dispatch(setPart({ index, part: copy.partNumbers[index] }));
   };
 
   return (

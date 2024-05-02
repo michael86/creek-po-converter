@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { useAppSelector } from "../hooks";
 import AddIcon from "@mui/icons-material/Add";
@@ -58,8 +58,8 @@ const EditPoTable = () => {
             </thead>
 
             <tbody>
-              {Object.keys(order.partNumbers).map((part, index) => {
-                const { name, description, totalOrdered, lastEdited } = order.partNumbers[part];
+              {order.partNumbers.map((part, index) => {
+                const { name, description, totalOrdered, lastEdited } = part;
 
                 return (
                   <EditPoRow

@@ -6,15 +6,15 @@ import { AxiosResponse } from "axios";
 import { setToast } from "../../slices/alert";
 
 type Props = {
-  name: string;
+  index: number;
 };
 
-const PartialConfirm: React.FC<Props> = ({ name }) => {
-  const { partNumbers, purchaseOrder } = useAppSelector((state) => state.purchase.order!);
+const PartialConfirm: React.FC<Props> = ({ index }) => {
+  const { partNumbers } = useAppSelector((state) => state.purchase.order!);
   const ref = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
 
-  const part = partNumbers[name];
+  const part = partNumbers[index];
 
   const onConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -31,7 +31,7 @@ const PartialConfirm: React.FC<Props> = ({ name }) => {
 
     type StatusRes = { status: number; token: string };
     const res: AxiosResponse<StatusRes> = await axios.patch(
-      `/purchase/set-partial/${purchaseOrder}/${name}`
+      `/purchase/set-partial/${partNumbers[index].lineId}`
     );
 
     if (res.status !== 200 || !res.data.status) {
@@ -47,7 +47,7 @@ const PartialConfirm: React.FC<Props> = ({ name }) => {
 
     const copy = structuredClone(part);
     copy.partial = 1;
-    dispatch(setPart({ key: name, part: copy }));
+    dispatch(setPart({ index, part: copy }));
 
     dispatch(
       setToast({

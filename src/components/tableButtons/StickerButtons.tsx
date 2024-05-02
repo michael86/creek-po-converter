@@ -7,12 +7,13 @@ import "../../styles/sticker_buttons.css";
 type Props = {
   name: string;
   addToPrint: Function;
+  index: number;
 };
 
-const StickerButtons: React.FC<Props> = ({ name, addToPrint }) => {
+const StickerButtons: React.FC<Props> = ({ name, addToPrint, index }) => {
   const { order } = useAppSelector((state) => state.purchase);
 
-  const part = order!.partNumbers[name];
+  const part = order!.partNumbers[index];
   const totalOrdered = part.totalOrdered;
   const totalReceived = part.partsReceived.reduce((a, b) => a + b.amountReceived, 0);
 
@@ -20,11 +21,11 @@ const StickerButtons: React.FC<Props> = ({ name, addToPrint }) => {
     <span className="no-print button-container">
       {totalOrdered - totalReceived > 0 ? (
         <>
-          <SubmitParcels name={name} />
+          <SubmitParcels name={name} index={index} />
           <hr style={{ border: "solid black 1px" }} />
-          <SelectLocation part={name} orderNumber={order!.purchaseOrder} />
+          <SelectLocation index={index} />
           <hr style={{ border: "solid black 1px" }} />
-          <PartialConfirm name={name} />
+          <PartialConfirm index={index} />
         </>
       ) : (
         <button onClick={() => addToPrint()}>Add to Print</button>

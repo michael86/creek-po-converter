@@ -5,6 +5,7 @@ import { getDate } from "../utils";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { setPartNumbers } from "../slices/purchaseOrders";
+import axios from "../utils/interceptors";
 
 type Props = {
   name?: string;
@@ -34,29 +35,28 @@ const EditPoRow: React.FC<Props> = ({ name, description, quantity, lastEdited, n
 
   const onSave = () => {
     if (!order) return;
-    if (!name) return; //Will hand new rows here
+    // if (!name) return; //Will hand new rows here
 
-    const storeState = order.partNumbers[name];
+    // const storeState = order.partNumbers[name];
 
-    const { totalOrdered, description } = storeState;
+    // const { totalOrdered, description } = storeState;
 
-    if (totalOrdered !== state.quantity) {
-      console.log("total changed");
-    }
-    if (description !== state.description) {
-      console.log("desc changed");
-    }
+    // if (totalOrdered !== state.quantity) {
+    //   console.log("total changed");
+    // }
+    // if (description !== state.description) {
+    //   console.log("desc changed");
+    // }
   };
 
-  const onDelete = () => {
-    if (!order || !name) return;
-
-    const { partNumbers } = order;
-    const copy = structuredClone(partNumbers);
-    delete copy[name];
-    //Call api here to remove partnumber
-
-    dispatch(setPartNumbers(copy));
+  const onDelete = async () => {
+    // if (!order || !name) return;
+    // const { partNumbers } = order;
+    // const copy = structuredClone(partNumbers);
+    // delete copy[name];
+    // //Call api here to remove partnumber
+    // const res = await axios.post("/purchase/delete", { name, order: order.purchaseOrder });
+    // dispatch(setPartNumbers(copy));
   };
 
   return (
