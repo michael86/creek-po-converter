@@ -14,14 +14,27 @@ type Props = {
   dateCreated?: number;
   lastEdited?: number;
   newRowIndex?: number;
+  dateDue?: number;
 };
 
-type State = { name?: string; description?: string; quantity?: number };
+type State = { name?: string; description?: string; quantity?: number; dateDue?: string };
 
 const REGEX = /^[0-9]*$/;
 
-const EditPoRow: React.FC<Props> = ({ name, description, quantity, lastEdited, newRowIndex }) => {
-  const [state, setState] = useState<State>({ name, description, quantity });
+const EditPoRow: React.FC<Props> = ({
+  name,
+  description,
+  quantity,
+  lastEdited,
+  dateDue,
+  newRowIndex,
+}) => {
+  const [state, setState] = useState<State>({
+    name,
+    description,
+    quantity,
+    dateDue: getDate(dateDue, true),
+  });
   const { order } = useAppSelector((state) => state.purchase);
   const dispatch = useAppDispatch();
 
@@ -59,6 +72,8 @@ const EditPoRow: React.FC<Props> = ({ name, description, quantity, lastEdited, n
     // dispatch(setPartNumbers(copy));
   };
 
+  console.log(state.dateDue);
+
   return (
     <tr>
       <td>
@@ -89,6 +104,10 @@ const EditPoRow: React.FC<Props> = ({ name, description, quantity, lastEdited, n
           onInput={(e: React.ChangeEvent<HTMLInputElement>) => onInput("quantity", e.target.value)}
           value={state.quantity}
         />
+      </td>
+
+      <td>
+        <Input type="date" value={state.dateDue} />
       </td>
 
       <td>

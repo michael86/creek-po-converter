@@ -58,7 +58,7 @@ const StickerRow = ({ qty, isReceived, part, date, index }: Props) => {
         <StickerLocation location={part.location} />
 
         <td className="table-buttons pagebreak">
-          <StickerButtons name={part.name} addToPrint={addToPrint} index={index} />
+          <StickerButtons addToPrint={addToPrint} index={index} isReceived={isReceived} />
         </td>
       </tr>
     </>

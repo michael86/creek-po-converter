@@ -47,6 +47,9 @@ const EditPoTable = () => {
                 <th>
                   <Typography variant="subtitle2">Count</Typography>
                 </th>
+                <th>
+                  <Typography variant="subtitle2">Date Due</Typography>
+                </th>
 
                 <th>
                   <Typography variant="subtitle2">Last Edited</Typography>
@@ -59,8 +62,7 @@ const EditPoTable = () => {
 
             <tbody>
               {order.partNumbers.map((part, index) => {
-                const { name, description, totalOrdered, lastEdited } = part;
-
+                const { name, description, totalOrdered, lastEdited, dateDue } = part;
                 return (
                   <EditPoRow
                     key={`${part}-${index}`}
@@ -68,6 +70,7 @@ const EditPoTable = () => {
                     description={description}
                     quantity={totalOrdered}
                     lastEdited={lastEdited}
+                    dateDue={dateDue}
                   />
                 );
               })}

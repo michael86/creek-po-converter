@@ -7,14 +7,13 @@ import { AxiosResponse } from "axios";
 import { getDateAsUnix } from "../../utils";
 
 type Props = {
-  name: string;
   index: number;
 };
 
-const SubmitParcels: React.FC<Props> = ({ name, index }) => {
+const SubmitParcels: React.FC<Props> = ({ index }) => {
   const dispatch = useAppDispatch();
   const [state, setState] = useState("");
-  const { partNumbers, purchaseOrder } = useAppSelector((state) => state.purchase.order!);
+  const { partNumbers } = useAppSelector((state) => state.purchase.order!);
   const part = partNumbers[index];
   const { totalOrdered, partial } = part;
   const totalReceived = part.partsReceived.reduce((a, b) => a + b.amountReceived, 0);
@@ -44,8 +43,7 @@ const SubmitParcels: React.FC<Props> = ({ name, index }) => {
     type CustomResponse = { status: number; token: string };
     const res: AxiosResponse<CustomResponse> = await axios.put("/purchase/add-parcel", {
       parcels: newParcels,
-      purchaseOrder,
-      part: name,
+      index: partNumbers[index].lineId,
     });
 
     if (res.status !== 200 || !res.data.status) {

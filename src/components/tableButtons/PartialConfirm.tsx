@@ -19,7 +19,7 @@ const PartialConfirm: React.FC<Props> = ({ index }) => {
   const onConfirm = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (!ref.current || !ref.current.checked) return;
+    if (!ref.current?.checked) return;
 
     if (
       !window.confirm(
