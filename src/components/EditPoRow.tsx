@@ -72,8 +72,6 @@ const EditPoRow: React.FC<Props> = ({
     // dispatch(setPartNumbers(copy));
   };
 
-  console.log(state.dateDue);
-
   return (
     <tr>
       <td>
@@ -107,7 +105,11 @@ const EditPoRow: React.FC<Props> = ({
       </td>
 
       <td>
-        <Input type="date" value={state.dateDue} />
+        <Input
+          type="date"
+          value={state.dateDue}
+          onChange={(e) => setState({ ...state, dateDue: e.target.value })}
+        />
       </td>
 
       <td>
