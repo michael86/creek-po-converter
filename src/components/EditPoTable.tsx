@@ -19,7 +19,7 @@ const EditPoTable = () => {
     if (newRows.length === 0) return null;
 
     //Use index to call back what row to save to database
-    console.log("new rows render ", newRows);
+
     return newRows.map((row, index) => {
       return (
         <EditPoRow
@@ -29,6 +29,7 @@ const EditPoTable = () => {
           quantity={+row.totalOrdered}
           onNewRowDelete={() => {
             const copy = structuredClone(newRows);
+            copy.splice(index, 1);
             setNewRows(copy);
           }}
         />
@@ -86,11 +87,11 @@ const EditPoTable = () => {
             </tbody>
           </table>
 
-          <div className="add-new-item-container">
+          {/* <div className="add-new-item-container">
             <Button variant="contained" endIcon={<AddIcon />} onClick={handleAddRow}>
               Add new Item
             </Button>
-          </div>
+          </div> */}
         </>
       ) : null}
     </>

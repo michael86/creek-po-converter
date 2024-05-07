@@ -50,20 +50,25 @@ const EditPoRow: React.FC<Props> = ({
     setState({ ...state, [key]: value });
   };
 
-  const onSave = () => {
-    if (!order) return;
-    // if (!name) return; //Will hand new rows here
+  const onSave = async () => {
+    if (!lineId || !order) return;
+    const { partNumbers } = order;
+    const storeState = partNumbers.find((entry) => entry.lineId === lineId);
+    if (!storeState) return;
+    const { totalOrdered, description, dateDue } = storeState;
 
-    // const storeState = order.partNumbers[name];
+    const updates: { count?: number; description?: string; dateDue?: string } = {};
+    if (totalOrdered !== state.quantity) updates.count = state.quantity;
+    if (description !== state.description) updates.description = state.description;
+    if (getDate(dateDue, true) !== state.dateDue) updates.dateDue = state.dateDue;
 
-    // const { totalOrdered, description } = storeState;
+    if (Object.keys(updates).length > 0) {
+      const res = await axios.post("/purchase/update", { ...updates, lineId });
+      if (res.status !== 200)
+        return dispatch(setToast({ type: "error", message: "Failed to update date", show: true }));
 
-    // if (totalOrdered !== state.quantity) {
-    //   console.log("total changed");
-    // }
-    // if (description !== state.description) {
-    //   console.log("desc changed");
-    // }
+      dispatch(setToast({ type: "success", message: "Date due updated", show: true }));
+    }
   };
 
   const onDelete = async () => {
@@ -104,21 +109,23 @@ const EditPoRow: React.FC<Props> = ({
       </td>
 
       <td>
-        <Input
+        {/* <Input
           type="text"
           onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
             onInput("description", e.target.value)
           }
           value={state.description}
-        />
+        /> */}
+        <Typography>{state.description}</Typography>
       </td>
 
       <td>
-        <Input
+        {/* <Input
           type="text"
           onInput={(e: React.ChangeEvent<HTMLInputElement>) => onInput("quantity", e.target.value)}
           value={state.quantity}
-        />
+        /> */}
+        <Typography>{state.quantity}</Typography>
       </td>
 
       <td>
