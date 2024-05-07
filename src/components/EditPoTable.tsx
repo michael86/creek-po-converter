@@ -19,13 +19,18 @@ const EditPoTable = () => {
     if (newRows.length === 0) return null;
 
     //Use index to call back what row to save to database
+    console.log("new rows render ", newRows);
     return newRows.map((row, index) => {
       return (
         <EditPoRow
-          key={`new-row`}
+          key={`new-row-${index}`}
           name={row.name}
           description={row.description}
           quantity={+row.totalOrdered}
+          onNewRowDelete={() => {
+            const copy = structuredClone(newRows);
+            setNewRows(copy);
+          }}
         />
       );
     });

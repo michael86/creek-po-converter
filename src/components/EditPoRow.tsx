@@ -14,9 +14,10 @@ type Props = {
   quantity?: number;
   dateCreated?: number;
   lastEdited?: number;
-  newRowIndex?: number;
+
   dateDue?: number;
   lineId?: number;
+  onNewRowDelete?: () => void;
 };
 
 type State = { name?: string; description?: string; quantity?: number; dateDue?: string };
@@ -29,7 +30,7 @@ const EditPoRow: React.FC<Props> = ({
   quantity,
   lastEdited,
   dateDue,
-  newRowIndex,
+  onNewRowDelete,
   lineId,
 }) => {
   const [state, setState] = useState<State>({
@@ -66,7 +67,10 @@ const EditPoRow: React.FC<Props> = ({
   };
 
   const onDelete = async () => {
-    if (!lineId || !order) return;
+    if (!lineId || !order) {
+      onNewRowDelete && onNewRowDelete();
+      return;
+    }
 
     const res = await axios.post("/purchase/delete", { lineId });
     if (res.status !== 200) {
