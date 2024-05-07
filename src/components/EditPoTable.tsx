@@ -71,6 +71,7 @@ const EditPoTable = () => {
                     quantity={totalOrdered}
                     lastEdited={lastEdited}
                     dateDue={dateDue}
+                    lineId={part.lineId}
                   />
                 );
               })}

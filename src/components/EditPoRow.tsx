@@ -4,8 +4,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import { getDate } from "../utils";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { setPartNumbers } from "../slices/purchaseOrders";
+import { PartNumber, setPartNumbers } from "../slices/purchaseOrders";
 import axios from "../utils/interceptors";
+import { setToast } from "../slices/alert";
 
 type Props = {
   name?: string;
@@ -15,6 +16,7 @@ type Props = {
   lastEdited?: number;
   newRowIndex?: number;
   dateDue?: number;
+  lineId?: number;
 };
 
 type State = { name?: string; description?: string; quantity?: number; dateDue?: string };
@@ -28,6 +30,7 @@ const EditPoRow: React.FC<Props> = ({
   lastEdited,
   dateDue,
   newRowIndex,
+  lineId,
 }) => {
   const [state, setState] = useState<State>({
     name,
@@ -63,13 +66,23 @@ const EditPoRow: React.FC<Props> = ({
   };
 
   const onDelete = async () => {
-    // if (!order || !name) return;
-    // const { partNumbers } = order;
-    // const copy = structuredClone(partNumbers);
-    // delete copy[name];
-    // //Call api here to remove partnumber
-    // const res = await axios.post("/purchase/delete", { name, order: order.purchaseOrder });
-    // dispatch(setPartNumbers(copy));
+    if (!lineId || !order) return;
+
+    const res = await axios.post("/purchase/delete", { lineId });
+    if (res.status !== 200) {
+      return dispatch(
+        setToast({ type: "error", message: "Failed to delete part, contact michael", show: true })
+      );
+    }
+
+    const { partNumbers } = order;
+    const copy = structuredClone(partNumbers);
+    copy.splice(
+      copy.findIndex((entry: PartNumber) => entry.lineId === lineId),
+      1
+    );
+    dispatch(setPartNumbers(copy));
+    dispatch(setToast({ type: "success", message: "Part deleted", show: true }));
   };
 
   return (
