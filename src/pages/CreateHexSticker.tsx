@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Template, BLANK_PDF } from "@pdfme/common";
+import { generate } from "@pdfme/generator";
 
 import {
   Input,
@@ -15,6 +17,69 @@ import HexTable from "../components/HexTable";
 
 const convertToHex = (number: number) => number.toString(16);
 const convertToDec = (number: string) => parseInt(number, 16);
+
+const testPDF = () => {
+  const fontSize: number = 6;
+  const labelWidth: number = 16;
+  const labelHeight: number = 4;
+  const sheetHeight: number = 297;
+  const sheetWidth: number = 210;
+  const sheetCols: number = 10;
+  const sheetRows: number = 36;
+
+  const template: Template = {
+    basePdf: BLANK_PDF,
+
+    /**
+     * Schema is going to be our label positions assumed 
+     * the name is going to be used for the inputs to know where to put our label.
+     * Need to addjust the margin top and so on...
+     * 
+     * Template details: 
+     * top margin: 6
+     * sid margin: 8
+     * vertical pitch: 8 - Pitch is from the top side of the sticker to the top of the next, includes the sticker and gap
+     * horizontal pitch: 20 - same as above but from the left side of the sticker to the left of the next
+     * page size: 21 x 297 - A4 
+     * label heigh: 4
+     * label width: 16
+     * number across: 10 - columns
+     * number down 36 - rows
+    
+    */
+    schemas: [
+      [
+        {
+          name: "0",
+          type: "text",
+          position: { x: (sheetHeight / sheetRows) * 0, y: (sheetWidth / sheetCols) * 0 },
+          width: labelWidth,
+          height: labelHeight,
+          alignment: "center",
+          fontSize: fontSize,
+        },
+        {
+          name: "13",
+          type: "text",
+          position: { x: (sheetHeight / sheetRows) * 6, y: (sheetWidth / sheetCols) * 1 },
+          width: labelWidth,
+          height: labelHeight,
+          alignment: "center",
+          fontSize: fontSize,
+        },
+      ],
+    ],
+  };
+
+  const inputs = [{ 0: "ermmmmm", 13: "yeaahhhhhh" }];
+
+  generate({ template, inputs }).then((pdf) => {
+    console.log("ya yeet ", pdf);
+
+    const blob = new Blob([pdf.buffer], { type: "application/pdf" });
+    window.open(URL.createObjectURL(blob));
+  });
+};
 
 const CreateHexSticker = () => {
   const [value, setValue] = useState("");
@@ -43,6 +108,8 @@ const CreateHexSticker = () => {
     }
 
     setData(newData);
+
+    testPDF();
   };
 
   const setRadioValue = (value: string) => setRadio(value.toLowerCase() === "decimal" ? 0 : 1);
