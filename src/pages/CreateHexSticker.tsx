@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 import "../styles/create_hex.css";
+import HexTable from "../components/HexTable";
 
 const convertToHex = (number: number) => number.toString(16);
 const convertToDec = (number: string) => parseInt(number, 16);
@@ -27,7 +28,7 @@ const CreateHexSticker = () => {
     let valueRef = !radio ? +value : value;
     const newData = [];
 
-    for (let i = 1; i <= count; i++) {
+    for (let i = 0; i <= count; i++) {
       typeof valueRef === "string"
         ? newData.push({ hex: valueRef.toUpperCase(), decimal: convertToDec(valueRef) })
         : newData.push({ hex: convertToHex(valueRef).toUpperCase(), decimal: valueRef });
@@ -40,6 +41,7 @@ const CreateHexSticker = () => {
         valueRef = valueRef.toString(16);
       }
     }
+
     setData(newData);
   };
 
@@ -91,6 +93,12 @@ const CreateHexSticker = () => {
           </Button>
         </div>
       </form>
+
+      {data.length > 0 && (
+        <section className="data-table">
+          <HexTable data={data} />
+        </section>
+      )}
     </>
   );
 };
