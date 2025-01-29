@@ -17,13 +17,25 @@ const convertToDec = (number: string) => parseInt(number, 16);
 
 const CreateHexSticker = () => {
   const [value, setValue] = useState("");
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [radio, setRadio] = useState(0);
 
   const manageConversion = () => {
-    console.log(count);
-    //Here we need to check if working with a hex, if are, then parse int, incrememnt by 1, then toString(16)
-    console.log("start value ", !radio ? convertToHex(+value) : convertToDec(value));
+    let valueRef = !radio ? +value : value;
+
+    for (let i = 1; i <= count; i++) {
+      typeof valueRef === "string" ? convertToDec(valueRef) : convertToHex(valueRef);
+
+      if (typeof valueRef === "number") {
+        valueRef++;
+      } else if (typeof valueRef === "string") {
+        valueRef = parseInt(valueRef, 16);
+        valueRef++;
+        valueRef = valueRef.toString(16);
+      }
+
+      console.log(i);
+    }
   };
 
   const setRadioValue = (value: string) => setRadio(value.toLowerCase() === "decimal" ? 0 : 1);
