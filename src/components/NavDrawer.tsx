@@ -19,6 +19,7 @@ import "../styles/drawer.css";
 import { useAppSelector } from "../hooks";
 import axios from "../utils/interceptors";
 import { deleteFromStorage } from "../utils/storage";
+import { NoteAdd } from "@mui/icons-material";
 
 type Props = {
   setScreen: React.Dispatch<React.SetStateAction<number>>;
@@ -92,11 +93,26 @@ const NavDrawer: React.FC<Props> = ({ setScreen, setLoggedIn }) => {
           </List>
         </>
       )}
+      {role >= 2 && (
+        <>
+          <Divider />
+          <List>
+            {[{ text: "Create Hex Stickers", icon: NoteAdd, screen: 5 }].map((entry) => (
+              <ListItem key={entry.text} disablePadding onClick={() => setScreen(entry.screen)}>
+                <ListItemButton>
+                  <entry.icon />
+                  <ListItemText primary={entry.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </>
+      )}
       {role >= 5 && (
         <>
           <Divider />
           <List>
-            {[{ text: "View Logs", icon: VisibilityIcon, screen: 5 }].map((entry) => (
+            {[{ text: "View Logs", icon: VisibilityIcon, screen: 6 }].map((entry) => (
               <ListItem key={entry.text} disablePadding onClick={() => setScreen(entry.screen)}>
                 <ListItemButton>
                   <entry.icon />

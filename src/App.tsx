@@ -57,8 +57,9 @@ function App() {
       {screen === 2 && <DownloadPo />}
       {screen === 3 && <AddPrefix />}
       {screen === 4 && <EditPo />}
-      {screen === 5 && <Logs />}
-      {screen === 6 && <ForgotPass />}
+      {screen === 5 && <EditPo />}
+      {screen === 6 && <Logs />}
+      {screen === 7 && <ForgotPass />}
     </>
   );
 }
