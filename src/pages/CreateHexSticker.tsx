@@ -19,12 +19,18 @@ const CreateHexSticker = () => {
   const [value, setValue] = useState("");
   const [count, setCount] = useState(1);
   const [radio, setRadio] = useState(0);
+  const [data, setData] = useState<{ hex: string; decimal: number }[]>([]);
 
   const manageConversion = () => {
+    if (!radio && isNaN(+value)) return;
+
     let valueRef = !radio ? +value : value;
+    const newData = [];
 
     for (let i = 1; i <= count; i++) {
-      typeof valueRef === "string" ? convertToDec(valueRef) : convertToHex(valueRef);
+      typeof valueRef === "string"
+        ? newData.push({ hex: valueRef.toUpperCase(), decimal: convertToDec(valueRef) })
+        : newData.push({ hex: convertToHex(valueRef).toUpperCase(), decimal: valueRef });
 
       if (typeof valueRef === "number") {
         valueRef++;
@@ -33,9 +39,8 @@ const CreateHexSticker = () => {
         valueRef++;
         valueRef = valueRef.toString(16);
       }
-
-      console.log(i);
     }
+    setData(newData);
   };
 
   const setRadioValue = (value: string) => setRadio(value.toLowerCase() === "decimal" ? 0 : 1);
