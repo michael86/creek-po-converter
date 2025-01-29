@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   Input,
   Button,
@@ -9,7 +11,6 @@ import {
 } from "@mui/material";
 
 import "../styles/create_hex.css";
-import { useState } from "react";
 
 const convertToHex = (number: number) => number.toString(16);
 const convertToDec = (number: string) => parseInt(number, 16);
@@ -20,6 +21,8 @@ const CreateHexSticker = () => {
   const [radio, setRadio] = useState(0);
 
   const manageConversion = () => {
+    console.log(count);
+    //Here we need to check if working with a hex, if are, then parse int, incrememnt by 1, then toString(16)
     console.log("start value ", !radio ? convertToHex(+value) : convertToDec(value));
   };
 
@@ -50,7 +53,6 @@ const CreateHexSticker = () => {
             name="count-amount"
             required
             type="number"
-            value={count}
             onChange={(e) => setCount(+e.target.value)}
           />
         </InputLabel>
