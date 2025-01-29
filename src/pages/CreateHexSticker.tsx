@@ -20,7 +20,7 @@ const CreateHexSticker = () => {
   const [radio, setRadio] = useState(0);
 
   const manageConversion = () => {
-    console.log("start value ", radio);
+    console.log("start value ", !radio ? convertToHex(+value) : convertToDec(value));
   };
 
   const setRadioValue = (value: string) => setRadio(value.toLowerCase() === "decimal" ? 0 : 1);
@@ -28,6 +28,7 @@ const CreateHexSticker = () => {
   return (
     <>
       <h1 className="hex-title">Create Hex</h1>
+
       <form className="hex-form">
         <InputLabel>
           Start Count:
@@ -38,7 +39,7 @@ const CreateHexSticker = () => {
             required
             type="text"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => setValue(e.target.value.toUpperCase())}
           />
         </InputLabel>
 
