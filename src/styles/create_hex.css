@@ -1,0 +1,19 @@
+.hex-title {
+  text-align: center;
+}
+
+.hex-form {
+  margin: auto;
+  width: 75%;
+
+  border: 1px solid #000;
+  padding: 1rem;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.button-container {
+  margin-top: 1rem;
+  width: 25%;
+  margin: auto;
+}
