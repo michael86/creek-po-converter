@@ -22,7 +22,7 @@ const HexStickerSheet: React.FC<StickerSheetProps> = ({
   numberAcross,
   numberDown,
 }) => {
-  const { data } = useAppSelector((state) => state.hex);
+  const { data, radio } = useAppSelector((state) => state.hex);
 
   // Calculate the total height and width of the grid, factoring in the labels and spacing
   const totalHeight = labelHeight * numberDown + verticalPitch * (numberDown - 1);
@@ -49,7 +49,6 @@ const HexStickerSheet: React.FC<StickerSheetProps> = ({
   return (
     <div className="sticker-sheet" style={generateStyles()}>
       {data.map((item, index) => {
-        // const hexOrDec = index % 2 === 0 ? item.hex : item.decimal.toString();
         return (
           <div
             key={index}
@@ -64,7 +63,7 @@ const HexStickerSheet: React.FC<StickerSheetProps> = ({
               alignItems: "center",
             }}
           >
-            {item.hex}
+            {radio === 0 ? item.decimal : item.hex}
           </div>
         );
       })}
