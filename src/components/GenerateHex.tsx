@@ -28,7 +28,9 @@ const GenerateHex: React.FC = () => {
 
     if (!radio && isNaN(+inputElement.value)) return;
 
-    dispatch(setHexData(manageConversion(inputElement.value, +amountElement.value) as dataSchema));
+    dispatch(
+      setHexData(manageConversion(inputElement.value, +amountElement.value, radio) as dataSchema)
+    );
   };
 
   return (
@@ -63,7 +65,9 @@ const GenerateHex: React.FC = () => {
           <RadioGroup
             defaultValue="decimal"
             name="radio-buttons-group"
-            onChange={(e) => dispatch(setHexRadio(e.target.value ? 1 : 0))}
+            onChange={(e) =>
+              dispatch(setHexRadio(e.target.value.toLowerCase() === "decimal" ? 0 : 1))
+            }
           >
             <FormControlLabel value="decimal" control={<Radio />} label="decimal" />
             <FormControlLabel value="hex" control={<Radio />} label="hex" />

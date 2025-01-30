@@ -29,26 +29,46 @@ export const onParcelInput: OnParcelInput = (value, dispatch) => {
   dispatch(value);
 };
 
-export const convertToHex = (number: number) => number.toString(16);
-export const convertToDec = (number: string) => parseInt(number, 16);
+export const convertToHex = (number: number): string => number.toString(16);
+export const convertToDec = (number: string): number => parseInt(number, 16);
 
-export const manageConversion = (value: string | number, amount: number) => {
-  if (!value || !amount) return;
+export const manageConversion = (value: string, amount: number, radio: 1 | 0) => {
+  if (!value || !amount || typeof radio !== "number") return;
 
   const newData: { hex: string; decimal: number }[] = [];
 
-  for (let i = 0; i < amount; i++) {
-    typeof value === "string"
-      ? newData.push({ hex: value.toUpperCase(), decimal: convertToDec(value) })
-      : newData.push({ hex: convertToHex(value).toUpperCase(), decimal: value });
+  let base: number;
 
-    if (typeof value === "number") {
-      value++;
-    } else if (typeof value === "string") {
-      value = parseInt(value, 16);
-      value++;
-      value = value.toString(16);
+  // Handle decimal to hex or hex to decimal based on the radio
+  if (radio === 1) {
+    // Hex to Decimal
+    base = convertToDec(value); // Convert hex string to decimal
+  } else {
+    // Decimal to Hex
+    base = parseInt(value, 10); // Treat value as a decimal number
+  }
+
+  if (isNaN(base)) return; // If the base is invalid (NaN), return early
+
+  for (let i = 0; i < amount; i++) {
+    let hexValue: string;
+    let decimalValue: number;
+
+    if (radio === 0) {
+      // Decimal to Hex conversion
+      hexValue = convertToHex(base).toUpperCase();
+      decimalValue = base;
+    } else {
+      // Hex to Decimal conversion
+      hexValue = convertToHex(base).toUpperCase();
+      decimalValue = base;
     }
+
+    newData.push({ hex: hexValue, decimal: decimalValue });
+
+    // Increment the base for the next iteration
+    base++;
+    value = base.toString(); // Update value for the next iteration
   }
 
   return newData;
