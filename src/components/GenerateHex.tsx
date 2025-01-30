@@ -9,26 +9,18 @@ import {
   Button,
   Radio,
 } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { setHexCount, setHexData, setHexPrint, setHexRadio } from "../slices/hex";
 
 type Props = {
-  data: { hex: string; decimal: number }[];
   value: string;
   setValue: React.Dispatch<SetStateAction<string>>;
-  setCount: React.Dispatch<SetStateAction<number>>;
-  setRadioValue: React.Dispatch<SetStateAction<string>>;
-  setData: React.Dispatch<SetStateAction<{ hex: string; decimal: number }[]>>;
-  radio: 1 | 0;
 };
 
-const GenerateHex: React.FC<Props> = ({
-  data,
-  value,
-  setValue,
-  setCount,
-  setRadioValue,
-  setData,
-  radio,
-}) => {
+const GenerateHex: React.FC<Props> = ({ value, setValue }) => {
+  const { data, radio } = useAppSelector((state) => state.hex);
+  const dispatch = useAppDispatch();
+
   //     const manageConversion = () => {
   //     if (!radio && isNaN(+value)) return;
 
@@ -76,7 +68,7 @@ const GenerateHex: React.FC<Props> = ({
             name="count-amount"
             required
             type="number"
-            onChange={(e) => setCount(+e.target.value)}
+            onChange={(e) => dispatch(setHexCount(+e.target.value))}
           />
         </InputLabel>
 
@@ -84,7 +76,7 @@ const GenerateHex: React.FC<Props> = ({
           <RadioGroup
             defaultValue="decimal"
             name="radio-buttons-group"
-            onChange={(e) => setRadioValue(e.target.value)}
+            onChange={(e) => dispatch(setHexRadio(e.target.value ? 1 : 0))}
           >
             <FormControlLabel value="decimal" control={<Radio />} label="decimal" />
             <FormControlLabel value="hex" control={<Radio />} label="hex" />
@@ -96,18 +88,18 @@ const GenerateHex: React.FC<Props> = ({
                 Generate
               </Button> */}
 
-          {/* {data && data.length > 0 && (
-                  <Button variant="contained" onClick={() => setPrint(true)}>
-                  Print
-                </Button>
-              )} */}
+          {data.length > 0 && (
+            <Button variant="contained" onClick={() => dispatch(setHexPrint(true))}>
+              Print
+            </Button>
+          )}
         </div>
       </form>
       {data && data.length > 0 && (
         <section className="data-table">
           <HexTable data={data} />
         </section>
-      )}{" "}
+      )}
       );
     </>
   );
