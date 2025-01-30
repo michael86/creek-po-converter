@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useAppSelector } from "../hooks";
-import AddIcon from "@mui/icons-material/Add";
+
 import EditPoRow from "./EditPoRow";
 
 const EditPoTable = () => {
@@ -9,11 +9,6 @@ const EditPoTable = () => {
   const [newRows, setNewRows] = useState<
     { name: string; description: string; totalOrdered: string }[]
   >([]);
-
-  const handleAddRow = () => {
-    const newRow = { name: "", description: "", totalOrdered: "" };
-    setNewRows([...newRows, newRow]);
-  };
 
   const renderNewRow = () => {
     if (newRows.length === 0) return null;
