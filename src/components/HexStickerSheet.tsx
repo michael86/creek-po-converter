@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
-
-// Type definition for the data
+import { useAppSelector } from "../hooks";
 
 interface StickerSheetProps {
-  data: {
-    hex: string;
-    decimal: number;
-  }[];
   topMargin: number;
   sideMargin: number;
   verticalPitch: number;
@@ -18,7 +13,6 @@ interface StickerSheetProps {
 }
 
 const HexStickerSheet: React.FC<StickerSheetProps> = ({
-  data,
   topMargin,
   sideMargin,
   verticalPitch,
@@ -28,6 +22,8 @@ const HexStickerSheet: React.FC<StickerSheetProps> = ({
   numberAcross,
   numberDown,
 }) => {
+  const { data } = useAppSelector((state) => state.hex);
+
   // Calculate the total height and width of the grid, factoring in the labels and spacing
   const totalHeight = labelHeight * numberDown + verticalPitch * (numberDown - 1);
   const totalWidth = labelWidth * numberAcross + horizontalPitch * (numberAcross - 1);

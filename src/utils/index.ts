@@ -28,3 +28,28 @@ export const onParcelInput: OnParcelInput = (value, dispatch) => {
   if (!value.match(/^\d*(,\d*)*$/)) return; // Only allow numeric input
   dispatch(value);
 };
+
+export const convertToHex = (number: number) => number.toString(16);
+export const convertToDec = (number: string) => parseInt(number, 16);
+
+export const manageConversion = (value: string | number, amount: number) => {
+  if (!value || !amount) return;
+
+  const newData: { hex: string; decimal: number }[] = [];
+
+  for (let i = 0; i < amount; i++) {
+    typeof value === "string"
+      ? newData.push({ hex: value.toUpperCase(), decimal: convertToDec(value) })
+      : newData.push({ hex: convertToHex(value).toUpperCase(), decimal: value });
+
+    if (typeof value === "number") {
+      value++;
+    } else if (typeof value === "string") {
+      value = parseInt(value, 16);
+      value++;
+      value = value.toString(16);
+    }
+  }
+
+  return newData;
+};

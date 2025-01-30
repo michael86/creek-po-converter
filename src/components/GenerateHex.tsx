@@ -1,4 +1,4 @@
-import React, { SetStateAction } from "react";
+import React, { SetStateAction, useRef } from "react";
 import HexTable from "./HexTable";
 import {
   InputLabel,
@@ -9,40 +9,27 @@ import {
   Button,
   Radio,
 } from "@mui/material";
+
+import { dataSchema, setHexCount, setHexData, setHexPrint, setHexRadio } from "../slices/hex";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { setHexCount, setHexData, setHexPrint, setHexRadio } from "../slices/hex";
+import { manageConversion } from "../utils";
 
-type Props = {
-  value: string;
-  setValue: React.Dispatch<SetStateAction<string>>;
-};
-
-const GenerateHex: React.FC<Props> = ({ value, setValue }) => {
-  const { data, radio } = useAppSelector((state) => state.hex);
+const GenerateHex: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { data, radio } = useAppSelector((state) => state.hex);
+  const startRef = useRef<HTMLDivElement>(null);
+  const amountRef = useRef<HTMLDivElement>(null);
 
-  //     const manageConversion = () => {
-  //     if (!radio && isNaN(+value)) return;
+  const dispatchHexData = () => {
+    if (!startRef.current || !amountRef.current) return;
 
-  //     let valueRef = !radio ? +value : value;
-  //     const newData: {hex: string, decimal: number}[] = [];
+    const inputElement = startRef.current.children[0] as HTMLInputElement;
+    const amountElement = amountRef.current.children[0] as HTMLInputElement;
 
-  //     for (let i = 0; i <= count; i++) {
-  //       typeof valueRef === "string"
-  //         ? newData.push({ hex: valueRef.toUpperCase(), decimal: convertToDec(valueRef) })
-  //         : newData.push({ hex: convertToHex(valueRef).toUpperCase(), decimal: valueRef });
+    if (!radio && isNaN(+inputElement.value)) return;
 
-  //       if (typeof valueRef === "number") {
-  //         valueRef++;
-  //       } else if (typeof valueRef === "string") {
-  //         valueRef = parseInt(valueRef, 16);
-  //         valueRef++;
-  //         valueRef = valueRef.toString(16);
-  //       }
-  //     }
-
-  //     setData(newData);
-  //   };
+    dispatch(setHexData(manageConversion(inputElement.value, +amountElement.value) as dataSchema));
+  };
 
   return (
     <>
@@ -56,8 +43,7 @@ const GenerateHex: React.FC<Props> = ({ value, setValue }) => {
             name="start-count"
             required
             type="text"
-            value={value || ""}
-            onChange={(e) => setValue(e.target.value.toUpperCase())}
+            ref={startRef}
           />
         </InputLabel>
 
@@ -69,6 +55,7 @@ const GenerateHex: React.FC<Props> = ({ value, setValue }) => {
             required
             type="number"
             onChange={(e) => dispatch(setHexCount(+e.target.value))}
+            ref={amountRef}
           />
         </InputLabel>
 
@@ -84,9 +71,9 @@ const GenerateHex: React.FC<Props> = ({ value, setValue }) => {
         </FormControl>
 
         <div className="button-container">
-          {/* <Button variant="contained" onClick={() => manageConversion()}>
-                Generate
-              </Button> */}
+          <Button variant="contained" onClick={() => dispatchHexData()}>
+            Generate
+          </Button>
 
           {data.length > 0 && (
             <Button variant="contained" onClick={() => dispatch(setHexPrint(true))}>
@@ -97,10 +84,9 @@ const GenerateHex: React.FC<Props> = ({ value, setValue }) => {
       </form>
       {data && data.length > 0 && (
         <section className="data-table">
-          <HexTable data={data} />
+          <HexTable />
         </section>
       )}
-      );
     </>
   );
 };

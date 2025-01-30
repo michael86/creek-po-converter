@@ -6,6 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useAppSelector } from "../hooks";
 
 interface Column {
   id: "decimal" | "hex";
@@ -20,11 +21,9 @@ const columns: readonly Column[] = [
   { id: "hex", label: "Hex", minWidth: 100 },
 ];
 
-type Props = {
-  data: { hex: string; decimal: number }[];
-};
+const HexTable: React.FC = () => {
+  const { data } = useAppSelector((state) => state.hex);
 
-const HexTable: React.FC<Props> = ({ data }) => {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type dataSchema = { hex: string; decimal: number }[];
+export type dataSchema = { hex: string; decimal: number }[];
 type print = boolean;
 
 type InitState = {
