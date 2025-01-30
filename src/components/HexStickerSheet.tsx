@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import { useAppSelector } from "../hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
+import { setHexPrint } from "../slices/hex";
 
 interface StickerSheetProps {
   topMargin: number;
@@ -23,6 +24,7 @@ const HexStickerSheet: React.FC<StickerSheetProps> = ({
   numberDown,
 }) => {
   const { data, radio } = useAppSelector((state) => state.hex);
+  const dispatch = useAppDispatch();
 
   // Calculate the total height and width of the grid, factoring in the labels and spacing
   const totalHeight = labelHeight * numberDown + verticalPitch * (numberDown - 1);
@@ -47,27 +49,30 @@ const HexStickerSheet: React.FC<StickerSheetProps> = ({
   }, []);
 
   return (
-    <div className="sticker-sheet" style={generateStyles()}>
-      {data.map((item, index) => {
-        return (
-          <div
-            key={index}
-            style={{
-              width: `${labelWidth}cm`,
-              height: `${labelHeight}cm`,
-              border: "1px solid black",
-              textAlign: "center",
-              lineHeight: `${labelHeight}cm`,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {radio === 0 ? item.decimal : item.hex}
-          </div>
-        );
-      })}
-    </div>
+    <>
+      <button onClick={() => dispatch(setHexPrint(false))}>Back</button>
+      <div className="sticker-sheet" style={generateStyles()}>
+        {data.map((item, index) => {
+          return (
+            <div
+              key={index}
+              style={{
+                width: `${labelWidth}cm`,
+                height: `${labelHeight}cm`,
+                border: "1px solid black",
+                textAlign: "center",
+                lineHeight: `${labelHeight}cm`,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {radio === 0 ? item.decimal : item.hex}
+            </div>
+          );
+        })}
+      </div>
+    </>
   );
 };
 
