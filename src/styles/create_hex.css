@@ -61,4 +61,8 @@
   div {
     page-break-inside: avoid;
   }
+
+  button {
+    display: none;
+  }
 }
