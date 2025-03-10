@@ -1,24 +1,19 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import purchaseReducer from "../slices/purchaseOrders";
-import alertReducer from "../slices/alert";
-import userReducer from "../slices/user";
-import hexReducer from "../slices/hex";
+import { configureStore } from "@reduxjs/toolkit";
+import { authReducer, logout } from "./slices/authSlice";
+import { setLogoutHandler } from "../api";
+import { useDispatch } from "react-redux";
 
 export const store = configureStore({
   reducer: {
-    purchase: purchaseReducer,
-    alert: alertReducer,
-    user: userReducer,
-    hex: hexReducer,
+    auth: authReducer,
   },
-  devTools: process.env.NODE_ENV !== "production",
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });
 
-export type AppDispatch = typeof store.dispatch;
+// Register the logoutHandler after the store is initilized,
+// this allows axios inteceptor to access the logout reducer in the auth slice
+setLogoutHandler(() => store.dispatch(logout()));
+
 export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
