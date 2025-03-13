@@ -18,14 +18,18 @@ export const setLogoutHandler = (handler: () => void) => {
 
 api.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    //Handle errors here and logout user if required
-
-    //auth failed - 401
-    if (error.response === 401) {
+  async (error: CustomAxiosError) => {
+    // If authentication failed (401)
+    if (error.status === 401) {
       logoutHandler && logoutHandler();
-      return null;
+
+      if (error.response?.data) {
+        return Promise.reject(error.response.data as CustomAxiosError);
+      }
     }
+
+    //Something server side went wrong, check here later to see if status is 500, as may need to handle other errors above
+    return Promise.reject(error);
   }
 );
 

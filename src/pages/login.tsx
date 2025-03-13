@@ -1,8 +1,10 @@
 import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../schemas/login";
+import api from "../api";
+import { useState } from "react";
 
 const Login = () => {
   const {
@@ -11,7 +13,23 @@ const Login = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(loginSchema) });
 
-  const onSubmit = (data: { email: string; password: string }) => console.log(data); //submit api call here
+  const [error, setError] = useState<null | string>(null);
+
+  const onSubmit = async (data: { email: string; password: string }) => {
+    setError(null);
+    try {
+      const valid = await api.post("user/login", {
+        email: data.email,
+        password: data.password,
+      });
+      console.log(valid);
+    } catch (error: any) {
+      if ("status" in error) {
+        const err = error as CustomAxiosError;
+        setError(err.message);
+      }
+    }
+  };
 
   return (
     <>
@@ -45,6 +63,11 @@ const Login = () => {
           Login
         </Button>
       </form>
+      {error && (
+        <Typography color="red" align="center">
+          {error}
+        </Typography>
+      )}
     </>
   );
 };
