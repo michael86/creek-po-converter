@@ -1,29 +1,17 @@
 import TextField from "@mui/material/TextField";
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-
-const schema = yup.object({
-  email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup
-    .string()
-    .required("Please enter a password")
-    .min(8, "Password too short")
-    .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
-    .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
-    .matches(/^(?=.*[0-9])/, "Must contain at least one number")
-    .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character"),
-});
+import { loginSchema } from "../schemas/login";
 
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({ resolver: yupResolver(loginSchema) });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: { email: string; password: string }) => console.log(data); //submit api call here
 
   return (
     <>
