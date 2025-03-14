@@ -1,9 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import Auth from "../pages/Auth";
 
 export const Route = createFileRoute("/register")({
-  component: RouteComponent,
+  component: () => <Auth route="register" />,
 });
-
-function RouteComponent() {
-  return <div>Hello "/register"!</div>;
-}

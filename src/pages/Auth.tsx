@@ -5,8 +5,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../schemas/login";
 import api from "../api";
 import { useState } from "react";
+import BackButton from "../components/backButton";
 
-const Login = () => {
+const Auth: React.FC<{ route: "login" | "register" }> = ({ route }) => {
   const {
     register,
     handleSubmit,
@@ -33,7 +34,12 @@ const Login = () => {
 
   return (
     <>
-      <h1 style={{ textAlign: "center" }}>Login to Creekview</h1>
+      <BackButton />
+
+      <h1 style={{ textAlign: "center" }}>
+        {route === "login" ? "Login to Creekview" : "Register"}
+      </h1>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         style={{
@@ -60,7 +66,7 @@ const Login = () => {
           helperText={errors.password?.message}
         />
         <Button type="submit" variant="contained">
-          Login
+          Submit
         </Button>
       </form>
       {error && (
@@ -72,4 +78,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Auth;
