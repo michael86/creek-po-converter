@@ -30,7 +30,7 @@ api.interceptors.response.use(
 
     console.log("axios error", error);
     //Something server side went wrong, check here later to see if status is 500, as may need to handle other errors above
-    return Promise.reject(error);
+    return Promise.reject(error as CustomAxiosError);
   }
 );
 
