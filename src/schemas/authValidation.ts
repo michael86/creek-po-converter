@@ -11,3 +11,11 @@ export const loginSchema = yup.object({
     .matches(/^(?=.*[0-9])/, "Must contain at least one number")
     .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character"),
 });
+
+export const registerSchema = loginSchema.shape({
+  name: yup.string().required("Name is required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password")], "Passwords must match")
+    .required("Please confirm your password"),
+});

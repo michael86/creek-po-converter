@@ -4,6 +4,8 @@ import api from "../../api";
 interface AuthState {
   isAuthenticated: boolean;
   user: string | null;
+  email: string | null;
+  role: number | null;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -11,6 +13,8 @@ interface AuthState {
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
+  email: null,
+  role: null,
   status: "idle",
   error: null,
 };
@@ -38,13 +42,17 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<string>) => {
+    login: (state, action: PayloadAction<{ name: string; email: string; role: number }>) => {
       state.isAuthenticated = true;
-      state.user = action.payload;
+      state.user = action.payload.name;
+      state.email = action.payload.email;
+      state.role = action.payload.role;
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.user = null;
+      state.email = null;
+      state.role = null;
     },
   },
   extraReducers: (builder) => {

@@ -19,15 +19,16 @@ export const setLogoutHandler = (handler: () => void) => {
 api.interceptors.response.use(
   (response) => response,
   async (error: CustomAxiosError) => {
-    // If authentication failed (401)
-    if (error.status === 401) {
-      logoutHandler && logoutHandler();
+    // user error (status 4**)
+    if (error.status && error.status >= 400 && error.status < 500) {
+      logoutHandler && logoutHandler(); // add checks here later to prevent user logoiut if not required. I.e invalid pdf upload
 
       if (error.response?.data) {
         return Promise.reject(error.response.data as CustomAxiosError);
       }
     }
 
+    console.log("axios error", error);
     //Something server side went wrong, check here later to see if status is 500, as may need to handle other errors above
     return Promise.reject(error);
   }
