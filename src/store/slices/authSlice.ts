@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import api from "../../api";
+import { AuthMe } from "../../types/api";
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -21,8 +22,11 @@ const initialState: AuthState = {
 
 export const authUser = createAsyncThunk("auth/validateMe", async (_, thunkAPI) => {
   try {
-    const response = await api.get("auth/me");
-    return response?.data ? response.data : null;
+    const { data } = await api.get<AuthMe>("auth/me", { withCredentials: true });
+
+    thunkAPI.dispatch(login({ name: data.name, email: data.email, role: data.role }));
+
+    return data;
   } catch (error: unknown) {
     let errorMessage = "Failed to fetch auth data";
 

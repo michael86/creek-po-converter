@@ -76,6 +76,7 @@ const Auth: React.FC<{ route: "login" | "register" }> = ({ route }) => {
             type={field.type || "text"}
             error={!!errors[field.name as keyof AuthForm]}
             helperText={errors[field.name as keyof AuthForm]?.message}
+            required
           />
         ))}
 
