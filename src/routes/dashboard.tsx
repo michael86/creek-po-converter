@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { checkAuth } from "../utils/auth";
+import Dashboard from "../pages/dashboard";
 
 export const Route = createFileRoute("/dashboard")({
   beforeLoad: async () => {
@@ -9,9 +10,5 @@ export const Route = createFileRoute("/dashboard")({
       return;
     }
   },
-  component: RouteComponent,
+  component: Dashboard,
 });
-
-function RouteComponent() {
-  return <div>Hello "/dashboard"!</div>;
-}

@@ -5,18 +5,25 @@ import { RootState, useAppDispatch } from "./store";
 import { authUser } from "./store/slices/authSlice";
 import { useRouter } from "@tanstack/react-router";
 
-// import Logo from "./components/Logo";
-
 function App() {
   const dispatch = useAppDispatch();
   const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
   const status = useSelector((state: RootState) => state.auth.status);
+  const router = useRouter();
 
+  // Fetch auth status on app load
   useEffect(() => {
     dispatch(authUser());
   }, [dispatch]);
 
-  const router = useRouter();
+  useEffect(() => {
+    if (status !== "loading") {
+      if (isAuthenticated) {
+        router.navigate({ to: "/dashboard" });
+        return;
+      }
+    }
+  }, [isAuthenticated, status, router]);
 
   if (status === "loading") {
     return (
@@ -26,14 +33,8 @@ function App() {
     );
   }
 
-  if (isAuthenticated) {
-    router.navigate({ to: "/dashboard" });
-    return null;
-  }
-
   const navigate = (location: "login" | "register") => {
     router.navigate({ to: `/${location}` });
-    return null;
   };
 
   return (

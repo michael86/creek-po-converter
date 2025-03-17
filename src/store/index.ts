@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer, logout } from "./slices/authSlice";
 import { setLogoutHandler } from "../api";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 
 export const store = configureStore({
   reducer: {
@@ -17,3 +17,4 @@ setLogoutHandler(() => store.dispatch(logout()));
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
