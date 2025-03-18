@@ -19,48 +19,49 @@ const VisuallyHiddenInput = styled("input")({
 
 const PdfUpload = () => {
   const [file, setFile] = useState<File | null>(null);
-
   const [messages, setMessages] = useState<{ error: string | null; ok: string | null }>({
     ok: null,
     error: null,
   });
 
   const beginUpload = async () => {
+    setMessages((prev) => ({ ok: null, error: null }));
     setMessages({ error: null, ok: null });
 
     if (!file) {
-      setMessages({ ...messages, error: "No file selected" });
+      setMessages((prev) => ({ ...prev, error: "No file selected" }));
       return;
     }
 
     var formData = new FormData();
     formData.append("file", file);
+
     try {
       await api.post("pdf/upload", formData, {
         onUploadProgress: (status) => console.log(status),
       });
-      setMessages({ ...messages, ok: "file uploaded" });
+
+      setMessages((prev) => ({ ...prev, ok: "File uploaded" }));
     } catch (error: any) {
       if ("message" in error) {
-        if (error.message === "ER_DUP_ENTRY")
-          return setMessages({ ...messages, error: "Purchase order already uploaded" });
+        if (error.message === "ER_DUP_ENTRY") {
+          setMessages((prev) => ({ ...prev, error: "Purchase order already uploaded" }));
+          return;
+        }
 
-        return setMessages({ ...messages, error: error.message });
+        setMessages((prev) => ({ ...prev, error: error.message }));
       }
     }
   };
 
   const onFileChange = (fileList: FileList | null) => {
-    console.log("set ok tyo null");
-    setMessages({ ...messages, ok: null });
-
+    setMessages((prev) => ({ ...prev, ok: null }));
     if (!fileList) return;
 
     setFile(fileList[0]);
-    setMessages({ ...messages, error: null });
+    setMessages((prev) => ({ ...prev, error: null }));
   };
 
-  console.log("messages ok ", messages.ok);
   return (
     <>
       <Button
