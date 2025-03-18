@@ -3,6 +3,7 @@ import { store } from "../store";
 import { login, logout } from "../store/slices/authSlice";
 import { queryClient } from "../lib/reactQueryClient";
 import { AuthMe } from "../types/api";
+import { redirect } from "@tanstack/react-router";
 
 export const checkAuth = async () => {
   try {
@@ -20,10 +21,8 @@ export const checkAuth = async () => {
 
     store.dispatch(login({ name: data.name, email: data.email, role: data.role }));
   } catch (error) {
-    console.error("Auth check failed:", error);
-
     store.dispatch(logout());
 
-    return { to: "/" };
+    throw redirect({ to: "/", throw: true });
   }
 };
