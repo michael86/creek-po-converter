@@ -43,6 +43,7 @@ const PdfUpload = () => {
 
       setMessages((prev) => ({ ...prev, ok: "File uploaded" }));
     } catch (error: any) {
+      console.error("file upload error", error);
       if ("message" in error) {
         if (error.message === "ER_DUP_ENTRY") {
           setMessages((prev) => ({ ...prev, error: "Purchase order already uploaded" }));

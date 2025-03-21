@@ -18,6 +18,7 @@ function App() {
 
   useEffect(() => {
     if (status !== "loading") {
+      console.log("status is: ", isAuthenticated);
       if (isAuthenticated) {
         router.navigate({ to: "/dashboard" });
         return;
