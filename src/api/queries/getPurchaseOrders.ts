@@ -8,7 +8,7 @@ export const fetchPoNames = () =>
     queryFn: fetchPurchaseOrders,
   });
 
-export const fetchPurchaseOrders = async (): Promise<FetchPoNames> => {
+const fetchPurchaseOrders = async (): Promise<FetchPoNames> => {
   await new Promise((resolve) => setTimeout(resolve, 3000));
   const res = await api.get<FetchPoNames>("purchase-order/names");
   return res.data;
