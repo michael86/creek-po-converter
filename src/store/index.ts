@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer, logout } from "./slices/authSlice";
+import { poReducer } from "./slices/purchaseOrder";
 import { setLogoutHandler } from "../api";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    purchaseOrder: poReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(),
 });

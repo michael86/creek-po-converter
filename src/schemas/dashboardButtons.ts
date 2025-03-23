@@ -2,7 +2,7 @@ const role1 = [{ label: "Generate Hex Stickers", route: "/hex-stickers" }];
 
 const role2 = [
   { label: "Upload Purchase Order", route: "/pdf/upload" },
-  { label: "View Purchase Order", route: "/pdf" },
+  { label: "View Purchase Order", route: "/purchase-orders" },
 ];
 
 const role3 = [
