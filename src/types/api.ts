@@ -11,12 +11,17 @@ export interface FetchPoNames {
 
 export interface PurchaseOrderItems {
   description: string;
-  dueDate: string;
+  dueDate: Date;
   partNumber: string;
   quantity: number;
   quantityReceived: number;
   storageLocation: string | null;
+  deliveries: {
+    quantityReceived: number;
+    dateReceived: Date;
+  }[];
 }
+
 export interface FetchCompletePurchaseOrder {
   status: "success";
   data: {

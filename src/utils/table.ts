@@ -8,17 +8,6 @@ export const createData = (data: PurchaseOrderItems) => {
     quantityReceived: data.quantityReceived,
     storageLocation: data.storageLocation,
     dueDate: data.dueDate,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
+    history: data.deliveries,
   };
 };
