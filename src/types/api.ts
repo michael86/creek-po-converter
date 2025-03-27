@@ -30,3 +30,8 @@ export interface FetchCompletePurchaseOrder {
     ponumber: string;
   };
 }
+
+export interface DeletePurchaseOrder {
+  message: "Purchase order deleted";
+  status: "success";
+}

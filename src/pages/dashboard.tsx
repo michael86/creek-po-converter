@@ -19,13 +19,20 @@ const Dashboard = () => {
             No role assigned, speak to an admin
           </Typography>
         ) : (
-          roleButtons.map((button) => {
-            return (
-              <Button variant="contained" onClick={() => router.navigate({ to: button.route })}>
-                {button.label}
-              </Button>
-            );
-          })
+          <Box display={"flex"} justifyContent={"space-around"}>
+            {roleButtons.map((button, i) => {
+              return (
+                <Button
+                  key={button.route}
+                  variant="contained"
+                  onClick={() => router.navigate({ to: button.route })}
+                  style={{ marginRight: i === roleButtons.length - 1 ? 0 : 5 }}
+                >
+                  {button.label}
+                </Button>
+              );
+            })}
+          </Box>
         )}
       </Box>
     </>
