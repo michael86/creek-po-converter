@@ -1,4 +1,5 @@
 import axios from "axios";
+import { validateErrorResponse } from "../utils/api";
 
 const ROOT = `${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}`;
 
@@ -21,15 +22,15 @@ api.interceptors.response.use(
   async (error: CustomAxiosError) => {
     // user error (status 4**)
     if (error.status && error.status >= 400 && error.status < 500) {
-      logoutHandler && logoutHandler(); // add checks here later to prevent user logoiut if not required. I.e invalid pdf upload
+      if (typeof error.response?.data?.message === "string") {
+        if (!validateErrorResponse(error.response?.data?.message)) {
+          logoutHandler && logoutHandler(); // add checks here later to prevent user logoiut if not required. I.e invalid pdf upload
+        }
 
-      if (error.response?.data) {
         return Promise.reject(error.response.data as CustomAxiosError);
       }
     }
 
-    console.log("axios error", error);
-    //Something server side went wrong, check here later to see if status is 500, as may need to handle other errors above
     return Promise.reject(error as CustomAxiosError);
   }
 );
