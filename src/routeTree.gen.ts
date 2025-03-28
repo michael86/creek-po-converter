@@ -12,11 +12,12 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as RegisterImport } from './routes/register'
-import { Route as PurchaseOrdersImport } from './routes/purchase-orders'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
+import { Route as PurchaseOrdersIndexImport } from './routes/purchase-orders/index'
 import { Route as PdfIndexImport } from './routes/pdf/index'
+import { Route as PurchaseOrdersUuidImport } from './routes/purchase-orders/$uuid'
 import { Route as PdfUploadImport } from './routes/pdf/upload'
 
 // Create/Update Routes
@@ -24,12 +25,6 @@ import { Route as PdfUploadImport } from './routes/pdf/upload'
 const RegisterRoute = RegisterImport.update({
   id: '/register',
   path: '/register',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PurchaseOrdersRoute = PurchaseOrdersImport.update({
-  id: '/purchase-orders',
-  path: '/purchase-orders',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -51,9 +46,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PurchaseOrdersIndexRoute = PurchaseOrdersIndexImport.update({
+  id: '/purchase-orders/',
+  path: '/purchase-orders/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const PdfIndexRoute = PdfIndexImport.update({
   id: '/pdf/',
   path: '/pdf/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PurchaseOrdersUuidRoute = PurchaseOrdersUuidImport.update({
+  id: '/purchase-orders/$uuid',
+  path: '/purchase-orders/$uuid',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,13 +95,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/purchase-orders': {
-      id: '/purchase-orders'
-      path: '/purchase-orders'
-      fullPath: '/purchase-orders'
-      preLoaderRoute: typeof PurchaseOrdersImport
-      parentRoute: typeof rootRoute
-    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -109,11 +109,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PdfUploadImport
       parentRoute: typeof rootRoute
     }
+    '/purchase-orders/$uuid': {
+      id: '/purchase-orders/$uuid'
+      path: '/purchase-orders/$uuid'
+      fullPath: '/purchase-orders/$uuid'
+      preLoaderRoute: typeof PurchaseOrdersUuidImport
+      parentRoute: typeof rootRoute
+    }
     '/pdf/': {
       id: '/pdf/'
       path: '/pdf'
       fullPath: '/pdf'
       preLoaderRoute: typeof PdfIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/purchase-orders/': {
+      id: '/purchase-orders/'
+      path: '/purchase-orders'
+      fullPath: '/purchase-orders'
+      preLoaderRoute: typeof PurchaseOrdersIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -125,20 +139,22 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
-  '/purchase-orders': typeof PurchaseOrdersRoute
   '/register': typeof RegisterRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/purchase-orders/$uuid': typeof PurchaseOrdersUuidRoute
   '/pdf': typeof PdfIndexRoute
+  '/purchase-orders': typeof PurchaseOrdersIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
-  '/purchase-orders': typeof PurchaseOrdersRoute
   '/register': typeof RegisterRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/purchase-orders/$uuid': typeof PurchaseOrdersUuidRoute
   '/pdf': typeof PdfIndexRoute
+  '/purchase-orders': typeof PurchaseOrdersIndexRoute
 }
 
 export interface FileRoutesById {
@@ -146,10 +162,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
-  '/purchase-orders': typeof PurchaseOrdersRoute
   '/register': typeof RegisterRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/purchase-orders/$uuid': typeof PurchaseOrdersUuidRoute
   '/pdf/': typeof PdfIndexRoute
+  '/purchase-orders/': typeof PurchaseOrdersIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -158,28 +175,31 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/login'
-    | '/purchase-orders'
     | '/register'
     | '/pdf/upload'
+    | '/purchase-orders/$uuid'
     | '/pdf'
+    | '/purchase-orders'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
     | '/login'
-    | '/purchase-orders'
     | '/register'
     | '/pdf/upload'
+    | '/purchase-orders/$uuid'
     | '/pdf'
+    | '/purchase-orders'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
     | '/login'
-    | '/purchase-orders'
     | '/register'
     | '/pdf/upload'
+    | '/purchase-orders/$uuid'
     | '/pdf/'
+    | '/purchase-orders/'
   fileRoutesById: FileRoutesById
 }
 
@@ -187,20 +207,22 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
-  PurchaseOrdersRoute: typeof PurchaseOrdersRoute
   RegisterRoute: typeof RegisterRoute
   PdfUploadRoute: typeof PdfUploadRoute
+  PurchaseOrdersUuidRoute: typeof PurchaseOrdersUuidRoute
   PdfIndexRoute: typeof PdfIndexRoute
+  PurchaseOrdersIndexRoute: typeof PurchaseOrdersIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
-  PurchaseOrdersRoute: PurchaseOrdersRoute,
   RegisterRoute: RegisterRoute,
   PdfUploadRoute: PdfUploadRoute,
+  PurchaseOrdersUuidRoute: PurchaseOrdersUuidRoute,
   PdfIndexRoute: PdfIndexRoute,
+  PurchaseOrdersIndexRoute: PurchaseOrdersIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -216,10 +238,11 @@ export const routeTree = rootRoute
         "/",
         "/dashboard",
         "/login",
-        "/purchase-orders",
         "/register",
         "/pdf/upload",
-        "/pdf/"
+        "/purchase-orders/$uuid",
+        "/pdf/",
+        "/purchase-orders/"
       ]
     },
     "/": {
@@ -231,17 +254,20 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.tsx"
     },
-    "/purchase-orders": {
-      "filePath": "purchase-orders.tsx"
-    },
     "/register": {
       "filePath": "register.tsx"
     },
     "/pdf/upload": {
       "filePath": "pdf/upload.tsx"
     },
+    "/purchase-orders/$uuid": {
+      "filePath": "purchase-orders/$uuid.tsx"
+    },
     "/pdf/": {
       "filePath": "pdf/index.tsx"
+    },
+    "/purchase-orders/": {
+      "filePath": "purchase-orders/index.tsx"
     }
   }
 }
