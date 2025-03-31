@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -11,10 +11,14 @@ import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../utils/table";
+import { Button, TextField } from "@mui/material";
 
-export const Row = (props: { row: ReturnType<typeof createData> }) => {
-  const { row } = props;
+type Props = {
+  row: ReturnType<typeof createData>;
+  editMode: boolean;
+};
 
+export const Row: FC<Props> = ({ row, editMode }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -37,8 +41,22 @@ export const Row = (props: { row: ReturnType<typeof createData> }) => {
         <TableCell align="right">{row.description}</TableCell>
         <TableCell align="right">{row.quantity}</TableCell>
         <TableCell align="right">{row.quantityReceived}</TableCell>
-        <TableCell align="right">{row.storageLocation || "No location assigned"}</TableCell>
+        <TableCell align="right">
+          {editMode ? (
+            <TextField
+              type="text"
+              value={row.storageLocation || "No location assigned"}
+            ></TextField>
+          ) : (
+            row.storageLocation || "No location assigned"
+          )}
+        </TableCell>
         <TableCell align="right">{new Date(row.dueDate).toLocaleDateString()}</TableCell>
+        {editMode && (
+          <Button variant="contained" style={{ marginTop: "50%", transform: "translateY(-100%)" }}>
+            Add Delivery
+          </Button>
+        )}
       </TableRow>
 
       {row.history.length > 0 && (

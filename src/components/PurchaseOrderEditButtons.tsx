@@ -5,12 +5,19 @@ import { useAppDispatch, useAppSelector } from "../store";
 import { DeletePurchaseOrder } from "../types/api";
 import { setUuid } from "../store/slices/purchaseOrder";
 import { queryClient } from "../lib/reactQueryClient";
-import { useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
+import { useRouter } from "@tanstack/react-router";
 
-const PurchaseOrderEditButtons = () => {
+type Props = {
+  setEdit: Dispatch<SetStateAction<boolean>>;
+};
+
+const PurchaseOrderEditButtons: FC<Props> = ({ setEdit }) => {
   const uuid = useAppSelector((state) => state.purchaseOrder.uuid);
   const dispatch = useAppDispatch();
   const [error, setError] = useState<null | string>(null);
+
+  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -42,7 +49,9 @@ const PurchaseOrderEditButtons = () => {
         </Typography>
       )}
       <Box display={"flex"} justifyContent={"space-around"}>
-        <Button variant="contained">Edit</Button>
+        <Button variant="contained" onClick={() => setEdit(true)}>
+          Edit
+        </Button>
         <Button variant="contained" onClick={() => mutation.mutate()} disabled={mutation.isPending}>
           {mutation.isPending ? "Deleting..." : "Delete"}
         </Button>

@@ -13,9 +13,14 @@ import { useAppSelector } from "../store";
 import FetchingLoader from "./FetchingLoader";
 import { Typography } from "@mui/material";
 import { FetchCompletePurchaseOrder } from "../types/api";
+import { useState } from "react";
+import PurchaseOrderEditButtons from "./PurchaseOrderEditButtons";
 
 const PurchaseOrderTable = () => {
   const uuid = useAppSelector((state) => state.purchaseOrder.uuid) as string; // Cast as string, this component will not render if null
+  const role = useAppSelector((state) => state.auth.role) || 1;
+
+  const [editMode, setEdit] = useState(false);
 
   const { data, isLoading, isError } = useQuery<FetchCompletePurchaseOrder>({
     queryKey: ["fetch-po", uuid],
@@ -32,30 +37,36 @@ const PurchaseOrderTable = () => {
 
   const items = data.data.items;
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Part Number</TableCell>
-            <TableCell align="right">Description</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Quantity Received</TableCell>
-            <TableCell align="right">Storage Location</TableCell>
-            <TableCell align="right">Due Date</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data ? (
-            items.map((row) => <Row key={row.partNumber} row={createData(row)} />)
-          ) : (
+    <>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
             <TableRow>
-              <TableCell colSpan={7}>No data available</TableCell>
+              <TableCell />
+              <TableCell>Part Number</TableCell>
+              <TableCell align="right">Description</TableCell>
+              <TableCell align="right">Quantity</TableCell>
+              <TableCell align="right">Quantity Received</TableCell>
+              <TableCell align="right">Storage Location</TableCell>
+              <TableCell align="right">Due Date</TableCell>
+              {editMode && <TableCell align="right">Add Delivery</TableCell>}
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {data ? (
+              items.map((row) => (
+                <Row key={row.partNumber} row={createData(row)} editMode={editMode} />
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7}>No data available</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {role >= 3 && <PurchaseOrderEditButtons setEdit={setEdit} />}
+    </>
   );
 };
 
