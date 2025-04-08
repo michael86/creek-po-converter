@@ -12,6 +12,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../utils/table";
 import { Button, TextField } from "@mui/material";
+import SelectLocationInput from "./SelectLocationInput";
 
 type Props = {
   row: ReturnType<typeof createData>;
@@ -43,19 +44,26 @@ export const Row: FC<Props> = ({ row, editMode }) => {
         <TableCell align="right">{row.quantityReceived}</TableCell>
         <TableCell align="right">
           {editMode ? (
-            <TextField
-              type="text"
-              value={row.storageLocation || "No location assigned"}
-            ></TextField>
+            // <TextField
+            //   type="text"
+            //   value={row.storageLocation || "No location assigned"}
+            // ></TextField>
+            <SelectLocationInput />
           ) : (
             row.storageLocation || "No location assigned"
           )}
         </TableCell>
         <TableCell align="right">{new Date(row.dueDate).toLocaleDateString()}</TableCell>
+
         {editMode && (
-          <Button variant="contained" style={{ marginTop: "50%", transform: "translateY(-100%)" }}>
-            Add Delivery
-          </Button>
+          <TableCell>
+            <Button
+              variant="contained"
+              style={{ marginTop: "50%", transform: "translateY(-100%)" }}
+            >
+              Add Delivery
+            </Button>
+          </TableCell>
         )}
       </TableRow>
 

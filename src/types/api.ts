@@ -35,3 +35,8 @@ export interface DeletePurchaseOrder {
   message: "Purchase order deleted";
   status: "success";
 }
+
+export interface FetchLocations {
+  status: "success";
+  data: [{ location: string; uuid: string }];
+}
