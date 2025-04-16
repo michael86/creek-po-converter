@@ -10,6 +10,7 @@ export interface FetchPoNames {
 }
 
 export interface PurchaseOrderItems {
+  id: number;
   description: string;
   dueDate: Date;
   partNumber: string;
@@ -38,5 +39,5 @@ export interface DeletePurchaseOrder {
 
 export interface FetchLocations {
   status: "success";
-  data: [{ location: string; uuid: string }];
+  data: [{ name: string; id: string }];
 }

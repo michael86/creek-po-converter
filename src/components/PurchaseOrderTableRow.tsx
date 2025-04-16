@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../utils/table";
-import { Button, TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
 
 type Props = {
@@ -48,7 +48,7 @@ export const Row: FC<Props> = ({ row, editMode }) => {
             //   type="text"
             //   value={row.storageLocation || "No location assigned"}
             // ></TextField>
-            <SelectLocationInput />
+            <SelectLocationInput itemId={row.id} />
           ) : (
             row.storageLocation || "No location assigned"
           )}

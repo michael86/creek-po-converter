@@ -39,15 +39,17 @@ function App() {
   };
 
   return (
-    <Container sx={{ textAlign: "center", mt: 5 }}>
-      <Typography variant="h4">Welcome to Creekview</Typography>
-      <Button variant="contained" onClick={() => navigate("login")}>
-        Login
-      </Button>
-      <Button variant="contained" onClick={() => navigate("register")}>
-        Register
-      </Button>
-    </Container>
+    <>
+      <Container sx={{ textAlign: "center", mt: 5 }}>
+        <Typography variant="h4">Welcome to Creekview</Typography>
+        <Button variant="contained" onClick={() => navigate("login")}>
+          Login
+        </Button>
+        <Button variant="contained" onClick={() => navigate("register")}>
+          Register
+        </Button>
+      </Container>
+    </>
   );
 }
 

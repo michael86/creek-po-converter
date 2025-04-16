@@ -10,6 +10,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { store } from "./store";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/reactQueryClient";
+import Toaster from "./components/Toaster.tsx";
 
 // Create a new router instance
 const router = createRouter({ routeTree, pathParamsAllowedCharacters: ["$"] });
@@ -35,6 +36,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <CssBaseline />
+          <Toaster />
           <RouterProvider router={router} />
         </QueryClientProvider>
       </ThemeProvider>

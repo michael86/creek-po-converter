@@ -1,9 +1,23 @@
-import { FormControl, InputLabel, MenuItem, Select, Typography } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
 import { getLocations } from "../api/queries/getLocations";
 import FetchingLoader from "./FetchingLoader";
+import { FC, useState } from "react";
+import toast from "react-hot-toast/headless";
 
-const SelectLocationInput = () => {
+type Props = {
+  itemId: number;
+};
+
+const SelectLocationInput: FC<Props> = ({ itemId }) => {
   const data = getLocations();
+  const [value, setValue] = useState<string>("");
 
   if (data === "loading") {
     return <FetchingLoader />;
@@ -17,19 +31,28 @@ const SelectLocationInput = () => {
     );
   }
 
+  const handleChange = (event: SelectChangeEvent) => {
+    setValue(event.target.value);
+    toast("location updated");
+  };
+
   return (
     <FormControl fullWidth>
       <InputLabel id="select-location">location</InputLabel>
       <Select
         labelId="select-location"
-        // id={`select-location-${}`} - need to return the uuid from ther backend as part of the data so we can set a unique html id here
-        // value={age}
+        id={`select-location-input-${itemId}`}
+        value={value}
         label="Age"
-        // onChange={handleChange}
+        onChange={handleChange}
       >
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
+        {data.map((val) => {
+          return (
+            <MenuItem key={`option-${itemId}-${val.id}`} value={val.id}>
+              {val.name}
+            </MenuItem>
+          );
+        })}
       </Select>
     </FormControl>
   );

@@ -2,6 +2,7 @@ import { PurchaseOrderItems } from "../types/api";
 
 export const createData = (data: PurchaseOrderItems) => {
   return {
+    id: data.id,
     name: data.partNumber,
     description: data.description,
     quantity: data.quantity,
