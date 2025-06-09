@@ -11,6 +11,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import DownloadIcon from "@mui/icons-material/Download";
 import AddIcon from "@mui/icons-material/Add";
+
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -19,7 +20,7 @@ import "../styles/drawer.css";
 import { useAppSelector } from "../hooks";
 import axios from "../utils/interceptors";
 import { deleteFromStorage } from "../utils/storage";
-import { NoteAdd } from "@mui/icons-material";
+import { NoteAdd, StickyNote2Rounded } from "@mui/icons-material";
 
 type Props = {
   setScreen: React.Dispatch<React.SetStateAction<number>>;
@@ -75,6 +76,23 @@ const NavDrawer: React.FC<Props> = ({ setScreen, setLoggedIn }) => {
                 </ListItemButton>
               </ListItem>
             ))}
+          </List>
+        </>
+      )}
+      {role >= 2 && (
+        <>
+          <Divider />
+          <List>
+            {[{ text: "Sticker Template", icon: StickyNote2Rounded, screen: 3 }].map(
+              (entry, index) => (
+                <ListItem key={entry.text} disablePadding onClick={() => setScreen(7)}>
+                  <ListItemButton>
+                    <entry.icon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</entry.icon>
+                    <ListItemText primary={entry.text} />
+                  </ListItemButton>
+                </ListItem>
+              )
+            )}
           </List>
         </>
       )}

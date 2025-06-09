@@ -7,7 +7,7 @@ import DownloadPo from "./pages/DownloadPo";
 import AddPrefix from "./pages/AddPrefix";
 import EditPo from "./pages/EditPo";
 import Logs from "./pages/Logs";
-import ForgotPass from "./pages/ForgotPass";
+import StickerTemplate from "./pages/StickerTemplate";
 import CreateHexSticker from "./pages/CreateHexSticker";
 
 import Toast from "./components/Toast";
@@ -65,7 +65,7 @@ function App() {
       {screen === 4 && <EditPo />}
       {screen === 5 && <CreateHexSticker />}
       {screen === 6 && <Logs />}
-      {screen === 7 && <ForgotPass />}
+      {screen === 7 && <StickerTemplate />}
     </>
   );
 }
