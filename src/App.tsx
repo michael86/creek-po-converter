@@ -1,54 +1,71 @@
-import { useEffect } from "react";
-import { Container, Typography, CircularProgress, Button } from "@mui/material";
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "./store";
-import { authUser } from "./store/slices/authSlice";
-import { useRouter } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+
+import Home from "./pages/Home";
+import ProcessPdf from "./pages/ProcessPdf";
+import DownloadPo from "./pages/DownloadPo";
+import AddPrefix from "./pages/AddPrefix";
+import EditPo from "./pages/EditPo";
+import Logs from "./pages/Logs";
+import ForgotPass from "./pages/ForgotPass";
+import CreateHexSticker from "./pages/CreateHexSticker";
+
+import Toast from "./components/Toast";
+import NavDrawer from "./components/NavDrawer";
+
+import { setRole } from "./slices/user";
+import { useAppDispatch } from "./hooks";
+
+import { readFromStorage } from "./utils/storage";
+import axios from "./utils/interceptors";
+
+import "./Print.css";
+import "./reset.css";
 
 function App() {
+  const [screen, setScreen] = useState(0);
+  const [loggedIn, setLoggedIn] = useState(false);
   const dispatch = useAppDispatch();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const status = useSelector((state: RootState) => state.auth.status);
-  const router = useRouter();
-
-  // Fetch auth status on app load
-  useEffect(() => {
-    dispatch(authUser());
-  }, [dispatch]);
 
   useEffect(() => {
-    if (status !== "loading") {
-      console.log("status is: ", isAuthenticated);
-      if (isAuthenticated) {
-        router.navigate({ to: "/dashboard" });
-        return;
+    const fetchData = async () => {
+      const token = readFromStorage("token");
+      const email = readFromStorage("email");
+
+      if (!token || !email) return;
+
+      try {
+        const {
+          data: { valid, role },
+        } = await axios.get(`account/validate-token/${token}/${email}`);
+        setLoggedIn(valid);
+        if (!role) return;
+
+        dispatch(setRole(role));
+      } catch (error) {
+        console.error("Error validating token:", error);
+        setLoggedIn(false);
       }
-    }
-  }, [isAuthenticated, status, router]);
+    };
 
-  if (status === "loading") {
-    return (
-      <Container sx={{ textAlign: "center", mt: 5 }}>
-        <CircularProgress sx={{ mt: 2 }} />
-      </Container>
-    );
-  }
-
-  const navigate = (location: "login" | "register") => {
-    router.navigate({ to: `/${location}` });
-  };
+    fetchData();
+  }, [dispatch]);
 
   return (
     <>
-      <Container sx={{ textAlign: "center", mt: 5 }}>
-        <Typography variant="h4">Welcome to Creekview</Typography>
-        <Button variant="contained" onClick={() => navigate("login")}>
-          Login
-        </Button>
-        <Button variant="contained" onClick={() => navigate("register")}>
-          Register
-        </Button>
-      </Container>
+      <Toast />
+      <header className="no-print">
+        {loggedIn && <NavDrawer setScreen={setScreen} setLoggedIn={setLoggedIn} />}
+      </header>
+
+      {screen === 0 && <Home setScreen={setScreen} loggedIn={loggedIn} setLoggedIn={setLoggedIn} />}
+      {screen === 1 && <ProcessPdf />}
+      {screen === 2 && <DownloadPo />}
+      {screen === 3 && <AddPrefix />}
+      {screen === 4 && <EditPo />}
+      {screen === 5 && <CreateHexSticker />}
+      {screen === 6 && <Logs />}
+      {screen === 7 && <ForgotPass />}
     </>
   );
 }

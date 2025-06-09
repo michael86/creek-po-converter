@@ -1,0 +1,92 @@
+@media print {
+  * {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  body,
+  html {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .no-print {
+    display: none;
+  }
+
+  table,
+  tr {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 1rem;
+  }
+  @page {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  td {
+    text-align: center;
+  }
+
+  p:first-of-type {
+    margin-top: 0.5rem;
+  }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .sticker-container {
+    display: block;
+
+    width: 100%;
+  }
+
+  .sticker {
+    width: 100%;
+    padding-top: 0.5rem !important;
+  }
+
+  .sticker td {
+    border: none;
+  }
+
+  .pagebreak {
+    page-break-after: always;
+  }
+
+  .print-flex:last-of-type {
+    justify-self: flex-start;
+    align-self: flex-start;
+  }
+
+  .print-flex:first-of-type {
+    justify-self: flex-end;
+    align-self: flex-end;
+    transform: translateY(-100%);
+  }
+
+  .show-print {
+    display: inline-block;
+    font-size: 0.5rem;
+    transform: translate(-3px, -12%);
+  }
+
+  .sticker-description {
+    font-size: 0.5rem;
+  }
+
+  .sticker-qty,
+  .sticker-part {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+}

@@ -1,0 +1,11 @@
+.home {
+  text-align: center;
+  font-size: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 15%;
+  margin: auto;
+}

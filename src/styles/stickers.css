@@ -1,0 +1,34 @@
+.select-pdf {
+  margin: auto;
+  width: 220px;
+  text-align: center;
+}
+
+.sticker-container {
+  width: 90%;
+  margin: auto;
+  margin-top: 2rem;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.sticker {
+  margin-right: 1rem;
+  border: 1px solid black;
+  border-radius: 20px;
+  padding: 1rem;
+  margin-top: 1rem;
+  width: calc(20% - 1rem);
+}
+
+.sticker p {
+  margin: 0.2rem;
+}
+
+.sticker.split {
+  background-color: rgba(139, 139, 218, 0.5);
+}
+
+.text-center {
+  text-align: center;
+}
