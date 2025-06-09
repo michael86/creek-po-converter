@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState } from "react";
+import axios from "../utils/interceptors";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -23,14 +24,15 @@ const StickerTemplate = () => {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("pdf", file);
 
-    const res = await fetch("/api/upload", {
-      method: "POST",
-      body: formData,
+    const res = await axios.post("/pdf/process-sticker-template", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
 
-    if (res.ok) {
+    if (res.status === 200) {
       console.log("Upload successful");
     } else {
       console.error("Upload failed");
