@@ -10,7 +10,13 @@ import {
   Radio,
 } from "@mui/material";
 
-import { dataSchema, setHexCount, setHexData, setHexPrint, setHexRadio } from "../slices/hex";
+import {
+  dataSchema,
+  setHexCount,
+  setHexData,
+  setHexPrint,
+  setHexRadio,
+} from "../slices/hex";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { manageConversion } from "../utils";
 
@@ -29,7 +35,13 @@ const GenerateHex: React.FC = () => {
     if (!radio && isNaN(+inputElement.value)) return;
 
     dispatch(
-      setHexData(manageConversion(inputElement.value, +amountElement.value, radio) as dataSchema)
+      setHexData(
+        manageConversion(
+          inputElement.value,
+          +amountElement.value,
+          radio
+        ) as dataSchema
+      )
     );
   };
 
@@ -66,21 +78,30 @@ const GenerateHex: React.FC = () => {
             defaultValue="decimal"
             name="radio-buttons-group"
             onChange={(e) =>
-              dispatch(setHexRadio(e.target.value.toLowerCase() === "decimal" ? 0 : 1))
+              dispatch(
+                setHexRadio(e.target.value.toLowerCase() === "decimal" ? 0 : 1)
+              )
             }
           >
-            <FormControlLabel value="decimal" control={<Radio />} label="decimal" />
+            <FormControlLabel
+              value="decimal"
+              control={<Radio />}
+              label="decimal"
+            />
             <FormControlLabel value="hex" control={<Radio />} label="hex" />
           </RadioGroup>
         </FormControl>
 
-        <div className="button-container">
+        <div className="button-container-hex">
           <Button variant="contained" onClick={() => dispatchHexData()}>
             Generate
           </Button>
 
           {data.length > 0 && (
-            <Button variant="contained" onClick={() => dispatch(setHexPrint(true))}>
+            <Button
+              variant="contained"
+              onClick={() => dispatch(setHexPrint(true))}
+            >
               Print
             </Button>
           )}

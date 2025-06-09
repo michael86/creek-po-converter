@@ -8,8 +8,6 @@ export const getDate = (date: number = getDateAsUnix(), toValue = false) => {
   const year = readable.getFullYear();
   const month = readable.getMonth();
   const day = readable.getDate();
-  const hour = readable.getHours();
-  const mins = readable.getMinutes();
 
   // Adjust for timezone offset
   const timezoneOffset = readable.getTimezoneOffset() * 60000; // Offset in milliseconds
@@ -17,12 +15,15 @@ export const getDate = (date: number = getDateAsUnix(), toValue = false) => {
 
   return toValue
     ? adjustedDate.toISOString().substring(0, 10)
-    : `${day}/${month < 10 ? "0" : ""}${month + 1}/${year} - ${hour}:${mins}`;
+    : `${day}/${month < 10 ? "0" : ""}${month + 1}/${year}`;
 };
 
 export const getRandomColor = () => `hsl(${Math.random() * 360}, 100%, 75%)`;
 
-type OnParcelInput = (value: string, dispatch: Dispatch<SetStateAction<string>>) => void;
+type OnParcelInput = (
+  value: string,
+  dispatch: Dispatch<SetStateAction<string>>
+) => void;
 
 export const onParcelInput: OnParcelInput = (value, dispatch) => {
   if (!value.match(/^\d*(,\d*)*$/)) return; // Only allow numeric input
@@ -32,7 +33,11 @@ export const onParcelInput: OnParcelInput = (value, dispatch) => {
 export const convertToHex = (number: number): string => number.toString(16);
 export const convertToDec = (number: string): number => parseInt(number, 16);
 
-export const manageConversion = (value: string, amount: number, radio: 1 | 0) => {
+export const manageConversion = (
+  value: string,
+  amount: number,
+  radio: 1 | 0
+) => {
   if (!value || !amount || typeof radio !== "number") return;
 
   const newData: { hex: string; decimal: number }[] = [];

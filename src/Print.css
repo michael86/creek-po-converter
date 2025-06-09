@@ -81,12 +81,23 @@
   }
 
   .sticker-description {
-    font-size: 0.5rem;
+    font-size: 1.2rem;
+    padding: 0 0.5rem !important;
   }
 
   .sticker-qty,
-  .sticker-part {
+  .sticker-part,
+  .purchase-order-row {
     font-size: 1.8rem;
+    font-weight: 500;
+  }
+
+  .purchase-order-row {
+    display: block;
+  }
+
+  .sticker-location {
+    font-size: 1.2rem;
     font-weight: 500;
   }
 }

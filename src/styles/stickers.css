@@ -32,3 +32,7 @@
 .text-center {
   text-align: center;
 }
+
+.purchase-order-row {
+  display: none;
+}

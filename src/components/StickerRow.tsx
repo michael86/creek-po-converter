@@ -8,6 +8,7 @@ import { setToast } from "../slices/alert";
 import { PartNumber } from "../slices/purchaseOrders";
 
 type Props = {
+  poNumber: string;
   qty: number;
   isReceived: boolean;
   part: PartNumber;
@@ -15,15 +16,31 @@ type Props = {
   index: number;
 };
 
-const StickerRow = ({ qty, isReceived, part, date, index }: Props) => {
+const StickerRow = ({
+  poNumber,
+  qty,
+  isReceived,
+  part,
+  date,
+  index,
+}: Props) => {
   const [print, setPrint] = useState(false);
   const dispatch = useAppDispatch();
 
-  const totalReceived = part.partsReceived.reduce((a, b) => a + b.amountReceived, 0);
+  const totalReceived = part.partsReceived.reduce(
+    (a, b) => a + b.amountReceived,
+    0
+  );
 
   const addToPrint = () => {
     setPrint(true);
-    dispatch(setToast({ show: true, type: "success", message: `${part.name} is now printable` }));
+    dispatch(
+      setToast({
+        show: true,
+        type: "success",
+        message: `${part.name} is now printable`,
+      })
+    );
   };
 
   return (
@@ -33,6 +50,7 @@ const StickerRow = ({ qty, isReceived, part, date, index }: Props) => {
         style={{ backgroundColor: isReceived ? "green" : "white" }}
       >
         <td className="sticker-part">{part.name}</td>
+        <td className="purchase-order-row">{poNumber}</td>
         <td className="sticker-description">{part.description}</td>
         <td className="sticker-qty">
           QTY:{qty}
@@ -46,19 +64,25 @@ const StickerRow = ({ qty, isReceived, part, date, index }: Props) => {
             </div>
           </>
         </td>
-        <td className="due-date" style={{ textTransform: "uppercase" }}>
+        <td
+          className="due-date no-print"
+          style={{ textTransform: "uppercase" }}
+        >
           <span className="show-print">Due: </span>
           {getDate(part.dateDue)}
         </td>
         <td className="date-received" style={{ textTransform: "uppercase" }}>
-          <span className="show-print">Received: </span>
           {getDate(date)}
         </td>
 
         <StickerLocation location={part.location} />
 
         <td className="table-buttons pagebreak">
-          <StickerButtons addToPrint={addToPrint} index={index} isReceived={isReceived} />
+          <StickerButtons
+            addToPrint={addToPrint}
+            index={index}
+            isReceived={isReceived}
+          />
         </td>
       </tr>
     </>
