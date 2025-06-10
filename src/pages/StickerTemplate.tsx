@@ -167,10 +167,10 @@ const StickerTemplate = () => {
 
       {/* Label printing styles */}
       <style>{`
-                    @media print {
-                    body {
-            margin: 0;
-          }
+          @media print {
+            body {
+              margin: 0;
+            }
 
           button, ul, h3, p, .MuiButtonBase-root, h1, .MuiTypography-h5, .no-print  {
             display: none;

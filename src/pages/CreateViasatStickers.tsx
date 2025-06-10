@@ -38,34 +38,42 @@ const CreateViasatStickers = () => {
   };
 
   const onSubmit = () => {
-    if (!file) return setError("Please select a file to upload.");
-    setError(null);
-    if (!template) return setError("Please select a template.");
-    setError(null);
-    console.log("Selected template:", template);
+    if (!file) {
+      setError("Please select a file to upload.");
+      return;
+    }
+    setError(null); // Clear previous error if file is present
+
+    if (!template) {
+      setError("Please select a template.");
+      return;
+    }
+    setError(null); // Clear previous error if template is present
+
     const reader = new FileReader();
 
     reader.onload = (event) => {
-      console.log("File loaded:", event);
-      const data = event.target?.result;
-      console.log("File data:", data);
-      if (typeof data !== "string") {
-        setError("Invalid file format.");
+      const arrayBuffer = event.target?.result;
+
+      if (!(arrayBuffer instanceof ArrayBuffer)) {
+        setError("Invalid file format. Expected ArrayBuffer.");
         return;
       }
 
-      const workbook = XLSX.read(data, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const sheetData = XLSX.utils.sheet_to_json(sheet);
-
-      setData(sheetData);
+      try {
+        const workbook = XLSX.read(arrayBuffer, { type: "binary" });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const sheetData = XLSX.utils.sheet_to_json(sheet);
+        setData(sheetData);
+      } catch (e) {
+        console.error("Error reading Excel file:", e);
+        setError("Failed to process Excel file. Please ensure it's a valid format.");
+      }
     };
-  };
 
-  console.log("template", template);
-  console.log("file", file);
-  console.log("data", data);
+    reader.readAsArrayBuffer(file);
+  };
 
   return (
     <div className="create-viasat-stickers">
@@ -113,7 +121,6 @@ const CreateViasatStickers = () => {
               style={{ width: "200px" }}
               tabIndex={-1}
               startIcon={<CloudUploadIcon />}
-              disabled={!!file}
             >
               Select File
               <VisuallyHiddenInput
