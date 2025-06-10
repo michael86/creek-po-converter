@@ -126,6 +126,21 @@ const NavDrawer: React.FC<Props> = ({ setScreen, setLoggedIn }) => {
           </List>
         </>
       )}
+      {role >= 2 && (
+        <>
+          <Divider />
+          <List>
+            {[{ text: "Viatsat Stickers", icon: NoteAdd, screen: 8 }].map((entry) => (
+              <ListItem key={entry.text} disablePadding onClick={() => setScreen(entry.screen)}>
+                <ListItemButton>
+                  <entry.icon />
+                  <ListItemText primary={entry.text} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+        </>
+      )}
       {role >= 5 && (
         <>
           <Divider />

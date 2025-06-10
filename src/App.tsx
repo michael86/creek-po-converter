@@ -21,6 +21,7 @@ import axios from "./utils/interceptors";
 
 import "./Print.css";
 import "./reset.css";
+import CreateViasatStickers from "./pages/CreateViasatStickers";
 
 function App() {
   const [screen, setScreen] = useState(0);
@@ -66,6 +67,7 @@ function App() {
       {screen === 5 && <CreateHexSticker />}
       {screen === 6 && <Logs />}
       {screen === 7 && <StickerTemplate />}
+      {screen === 8 && <CreateViasatStickers />}
     </>
   );
 }
