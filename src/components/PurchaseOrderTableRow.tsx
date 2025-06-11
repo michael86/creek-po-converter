@@ -13,6 +13,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../utils/table";
 import { Button } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
+import DeliveryModal from "./DeliveryModal";
 
 type Props = {
   row: ReturnType<typeof createData>;
@@ -22,6 +23,7 @@ type Props = {
 
 export const Row: FC<Props> = ({ row, editMode, refetch }) => {
   const [open, setOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
@@ -62,6 +64,7 @@ export const Row: FC<Props> = ({ row, editMode, refetch }) => {
             <Button
               variant="contained"
               style={{ marginTop: "50%", transform: "translateY(-100%)" }}
+              onClick={() => setShowModal(true)}
             >
               Add Delivery
             </Button>
@@ -69,6 +72,7 @@ export const Row: FC<Props> = ({ row, editMode, refetch }) => {
         )}
       </TableRow>
 
+      {/* //Refactor this into own component */}
       {row.history.length > 0 && (
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -100,6 +104,13 @@ export const Row: FC<Props> = ({ row, editMode, refetch }) => {
             </Collapse>
           </TableCell>
         </TableRow>
+      )}
+      {showModal && (
+        <DeliveryModal
+          setShowModal={setShowModal}
+          row={row}
+          quantitiyToReceive={row.quantity - row.quantityReceived}
+        />
       )}
     </>
   );

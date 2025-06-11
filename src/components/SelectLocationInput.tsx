@@ -18,17 +18,9 @@ const SelectLocationInput: FC<Props> = ({ itemId, itemName, refetch, currentLoca
   const [showSnack, setShowSnack] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  if (data === "loading") {
-    return <FetchingLoader />;
-  }
-
-  if (data === "Error selecting locations, are you sure you added some") {
-    return (
-      <Typography variant="body1" color="red">
-        {data}
-      </Typography>
-    );
-  }
+  useEffect(() => {
+    setValue(currentLocation || "");
+  }, [currentLocation]);
 
   const handleChange = async (event: SelectChangeEvent) => {
     try {
@@ -46,9 +38,17 @@ const SelectLocationInput: FC<Props> = ({ itemId, itemName, refetch, currentLoca
     }
   };
 
-  useEffect(() => {
-    setValue(currentLocation || "");
-  }, [currentLocation]);
+  if (data === "loading") {
+    return <FetchingLoader />;
+  }
+
+  if (data === "Error selecting locations, are you sure you added some") {
+    return (
+      <Typography variant="body1" color="red">
+        {data}
+      </Typography>
+    );
+  }
 
   return (
     <FormControl fullWidth>
