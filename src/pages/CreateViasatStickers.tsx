@@ -77,7 +77,7 @@ const CreateViasatStickers = () => {
           return {
             depotPin: row["Depot"] as number,
             masterPin: row["Master"] as number,
-            serialNumber: row["Serial No"] as string,
+            serialNumber: row["Serial Number"] as string,
             userPin: row["User"] as number,
           };
         });

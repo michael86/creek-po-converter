@@ -37,21 +37,22 @@ const ViasatStickerTable: React.FC<Props> = ({ data }) => {
 
     const stickers: string[][] = [];
 
+    const safe = (val: any) => (val != null ? String(val) : "");
     // Group 1: All Master Pin stickers (twice)
     for (const { serialNumber, masterPin } of data) {
-      const group = [serialNumber, "master pin", masterPin.toString()];
+      const group = [safe(serialNumber), "master pin", masterPin.toString()];
       stickers.push(group, group);
     }
 
     // Group 2: All Depot Pin stickers (twice)
     for (const { masterPin, depotPin } of data) {
-      const group = [masterPin.toString(), "Depot Pin", depotPin.toString()];
+      const group = [safe(masterPin).toString(), "Depot Pin", depotPin.toString()];
       stickers.push(group, group);
     }
 
     // Group 3: All User Pin stickers (twice)
     for (const { serialNumber, userPin } of data) {
-      const group = [serialNumber, "user pin", userPin.toString()];
+      const group = [safe(serialNumber), "user pin", userPin.toString()];
       stickers.push(group, group);
     }
 
