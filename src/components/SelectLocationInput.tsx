@@ -1,27 +1,22 @@
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import { FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
 import { getLocations } from "../api/queries/getLocations";
 import FetchingLoader from "./FetchingLoader";
 import { FC, useState } from "react";
 import SnackBar from "./SnackBar";
 import api from "../api";
-import { useAppSelector } from "../store";
-
+import { useEffect } from "react";
 type Props = {
   itemId: number;
+  itemName: string;
+  refetch: () => void;
+  currentLocation: string;
 };
 
-const SelectLocationInput: FC<Props> = ({ itemId }) => {
+const SelectLocationInput: FC<Props> = ({ itemId, itemName, refetch, currentLocation }) => {
   const data = getLocations();
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>(currentLocation);
   const [showSnack, setShowSnack] = useState<boolean>(false);
-  const purchaseOrder = useAppSelector((state) => state.purchaseOrder);
+  const [error, setError] = useState<string | null>(null);
 
   if (data === "loading") {
     return <FetchingLoader />;
@@ -37,16 +32,23 @@ const SelectLocationInput: FC<Props> = ({ itemId }) => {
 
   const handleChange = async (event: SelectChangeEvent) => {
     try {
-      console.log("event target value ", event.target.value);
-
-      const updated = await api.post("/locations/update", {
-        itemId,
+      await api.post("/locations/update", {
+        itemName,
+        location: event.target.value,
       });
-    } catch (error) {}
 
-    setValue(event.target.value);
-    setShowSnack(true);
+      await refetch();
+      setValue(event.target.value);
+      setShowSnack(true);
+    } catch (error) {
+      console.error("Error updating lcoation\n", error);
+      setError("Error updating location, please contact Michael");
+    }
   };
+
+  useEffect(() => {
+    setValue(currentLocation || "");
+  }, [currentLocation]);
 
   return (
     <FormControl fullWidth>
@@ -55,13 +57,18 @@ const SelectLocationInput: FC<Props> = ({ itemId }) => {
         id={`select-location-input-${itemId}`}
         value={value}
         label="location"
-        color="black"
         onChange={handleChange}
+        disabled={!!error}
+        displayEmpty
       >
+        <MenuItem disabled value="">
+          <em>Select Location</em>
+        </MenuItem>
+
         {data.map((val) => {
           return (
-            <MenuItem key={`option-${itemId}-${val.id}`} value={val.id}>
-              {val.name}
+            <MenuItem key={`option-${itemId}-${val.id}`} value={val.name}>
+              {error ? error : val.name}
             </MenuItem>
           );
         })}

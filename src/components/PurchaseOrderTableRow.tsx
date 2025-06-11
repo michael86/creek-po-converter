@@ -17,9 +17,10 @@ import SelectLocationInput from "./SelectLocationInput";
 type Props = {
   row: ReturnType<typeof createData>;
   editMode: boolean;
+  refetch: () => void;
 };
 
-export const Row: FC<Props> = ({ row, editMode }) => {
+export const Row: FC<Props> = ({ row, editMode, refetch }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -44,7 +45,12 @@ export const Row: FC<Props> = ({ row, editMode }) => {
         <TableCell align="right">{row.quantityReceived}</TableCell>
         <TableCell align="right">
           {editMode ? (
-            <SelectLocationInput itemId={row.id} />
+            <SelectLocationInput
+              itemId={row.id}
+              itemName={row.name}
+              refetch={refetch}
+              currentLocation={row.storageLocation || ""}
+            />
           ) : (
             row.storageLocation || "No location assigned"
           )}

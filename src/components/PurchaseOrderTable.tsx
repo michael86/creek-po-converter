@@ -22,7 +22,7 @@ const PurchaseOrderTable = () => {
 
   const [editMode, setEdit] = useState(false);
 
-  const { data, isLoading, isError } = useQuery<FetchCompletePurchaseOrder>({
+  const { data, isLoading, isError, refetch } = useQuery<FetchCompletePurchaseOrder>({
     queryKey: ["fetch-po", uuid],
     queryFn: () => fetchPo(uuid),
   });
@@ -36,6 +36,7 @@ const PurchaseOrderTable = () => {
     );
 
   const items = data.data.items;
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -54,8 +55,13 @@ const PurchaseOrderTable = () => {
           </TableHead>
           <TableBody>
             {data ? (
-              items.map((row) => (
-                <Row key={row.partNumber} row={createData(row)} editMode={editMode} />
+              items.map((row, index) => (
+                <Row
+                  key={`${row.partNumber}-${index}`}
+                  row={createData(row)}
+                  editMode={editMode}
+                  refetch={refetch}
+                />
               ))
             ) : (
               <TableRow>
