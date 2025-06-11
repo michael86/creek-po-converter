@@ -9,7 +9,9 @@ import {
 import { getLocations } from "../api/queries/getLocations";
 import FetchingLoader from "./FetchingLoader";
 import { FC, useState } from "react";
-import toast from "react-hot-toast/headless";
+import SnackBar from "./SnackBar";
+import api from "../api";
+import { useAppSelector } from "../store";
 
 type Props = {
   itemId: number;
@@ -18,6 +20,8 @@ type Props = {
 const SelectLocationInput: FC<Props> = ({ itemId }) => {
   const data = getLocations();
   const [value, setValue] = useState<string>("");
+  const [showSnack, setShowSnack] = useState<boolean>(false);
+  const purchaseOrder = useAppSelector((state) => state.purchaseOrder);
 
   if (data === "loading") {
     return <FetchingLoader />;
@@ -31,19 +35,27 @@ const SelectLocationInput: FC<Props> = ({ itemId }) => {
     );
   }
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = async (event: SelectChangeEvent) => {
+    try {
+      console.log("event target value ", event.target.value);
+
+      const updated = await api.post("/locations/update", {
+        itemId,
+      });
+    } catch (error) {}
+
     setValue(event.target.value);
-    toast("location updated");
+    setShowSnack(true);
   };
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="select-location">location</InputLabel>
       <Select
         labelId="select-location"
         id={`select-location-input-${itemId}`}
         value={value}
-        label="Age"
+        label="location"
+        color="black"
         onChange={handleChange}
       >
         {data.map((val) => {
@@ -54,6 +66,7 @@ const SelectLocationInput: FC<Props> = ({ itemId }) => {
           );
         })}
       </Select>
+      {showSnack && <SnackBar setShowSnack={setShowSnack} message="Location Updated" />}
     </FormControl>
   );
 };

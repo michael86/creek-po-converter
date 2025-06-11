@@ -44,10 +44,6 @@ export const Row: FC<Props> = ({ row, editMode }) => {
         <TableCell align="right">{row.quantityReceived}</TableCell>
         <TableCell align="right">
           {editMode ? (
-            // <TextField
-            //   type="text"
-            //   value={row.storageLocation || "No location assigned"}
-            // ></TextField>
             <SelectLocationInput itemId={row.id} />
           ) : (
             row.storageLocation || "No location assigned"

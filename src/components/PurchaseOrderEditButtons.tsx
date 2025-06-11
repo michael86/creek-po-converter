@@ -6,7 +6,6 @@ import { DeletePurchaseOrder } from "../types/api";
 import { setUuid } from "../store/slices/purchaseOrder";
 import { queryClient } from "../lib/reactQueryClient";
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { useRouter } from "@tanstack/react-router";
 
 type Props = {
   setEdit: Dispatch<SetStateAction<boolean>>;
@@ -16,8 +15,6 @@ const PurchaseOrderEditButtons: FC<Props> = ({ setEdit }) => {
   const uuid = useAppSelector((state) => state.purchaseOrder.uuid);
   const dispatch = useAppDispatch();
   const [error, setError] = useState<null | string>(null);
-
-  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: async () => {
