@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { createData } from "../../utils/table";
+import type { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { Button, FormGroup } from "@mui/material";
 import DeliveryDate from "./DeliveryDate";
@@ -12,6 +12,7 @@ import { PickerValue } from "@mui/x-date-pickers/internals";
 import api from "../../api";
 import { useAppSelector } from "../../store";
 import { Items } from "../../types/state/purchaseOrders";
+import { useMutation } from "@tanstack/react-query";
 
 const style = {
   position: "absolute",
@@ -28,9 +29,24 @@ const style = {
 type Props = {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   row: Items;
+  poName: string;
+  refetch: () => void;
 };
 
-const DeliveryModal: React.FC<Props> = ({ setShowModal, row }) => {
+interface AddDeliveryResponse {
+  status: number;
+  message: string;
+}
+
+interface AddDeliveryPayload {
+  poNumber: string;
+  deliveries: number[];
+  uuid: string;
+  partNumber: string;
+  date: Dayjs | PickerValue;
+}
+
+const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [parcels, setParcels] = useState<number[]>([]);
@@ -51,6 +67,26 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row }) => {
 
   useEffect(() => setOpen(true), []);
 
+  const addDeliveryMutation = useMutation<
+    AxiosResponse<AddDeliveryResponse>,
+    Error,
+    AddDeliveryPayload
+  >({
+    mutationFn: (payload: AddDeliveryPayload) =>
+      api.post<AddDeliveryResponse>("deliveries/add", {
+        ...payload,
+
+        date: (payload.date as Dayjs).toISOString(),
+      }),
+    onSuccess: () => {
+      refetch();
+      setShowModal(false);
+    },
+    onError: () => {
+      setError("Error submitting delivery, please contact Michael");
+    },
+  });
+
   const handleClose = () => {
     setOpen(false);
     setShowModal(false);
@@ -68,10 +104,12 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row }) => {
         return;
       }
 
-      const res = await api.post("deliveries/add", {
-        parcels,
-        partUuid: row.id,
+      addDeliveryMutation.mutate({
+        poNumber: poName,
+        deliveries: parcels,
+        uuid: row.id,
         partNumber: row.partNumber,
+        date: dateValue,
       });
     } catch (error) {
       setError("Error submitting delivery, please contact Michael");

@@ -60,7 +60,15 @@ const PurchaseOrderTable = () => {
           />
         </Table>
       </TableContainer>
-      {showModal && modalRow && <DeliveryModal setShowModal={setShowModal} row={modalRow} />}
+
+      {showModal && modalRow && (
+        <DeliveryModal
+          poName={data.data.poNumber}
+          setShowModal={setShowModal}
+          row={modalRow}
+          refetch={refetch}
+        />
+      )}
 
       {role >= 3 && <PurchaseOrderEditButtons setEdit={setEdit} />}
     </>
