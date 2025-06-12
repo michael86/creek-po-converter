@@ -11,8 +11,9 @@ import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../../utils/table";
-import { Button } from "@mui/material";
+import { Button, Checkbox, FormControlLabel } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
+import dayjs from "dayjs";
 
 type Props = {
   row: ReturnType<typeof createData>;
@@ -83,15 +84,20 @@ export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
                 <Table size="small" aria-label="purchases">
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date Received</TableCell>
+                      <TableCell>Print</TableCell>
+                      <TableCell align="right">Date Received</TableCell>
                       <TableCell align="right">Amount Received</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {row.history?.map((historyRow) => (
                       <TableRow key={`${historyRow.dateReceived}-${historyRow.quantityReceived}`}>
-                        <TableCell component="th" scope="row">
-                          {new Date(historyRow.dateReceived).toLocaleDateString()}
+                        <TableCell>
+                          <Checkbox defaultChecked />
+                        </TableCell>
+
+                        <TableCell component="th" scope="row" align="right">
+                          {dayjs(historyRow.dateReceived).format("DD-MM-YYYY HH:mm")}
                         </TableCell>
 
                         <TableCell align="right">{historyRow.quantityReceived}</TableCell>
