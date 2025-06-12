@@ -12,6 +12,7 @@ type Props = {
 };
 
 const TableBody: React.FC<Props> = ({ items, editMode, setShowModal, setModalRow, refetch }) => {
+  console.log("items ", items);
   return (
     <Tbody>
       {items.map((row, index) => (
