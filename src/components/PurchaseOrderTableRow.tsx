@@ -13,7 +13,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../utils/table";
 import { Button } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
-import DeliveryModal from "./DeliveryModal";
+import DeliveryModal from "./deliveryModal";
 
 type Props = {
   row: ReturnType<typeof createData>;
