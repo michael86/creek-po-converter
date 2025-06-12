@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../../utils/table";
-import { Button, Checkbox, FormControlLabel } from "@mui/material";
+import { Button, Checkbox } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
 import dayjs from "dayjs";
 
