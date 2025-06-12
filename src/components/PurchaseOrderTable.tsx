@@ -9,16 +9,18 @@ import Paper from "@mui/material/Paper";
 import Row from "./PurchaseOrderTableRow";
 import { createData } from "../utils/table";
 import { fetchPo } from "../api/queries/getPurchaseOrderDetails";
-import { useAppSelector } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
 import FetchingLoader from "./FetchingLoader";
 import { Typography } from "@mui/material";
 import { FetchCompletePurchaseOrder } from "../types/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PurchaseOrderEditButtons from "./PurchaseOrderEditButtons";
+import { setItems, setName, setRef } from "../store/slices/purchaseOrder";
 
 const PurchaseOrderTable = () => {
   const uuid = useAppSelector((state) => state.purchaseOrder.uuid) as string; // Cast as string, this component will not render if null
   const role = useAppSelector((state) => state.auth.role) || 1;
+  const dispatch = useAppDispatch();
 
   const [editMode, setEdit] = useState(false);
 
@@ -26,6 +28,14 @@ const PurchaseOrderTable = () => {
     queryKey: ["fetch-po", uuid],
     queryFn: () => fetchPo(uuid),
   });
+
+  useEffect(() => {
+    if (data?.data.items && data?.data.orderRef && data?.data.poNumber) {
+      dispatch(setItems(data.data.items));
+      dispatch(setName(data.data.poNumber));
+      dispatch(setRef(data.data.orderRef));
+    }
+  }, [data, dispatch]);
 
   if (isLoading) return <FetchingLoader />;
   if (isError || !data)

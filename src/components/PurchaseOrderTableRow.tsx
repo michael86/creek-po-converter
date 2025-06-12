@@ -32,7 +32,7 @@ export const Row: FC<Props> = ({ row, editMode, refetch }) => {
           <IconButton
             aria-label="expand row"
             size="small"
-            disabled={row.history.length === 0}
+            disabled={row.history?.length === 0}
             onClick={() => setOpen(!open)}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -73,7 +73,7 @@ export const Row: FC<Props> = ({ row, editMode, refetch }) => {
       </TableRow>
 
       {/* //Refactor this into own component */}
-      {row.history.length > 0 && (
+      {row.history?.length! > 0 && (
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
@@ -89,7 +89,7 @@ export const Row: FC<Props> = ({ row, editMode, refetch }) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {row.history.map((historyRow) => (
+                    {row.history?.map((historyRow) => (
                       <TableRow key={`${historyRow.dateReceived}-${historyRow.quantityReceived}`}>
                         <TableCell component="th" scope="row">
                           {new Date(historyRow.dateReceived).toLocaleDateString()}

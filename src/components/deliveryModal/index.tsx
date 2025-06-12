@@ -9,6 +9,7 @@ import DeliveryDate from "./DeliveryDate";
 import AddDeliveryField from "./AddDeliveryField";
 import dayjs, { Dayjs } from "dayjs";
 import { PickerValue } from "@mui/x-date-pickers/internals";
+import api from "../../api";
 
 const style = {
   position: "absolute",
@@ -31,6 +32,9 @@ type Props = {
 const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [parcels, setParcels] = useState<number[]>([]);
+  const [thresholdChecked, setThresholdChecked] = useState<boolean>(false);
+
   const [dateValue, setDateValue] = useState<Dayjs | PickerValue>(
     dayjs(new Date().toLocaleString())
   );
@@ -40,6 +44,29 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive 
   const handleClose = () => {
     setOpen(false);
     setShowModal(false);
+  };
+
+  const submitDeliveries = async () => {
+    setError("");
+
+    try {
+      if (
+        !parcels.length ||
+        (quantitiyToReceive - parcels.reduce((a, b) => a + b, 0) < 0 && !thresholdChecked)
+      ) {
+        setError("Parcels are empty or threshold is not checked");
+        return;
+      }
+
+      const res = await api.post("deliveries/add", {
+        parcels,
+        partUuid: row.id,
+        partNumber: row.name,
+      });
+    } catch (error) {
+      setError("Error submitting delivery, please contact Michael");
+      console.error(error);
+    }
   };
 
   return (
@@ -67,9 +94,19 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive 
             </Typography>
 
             <DeliveryDate value={dateValue} setValue={setDateValue} />
-            <AddDeliveryField setError={setError} quantitiyToReceive={quantitiyToReceive} />
 
-            <Button variant="contained">Submit Delivery</Button>
+            <AddDeliveryField
+              setError={setError}
+              quantitiyToReceive={quantitiyToReceive}
+              parcels={parcels}
+              setParcels={setParcels}
+              thresholdChecked={thresholdChecked}
+              setThresholdChecked={setThresholdChecked}
+            />
+
+            <Button variant="contained" onClick={submitDeliveries}>
+              Submit Delivery
+            </Button>
           </FormGroup>
         </Box>
       </Modal>

@@ -1,15 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface PoState {
-  uuid: string | null;
-  status: "idle" | "loading" | "succeeded" | "failed";
-  error: string | null;
-}
+import { PoState, Items } from "../../types/state/purchaseOrders";
 
 const initialState: PoState = {
   uuid: null,
   status: "idle",
   error: null,
+  name: null,
+  ref: null,
+  items: null,
 };
 
 const poSlice = createSlice({
@@ -19,8 +17,17 @@ const poSlice = createSlice({
     setUuid: (state, action: PayloadAction<string | null>) => {
       state.uuid = action.payload;
     },
+    setName: (state, action: PayloadAction<string | null>) => {
+      state.name = action.payload;
+    },
+    setRef: (state, action: PayloadAction<string | null>) => {
+      state.ref = action.payload;
+    },
+    setItems: (state, action: PayloadAction<Items[]>) => {
+      state.items = action.payload;
+    },
   },
 });
 
-export const { setUuid } = poSlice.actions;
+export const { setUuid, setName, setItems, setRef } = poSlice.actions;
 export const poReducer = poSlice.reducer;

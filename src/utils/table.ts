@@ -1,6 +1,6 @@
-import { PurchaseOrderItems } from "../types/api";
+import { Items } from "../types/state/purchaseOrders";
 
-export const createData = (data: PurchaseOrderItems) => {
+export const createData = (data: Items) => {
   return {
     id: data.id,
     name: data.partNumber,

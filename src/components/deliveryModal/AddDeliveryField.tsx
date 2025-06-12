@@ -13,12 +13,21 @@ import ThresholdWarning from "./ThresoldWarning";
 type Props = {
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   quantitiyToReceive: number;
+  parcels: number[];
+  setParcels: React.Dispatch<React.SetStateAction<number[]>>;
+  thresholdChecked: boolean;
+  setThresholdChecked: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const AddDeliveryField: React.FC<Props> = ({ setError, quantitiyToReceive }) => {
-  const [parcels, setParcels] = useState<number[]>([]);
+const AddDeliveryField: React.FC<Props> = ({
+  parcels,
+  setParcels,
+  setError,
+  quantitiyToReceive,
+  thresholdChecked,
+  setThresholdChecked,
+}) => {
   const [parcelTotal, setParcelTotal] = useState(0);
-  const [thresholdChecked, setThresholdChecked] = useState(false);
 
   const parcelRef = useRef<HTMLInputElement | null>(null);
 

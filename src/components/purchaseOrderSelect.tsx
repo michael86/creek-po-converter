@@ -14,7 +14,7 @@ import { setUuid } from "../store/slices/purchaseOrder";
 
 const PurchaseOrderSelect = () => {
   const dispatch = useAppDispatch();
-  const { uuid } = useAppSelector((state) => state.purchaseOrder);
+  const { uuid, name } = useAppSelector((state) => state.purchaseOrder);
 
   const [value, setValue] = useState(uuid || "");
 

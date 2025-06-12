@@ -6,7 +6,7 @@ import SnackBar from "./SnackBar";
 import api from "../api";
 import { useEffect } from "react";
 type Props = {
-  itemId: number;
+  itemId: string;
   itemName: string;
   refetch: () => void;
   currentLocation: string;
