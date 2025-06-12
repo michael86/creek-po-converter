@@ -10,6 +10,8 @@ import AddDeliveryField from "./AddDeliveryField";
 import dayjs, { Dayjs } from "dayjs";
 import { PickerValue } from "@mui/x-date-pickers/internals";
 import api from "../../api";
+import { useAppSelector } from "../../store";
+import { Items } from "../../types/state/purchaseOrders";
 
 const style = {
   position: "absolute",
@@ -25,11 +27,10 @@ const style = {
 
 type Props = {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  row: ReturnType<typeof createData>;
-  quantitiyToReceive: number;
+  row: Items;
 };
 
-const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive }) => {
+const DeliveryModal: React.FC<Props> = ({ setShowModal, row }) => {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [parcels, setParcels] = useState<number[]>([]);
@@ -38,6 +39,15 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive 
   const [dateValue, setDateValue] = useState<Dayjs | PickerValue>(
     dayjs(new Date().toLocaleString())
   );
+
+  const rows = useAppSelector((state) => state.purchaseOrder.items);
+  if (!rows?.length) {
+    return (
+      <Typography variant="body2" color="danger">
+        Error selecting items
+      </Typography>
+    );
+  }
 
   useEffect(() => setOpen(true), []);
 
@@ -52,7 +62,7 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive 
     try {
       if (
         !parcels.length ||
-        (quantitiyToReceive - parcels.reduce((a, b) => a + b, 0) < 0 && !thresholdChecked)
+        (row.quantity - parcels.reduce((a, b) => a + b, 0) < 0 && !thresholdChecked)
       ) {
         setError("Parcels are empty or threshold is not checked");
         return;
@@ -61,7 +71,7 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive 
       const res = await api.post("deliveries/add", {
         parcels,
         partUuid: row.id,
-        partNumber: row.name,
+        partNumber: row.partNumber,
       });
     } catch (error) {
       setError("Error submitting delivery, please contact Michael");
@@ -90,14 +100,14 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, quantitiyToReceive 
               component="h2"
               sx={{ marginBottom: "20px" }}
             >
-              Part: {row.name}
+              Part: {row.partNumber}
             </Typography>
 
             <DeliveryDate value={dateValue} setValue={setDateValue} />
 
             <AddDeliveryField
               setError={setError}
-              quantitiyToReceive={quantitiyToReceive}
+              quantitiyToReceive={row.quantity}
               parcels={parcels}
               setParcels={setParcels}
               thresholdChecked={thresholdChecked}
