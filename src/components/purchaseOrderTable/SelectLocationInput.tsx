@@ -1,9 +1,9 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent, Typography } from "@mui/material";
-import { getLocations } from "../api/queries/getLocations";
-import FetchingLoader from "./FetchingLoader";
+import { getLocations } from "../../api/queries/getLocations";
+import FetchingLoader from "../FetchingLoader";
 import { FC, useState } from "react";
-import SnackBar from "./SnackBar";
-import api from "../api";
+import SnackBar from "../SnackBar";
+import api from "../../api";
 import { useEffect } from "react";
 type Props = {
   itemId: string;

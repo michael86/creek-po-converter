@@ -1,5 +1,5 @@
 import { TableBody as Tbody } from "@mui/material";
-import Row from "../PurchaseOrderTableRow";
+import Row from "./PurchaseOrderTableRow";
 import { Items } from "../../types/state/purchaseOrders";
 import { createData } from "../../utils/table";
 

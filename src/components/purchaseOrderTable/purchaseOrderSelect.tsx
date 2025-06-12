@@ -1,4 +1,4 @@
-import { fetchPoNames } from "../api/queries/getPurchaseOrders";
+import { fetchPoNames } from "../../api/queries/getPurchaseOrders";
 import {
   Container,
   FormControl,
@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store";
-import { setUuid } from "../store/slices/purchaseOrder";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { setUuid } from "../../store/slices/purchaseOrder";
 
 const PurchaseOrderSelect = () => {
   const dispatch = useAppDispatch();

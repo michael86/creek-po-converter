@@ -1,10 +1,10 @@
-import api from "../api";
+import api from "../../api";
 import { Box, Button, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { useAppDispatch, useAppSelector } from "../store";
-import { DeletePurchaseOrder } from "../types/api";
-import { setUuid } from "../store/slices/purchaseOrder";
-import { queryClient } from "../lib/reactQueryClient";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { DeletePurchaseOrder } from "../../types/api";
+import { setUuid } from "../../store/slices/purchaseOrder";
+import { queryClient } from "../../lib/reactQueryClient";
 import { Dispatch, FC, SetStateAction, useState } from "react";
 
 type Props = {

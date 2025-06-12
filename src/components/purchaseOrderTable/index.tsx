@@ -8,7 +8,7 @@ import FetchingLoader from "../FetchingLoader";
 import { Typography } from "@mui/material";
 import { FetchCompletePurchaseOrder } from "../../types/api";
 import { useEffect, useState } from "react";
-import PurchaseOrderEditButtons from "../PurchaseOrderEditButtons";
+import PurchaseOrderEditButtons from "./PurchaseOrderEditButtons";
 import { setItems, setName, setRef } from "../../store/slices/purchaseOrder";
 import DeliveryModal from "../deliveryModal";
 import { Items } from "../../types/state/purchaseOrders";

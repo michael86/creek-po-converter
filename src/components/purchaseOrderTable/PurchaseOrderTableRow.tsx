@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { createData } from "../utils/table";
+import { createData } from "../../utils/table";
 import { Button } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
 
