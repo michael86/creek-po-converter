@@ -1,15 +1,17 @@
 import { Button } from "@mui/material";
 import { useLocation } from "@tanstack/react-router";
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { isKeyOf } from "../../utils/typeGuards";
 import { useDeletePurchaseOrder } from "../../hooks/usePurchaseOrderMutations";
 import { ButtonSchema } from "../../types/navBar";
+import { setEditMode } from "../../store/slices/purchaseOrder";
 
 export default function NavButtons() {
   const { pathname } = useLocation();
   const pathKey = pathname.replace(/[-/]/g, "");
   const purchaseOrder = useAppSelector((s) => s.purchaseOrder);
   const auth = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   //Have to call hooks inside component to prevent react from moaning
   const deletePO = useDeletePurchaseOrder();
@@ -20,7 +22,7 @@ export default function NavButtons() {
         role: 3,
         label: "Edit",
         action: () => {
-          //Add set Edit mode to redux store and set state here
+          dispatch(setEditMode(!purchaseOrder.editMode));
         },
         sx: { mr: 2.5 },
       },

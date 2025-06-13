@@ -18,4 +18,5 @@ export interface PoState {
   name: string | null;
   ref: string | null;
   items: Items[] | null;
+  editMode: boolean;
 }

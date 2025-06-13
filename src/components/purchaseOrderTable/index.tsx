@@ -16,17 +16,16 @@ import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 
 const PurchaseOrderTable = () => {
-  const uuid = useAppSelector((state) => state.purchaseOrder.uuid) as string; // Cast as string, this component will not render if null
+  const purchaseOrder = useAppSelector((state) => state.purchaseOrder); // Cast as string, this component will not render if null
 
   const dispatch = useAppDispatch();
 
   const [showModal, setShowModal] = useState(false);
-  const [editMode, setEdit] = useState(false);
   const [modalRow, setModalRow] = useState<Items | null>(null);
 
   const { data, isLoading, isError, refetch } = useQuery<FetchCompletePurchaseOrder>({
-    queryKey: ["fetch-po", uuid],
-    queryFn: () => fetchPo(uuid),
+    queryKey: ["fetch-po", purchaseOrder.uuid],
+    queryFn: () => fetchPo(purchaseOrder.uuid!),
   });
 
   useEffect(() => {
@@ -49,13 +48,13 @@ const PurchaseOrderTable = () => {
     <>
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
-          <TableHead editMode={editMode} />
+          <TableHead editMode={purchaseOrder.editMode} />
 
           <TableBody
             items={data.data.items}
             setModalRow={setModalRow}
             setShowModal={setShowModal}
-            editMode={editMode}
+            editMode={purchaseOrder.editMode}
             refetch={refetch}
           />
         </Table>

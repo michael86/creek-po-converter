@@ -8,6 +8,7 @@ const initialState: PoState = {
   name: null,
   ref: null,
   items: null,
+  editMode: false,
 };
 
 const poSlice = createSlice({
@@ -26,8 +27,11 @@ const poSlice = createSlice({
     setItems: (state, action: PayloadAction<Items[]>) => {
       state.items = action.payload;
     },
+    setEditMode: (state, action: PayloadAction<boolean>) => {
+      state.editMode = action.payload;
+    },
   },
 });
 
-export const { setUuid, setName, setItems, setRef } = poSlice.actions;
+export const { setUuid, setName, setItems, setRef, setEditMode } = poSlice.actions;
 export const poReducer = poSlice.reducer;
