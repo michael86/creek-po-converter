@@ -1,12 +1,12 @@
 import { SxProps, Theme } from "@mui/material";
 
 export interface ButtonConfig {
+  role: number;
   label: string;
   action: () => unknown;
-  styles?: SxProps<Theme>;
+  sx?: SxProps<Theme>;
 }
 
 export interface ButtonSchema {
   purchaseorders: ButtonConfig[];
-  test: ButtonConfig[];
 }

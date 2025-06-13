@@ -8,7 +8,7 @@ import FetchingLoader from "../FetchingLoader";
 import { Typography } from "@mui/material";
 import { FetchCompletePurchaseOrder } from "../../types/api";
 import { useEffect, useState } from "react";
-import PurchaseOrderEditButtons from "./PurchaseOrderEditButtons";
+
 import { setItems, setName, setRef } from "../../store/slices/purchaseOrder";
 import DeliveryModal from "../deliveryModal";
 import { Items } from "../../types/state/purchaseOrders";
@@ -17,7 +17,7 @@ import TableBody from "./TableBody";
 
 const PurchaseOrderTable = () => {
   const uuid = useAppSelector((state) => state.purchaseOrder.uuid) as string; // Cast as string, this component will not render if null
-  const role = useAppSelector((state) => state.auth.role) || 1;
+
   const dispatch = useAppDispatch();
 
   const [showModal, setShowModal] = useState(false);
@@ -69,8 +69,6 @@ const PurchaseOrderTable = () => {
           refetch={refetch}
         />
       )}
-
-      {role >= 3 && <PurchaseOrderEditButtons setEdit={setEdit} />}
     </>
   );
 };
