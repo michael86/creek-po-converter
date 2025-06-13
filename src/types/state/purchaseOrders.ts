@@ -19,4 +19,5 @@ export interface PoState {
   ref: string | null;
   items: Items[] | null;
   editMode: boolean;
+  deliveriesToPrint: number[] | null;
 }

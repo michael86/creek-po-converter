@@ -5,16 +5,12 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 import { useAppSelector } from "../../store";
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import NavButtons from "./NavButtons";
 import NavigationMenu from "./NavigationMenu";
 
 export default function ButtonAppBar() {
   const auth = useAppSelector((state) => state.auth);
-
-  const location = useLocation();
-  const path = location.pathname.replace(/^\//, "");
-
   const navigate = useNavigate();
 
   return (

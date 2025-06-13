@@ -37,6 +37,17 @@ export default function NavButtons() {
         },
         sx: { mr: 2.5 },
       },
+
+      {
+        role: 3,
+        label: "print",
+        action: () => {
+          if (purchaseOrder.uuid) {
+            deletePO.mutate(purchaseOrder.uuid);
+          }
+        },
+        sx: { mr: 2.5 },
+      },
     ],
   };
 
