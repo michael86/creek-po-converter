@@ -15,7 +15,7 @@ export default function ButtonAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1, marginBottom: 2.5 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ padding: "0.5rem 0" }}>
         <Toolbar>
           <NavigationMenu />
 
@@ -38,7 +38,7 @@ export default function ButtonAppBar() {
           </Box>
 
           <Button
-            sx={{ margin: "auto", marginLeft: "0", marginRight: "0", maxWidth: "fit-content" }}
+            sx={{ margin: "auto", marginLeft: "0", marginRight: "0" }}
             color="inherit"
             onClick={() =>
               auth.email && auth.role

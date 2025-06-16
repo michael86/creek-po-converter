@@ -30,7 +30,7 @@ export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
     if (purchaseOrder.labels[row.name]?.[historyId]) {
       const newLabels = { ...purchaseOrder.labels };
 
-      // Clone the inner object for safety
+      // If the label exists, we need to remove it
       const updatedHistoryMap = { ...newLabels[row.name] };
       delete updatedHistoryMap[historyId];
 

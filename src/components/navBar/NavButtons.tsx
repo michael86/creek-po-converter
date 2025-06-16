@@ -7,10 +7,9 @@ import { ButtonSchema } from "../../types/navBar";
 import { setEditMode } from "../../store/slices/purchaseOrder";
 import SnackBar from "../SnackBar";
 import { useState } from "react";
-import jsPDF from "jspdf";
-import { PurchaseOrderLabel, PurchaseOrderLabelsMap } from "../../types/labels";
+import { PurchaseOrderLabelsMap } from "../../types/labels";
 import { genPurchaseOrderLabels } from "../../utils/Nav/purchaseOrders";
-import { Deliveries, Delivery } from "../../types/state/purchaseOrders";
+import { Delivery } from "../../types/state/purchaseOrders";
 
 export default function NavButtons() {
   const [showSnack, setShowSnack] = useState<boolean>(false);

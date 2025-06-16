@@ -43,3 +43,15 @@ export interface FetchLocations {
   status: "success";
   data: [{ name: string; id: string }];
 }
+
+export type User = {
+  email: string;
+  name: string;
+  role: number;
+  dateCreated: Date;
+};
+
+export interface FetchUsers {
+  status: "success";
+  data: { users: User[]; status: number; message: string };
+}

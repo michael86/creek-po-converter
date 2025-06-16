@@ -17,6 +17,7 @@ import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as PurchaseOrdersIndexImport } from './routes/purchase-orders/index'
 import { Route as PdfIndexImport } from './routes/pdf/index'
+import { Route as UsersManageImport } from './routes/users/manage'
 import { Route as PdfUploadImport } from './routes/pdf/upload'
 
 // Create/Update Routes
@@ -54,6 +55,12 @@ const PurchaseOrdersIndexRoute = PurchaseOrdersIndexImport.update({
 const PdfIndexRoute = PdfIndexImport.update({
   id: '/pdf/',
   path: '/pdf/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UsersManageRoute = UsersManageImport.update({
+  id: '/users/manage',
+  path: '/users/manage',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PdfUploadImport
       parentRoute: typeof rootRoute
     }
+    '/users/manage': {
+      id: '/users/manage'
+      path: '/users/manage'
+      fullPath: '/users/manage'
+      preLoaderRoute: typeof UsersManageImport
+      parentRoute: typeof rootRoute
+    }
     '/pdf/': {
       id: '/pdf/'
       path: '/pdf'
@@ -127,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/users/manage': typeof UsersManageRoute
   '/pdf': typeof PdfIndexRoute
   '/purchase-orders': typeof PurchaseOrdersIndexRoute
 }
@@ -137,6 +152,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/users/manage': typeof UsersManageRoute
   '/pdf': typeof PdfIndexRoute
   '/purchase-orders': typeof PurchaseOrdersIndexRoute
 }
@@ -148,6 +164,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/users/manage': typeof UsersManageRoute
   '/pdf/': typeof PdfIndexRoute
   '/purchase-orders/': typeof PurchaseOrdersIndexRoute
 }
@@ -160,6 +177,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/pdf/upload'
+    | '/users/manage'
     | '/pdf'
     | '/purchase-orders'
   fileRoutesByTo: FileRoutesByTo
@@ -169,6 +187,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/pdf/upload'
+    | '/users/manage'
     | '/pdf'
     | '/purchase-orders'
   id:
@@ -178,6 +197,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/pdf/upload'
+    | '/users/manage'
     | '/pdf/'
     | '/purchase-orders/'
   fileRoutesById: FileRoutesById
@@ -189,6 +209,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   PdfUploadRoute: typeof PdfUploadRoute
+  UsersManageRoute: typeof UsersManageRoute
   PdfIndexRoute: typeof PdfIndexRoute
   PurchaseOrdersIndexRoute: typeof PurchaseOrdersIndexRoute
 }
@@ -199,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   PdfUploadRoute: PdfUploadRoute,
+  UsersManageRoute: UsersManageRoute,
   PdfIndexRoute: PdfIndexRoute,
   PurchaseOrdersIndexRoute: PurchaseOrdersIndexRoute,
 }
@@ -218,6 +240,7 @@ export const routeTree = rootRoute
         "/login",
         "/register",
         "/pdf/upload",
+        "/users/manage",
         "/pdf/",
         "/purchase-orders/"
       ]
@@ -236,6 +259,9 @@ export const routeTree = rootRoute
     },
     "/pdf/upload": {
       "filePath": "pdf/upload.tsx"
+    },
+    "/users/manage": {
+      "filePath": "users/manage.tsx"
     },
     "/pdf/": {
       "filePath": "pdf/index.tsx"
