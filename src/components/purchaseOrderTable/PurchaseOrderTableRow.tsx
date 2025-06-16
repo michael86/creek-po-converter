@@ -1,19 +1,16 @@
 import { FC, useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { createData } from "../../utils/table";
-import { Button, Checkbox } from "@mui/material";
+import { Button } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
-import dayjs from "dayjs";
+import HistoryRow from "./HistoryRow";
+import { hasItems } from "../../utils/typeGuards";
+import { PurchaseOrderLabels } from "../../types/labels";
+import { useAppSelector } from "../../store";
 
 type Props = {
   row: ReturnType<typeof createData>;
@@ -24,6 +21,32 @@ type Props = {
 
 export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
   const [open, setOpen] = useState(false);
+  const [labels, setLabels] = useState<Record<string, PurchaseOrderLabels>>({});
+  const purchaseOrder = useAppSelector((state) => state.purchaseOrder.name);
+  //Add a function to set all labels to checked
+
+  const handleLabelsChange = (historyId: number) => {
+    if (labels[historyId]) {
+      const newLabels = { ...labels };
+      delete newLabels[historyId];
+      setLabels(newLabels);
+      return;
+    }
+
+    if (!row.history || !row.history[historyId]) {
+      console.error("Invalid historyId or row.history is undefined");
+      return;
+    }
+
+    const newLabels = {
+      ...labels,
+      [historyId]: {
+        purchaseOrder,
+        ...row.history[historyId],
+      },
+    };
+    setLabels(newLabels);
+  };
 
   return (
     <>
@@ -71,44 +94,8 @@ export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
           </TableCell>
         )}
       </TableRow>
-
-      {/* //Refactor this into own component */}
-      {(row.history?.length ?? 0) > 0 && (
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-            <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box sx={{ margin: 1 }}>
-                <Typography variant="h6" gutterBottom component="div">
-                  History
-                </Typography>
-                <Table size="small" aria-label="purchases">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Print</TableCell>
-                      <TableCell align="right">Date Received</TableCell>
-                      <TableCell align="right">Amount Received</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {row.history?.map((historyRow) => (
-                      <TableRow key={`${historyRow.dateReceived}-${historyRow.quantityReceived}`}>
-                        <TableCell>
-                          <Checkbox defaultChecked />
-                        </TableCell>
-
-                        <TableCell component="th" scope="row" align="right">
-                          {dayjs(historyRow.dateReceived).format("DD-MM-YYYY HH:mm")}
-                        </TableCell>
-
-                        <TableCell align="right">{historyRow.quantityReceived}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </Box>
-            </Collapse>
-          </TableCell>
-        </TableRow>
+      {hasItems(row.history) && (
+        <HistoryRow history={row.history} open={open} handleLabelsChange={handleLabelsChange} />
       )}
     </>
   );

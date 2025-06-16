@@ -1,3 +1,5 @@
+import { PurchaseOrderLabels } from "../labels";
+
 export type Deliveries = { dateReceived: Date; id: number; quantityReceived: number }[];
 
 export interface Items {
@@ -20,4 +22,5 @@ export interface PoState {
   items: Items[] | null;
   editMode: boolean;
   deliveriesToPrint: number[] | null;
+  labels: Record<number, Record<string, PurchaseOrderLabels>>;
 }
