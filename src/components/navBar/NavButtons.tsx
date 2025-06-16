@@ -5,8 +5,13 @@ import { isKeyOf } from "../../utils/typeGuards";
 import { useDeletePurchaseOrder } from "../../hooks/usePurchaseOrderMutations";
 import { ButtonSchema } from "../../types/navBar";
 import { setEditMode } from "../../store/slices/purchaseOrder";
+import SnackBar from "../SnackBar";
+import { useState } from "react";
+import jsPDF from "jspdf";
 
 export default function NavButtons() {
+  const [showSnack, setShowSnack] = useState<boolean>(false);
+
   const { pathname } = useLocation();
   const pathKey = pathname.replace(/[-/]/g, "");
   const purchaseOrder = useAppSelector((s) => s.purchaseOrder);
@@ -42,8 +47,49 @@ export default function NavButtons() {
         role: 3,
         label: "print",
         action: () => {
-          if (purchaseOrder.uuid) {
-            deletePO.mutate(purchaseOrder.uuid);
+          if (Object.keys(purchaseOrder.labels).length > 0) {
+            const doc = new jsPDF({
+              unit: "mm",
+              format: [62, 40], // label size in mm
+              orientation: "landscape",
+            });
+
+            Object.entries(purchaseOrder.labels).forEach(([key, value], index) => {
+              if (index > 0) doc.addPage(); // new 62×30 mm page
+              const pageWidth = doc.internal.pageSize.getWidth();
+
+              const margin = 2; // 2 mm left/right margin
+              const maxWidth = 62 - margin * 2; // label width minus left+right margins
+              let y = 6; // start 6 mm down
+
+              doc.setFontSize(12);
+              doc.text(value.partNumber, pageWidth / 2, y, { align: "center" });
+              doc.text(value.purchaseOrder, pageWidth / 2, (y += 5), { align: "center" });
+              doc.text(`Qty: ${value.quantityReceived}`, pageWidth / 2, (y += 5), {
+                align: "center",
+              });
+              y += 5;
+
+              const desc = `${value.description}`;
+              const wrapped = doc.splitTextToSize(desc, maxWidth);
+              doc.text(wrapped, pageWidth / 2, y, { align: "center" });
+
+              y += wrapped.length * 2.5; // advance y by lineCount * lineHeight (≈5 mm)
+
+              doc.text(new Date(value.dateReceived).toLocaleDateString(), pageWidth / 2, (y += 5), {
+                align: "center",
+              });
+              doc.text(value.storageLocation || "Location", pageWidth / 2, (y += 5), {
+                align: "center",
+              });
+            });
+
+            const blob = doc.output("blob");
+            const url = URL.createObjectURL(blob);
+
+            window.open(url, "_blank");
+          } else {
+            setShowSnack(true);
           }
         },
         sx: { mr: 2.5 },
@@ -58,12 +104,15 @@ export default function NavButtons() {
     <>
       {buttonSchema[pathKey].map((cfg, idx) => {
         return (
-          auth.role &&
-          auth.role >= cfg.role && (
-            <Button key={idx} variant="outlined" color="inherit" onClick={cfg.action} sx={cfg.sx}>
-              {cfg.label}
-            </Button>
-          )
+          <>
+            {auth.role && auth.role >= cfg.role && (
+              <Button key={idx} variant="outlined" color="inherit" onClick={cfg.action} sx={cfg.sx}>
+                {cfg.label}
+              </Button>
+            )}
+
+            {showSnack && <SnackBar setShowSnack={setShowSnack} message="No labels to Print" />}
+          </>
         );
       })}
     </>
