@@ -8,6 +8,7 @@ import { setEditMode } from "../../store/slices/purchaseOrder";
 import SnackBar from "../SnackBar";
 import { useState } from "react";
 import jsPDF from "jspdf";
+import { PurchaseOrderLabel } from "../../types/labels";
 
 export default function NavButtons() {
   const [showSnack, setShowSnack] = useState<boolean>(false);
@@ -54,13 +55,18 @@ export default function NavButtons() {
               orientation: "landscape",
             });
 
-            Object.entries(purchaseOrder.labels).forEach(([key, value], index) => {
-              if (index > 0) doc.addPage(); // new 62×30 mm page
+            // Flatten labels into a single array of PurchaseOrderLabel
+            const allLabels: PurchaseOrderLabel[] = Object.values(purchaseOrder.labels).flatMap(
+              (historyMap) => Object.values(historyMap)
+            );
+
+            allLabels.forEach((value, index) => {
+              if (index > 0) doc.addPage(); // new 62×40 mm page
               const pageWidth = doc.internal.pageSize.getWidth();
 
               const margin = 2; // 2 mm left/right margin
-              const maxWidth = 62 - margin * 2; // label width minus left+right margins
-              let y = 6; // start 6 mm down
+              const maxWidth = 62 - margin * 2;
+              let y = 6;
 
               doc.setFontSize(12);
               doc.text(value.partNumber, pageWidth / 2, y, { align: "center" });
@@ -73,8 +79,7 @@ export default function NavButtons() {
               const desc = `${value.description}`;
               const wrapped = doc.splitTextToSize(desc, maxWidth);
               doc.text(wrapped, pageWidth / 2, y, { align: "center" });
-
-              y += wrapped.length * 2.5; // advance y by lineCount * lineHeight (≈5 mm)
+              y += wrapped.length * 2.5;
 
               doc.text(new Date(value.dateReceived).toLocaleDateString(), pageWidth / 2, (y += 5), {
                 align: "center",
@@ -86,12 +91,12 @@ export default function NavButtons() {
 
             const blob = doc.output("blob");
             const url = URL.createObjectURL(blob);
-
             window.open(url, "_blank");
           } else {
             setShowSnack(true);
           }
         },
+
         sx: { mr: 2.5 },
       },
     ],

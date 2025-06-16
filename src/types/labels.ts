@@ -8,4 +8,4 @@ export interface PurchaseOrderLabel {
 }
 
 // 2) A map from historyId → that single label
-export type PurchaseOrderLabelsMap = Record<number, PurchaseOrderLabel>;
+export type PurchaseOrderLabelsMap = Record<string, Record<number, PurchaseOrderLabel>>;

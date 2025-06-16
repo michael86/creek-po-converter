@@ -27,11 +27,21 @@ export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
   //Add a function to set all labels to checked
 
   const handleLabelsChange = (historyId: number) => {
-    if (purchaseOrder.labels[historyId]) {
+    if (purchaseOrder.labels[row.name]?.[historyId]) {
       const newLabels = { ...purchaseOrder.labels };
-      delete newLabels[historyId];
-      dispatch(setLabels(newLabels));
 
+      // Clone the inner object for safety
+      const updatedHistoryMap = { ...newLabels[row.name] };
+      delete updatedHistoryMap[historyId];
+
+      // Replace the entry or delete the partNumber entirely if empty
+      if (Object.keys(updatedHistoryMap).length === 0) {
+        delete newLabels[row.name];
+      } else {
+        newLabels[row.name] = updatedHistoryMap;
+      }
+
+      dispatch(setLabels(newLabels));
       return;
     }
 
@@ -42,13 +52,16 @@ export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
 
     const newLabels: PurchaseOrderLabelsMap = {
       ...purchaseOrder.labels,
-      [historyId]: {
-        purchaseOrder: purchaseOrder.name || "",
-        dateReceived: row.history[historyId].dateReceived,
-        quantityReceived: row.history[historyId].quantityReceived,
-        description: row.description,
-        partNumber: row.name,
-        storageLocation: row.storageLocation || null,
+      [row.name]: {
+        ...purchaseOrder.labels[row.name], // Ensure we are creating a new object for the row and spread previous labels if exists
+        [historyId]: {
+          purchaseOrder: purchaseOrder.name || "",
+          dateReceived: row.history[historyId].dateReceived,
+          quantityReceived: row.history[historyId].quantityReceived,
+          description: row.description,
+          partNumber: row.name,
+          storageLocation: row.storageLocation || null,
+        },
       },
     };
     dispatch(setLabels(newLabels));

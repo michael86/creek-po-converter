@@ -25,7 +25,7 @@ const PdfUpload = () => {
   });
 
   const beginUpload = async () => {
-    setMessages((prev) => ({ ok: null, error: null }));
+    setMessages(() => ({ ok: null, error: null }));
     setMessages({ error: null, ok: null });
 
     if (!file) {

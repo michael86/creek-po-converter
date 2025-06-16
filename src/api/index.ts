@@ -1,7 +1,9 @@
 import axios from "axios";
 import { validateErrorResponse } from "../utils/api";
 
-const ROOT = `${import.meta.env.VITE_API_URL}:${import.meta.env.VITE_API_PORT}`;
+const ROOT = import.meta.env.PROD
+  ? `${import.meta.env.VITE_API_URL}`
+  : `${import.meta.env.VITE_DEV_API_URL}:${import.meta.env.VITE_API_PORT}`;
 
 const api = axios.create({
   baseURL: ROOT,
@@ -21,6 +23,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error: CustomAxiosError) => {
     // user error (status 4**)
+    console.error("API error", error);
     if (error.status && error.status >= 400 && error.status < 500) {
       if (typeof error.response?.data?.message === "string") {
         if (!validateErrorResponse(error.response?.data?.message)) {
