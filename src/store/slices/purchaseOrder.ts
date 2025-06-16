@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PoState, Items } from "../../types/state/purchaseOrders";
+import { PurchaseOrderLabelsMap } from "../../types/labels";
 
 const initialState: PoState = {
   uuid: null,
@@ -18,6 +19,7 @@ const poSlice = createSlice({
   reducers: {
     setUuid: (state, action: PayloadAction<string | null>) => {
       state.uuid = action.payload;
+      state.labels = {}; // Reset labels when UUID changes
     },
     setName: (state, action: PayloadAction<string | null>) => {
       state.name = action.payload;
@@ -31,8 +33,11 @@ const poSlice = createSlice({
     setEditMode: (state, action: PayloadAction<boolean>) => {
       state.editMode = action.payload;
     },
+    setLabels: (state, action: PayloadAction<PurchaseOrderLabelsMap>) => {
+      state.labels = action.payload;
+    },
   },
 });
 
-export const { setUuid, setName, setItems, setRef, setEditMode } = poSlice.actions;
+export const { setUuid, setName, setItems, setRef, setEditMode, setLabels } = poSlice.actions;
 export const poReducer = poSlice.reducer;

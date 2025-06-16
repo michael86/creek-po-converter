@@ -9,8 +9,9 @@ import { Button } from "@mui/material";
 import SelectLocationInput from "./SelectLocationInput";
 import HistoryRow from "./HistoryRow";
 import { hasItems } from "../../utils/typeGuards";
-import { PurchaseOrderLabels } from "../../types/labels";
-import { useAppSelector } from "../../store";
+import { PurchaseOrderLabelsMap } from "../../types/labels";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { setLabels } from "../../store/slices/purchaseOrder";
 
 type Props = {
   row: ReturnType<typeof createData>;
@@ -21,15 +22,16 @@ type Props = {
 
 export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
   const [open, setOpen] = useState(false);
-  const [labels, setLabels] = useState<Record<string, PurchaseOrderLabels>>({});
-  const purchaseOrder = useAppSelector((state) => state.purchaseOrder.name);
+  const dispatch = useAppDispatch();
+  const purchaseOrder = useAppSelector((state) => state.purchaseOrder);
   //Add a function to set all labels to checked
 
   const handleLabelsChange = (historyId: number) => {
-    if (labels[historyId]) {
-      const newLabels = { ...labels };
+    if (purchaseOrder.labels[historyId]) {
+      const newLabels = { ...purchaseOrder.labels };
       delete newLabels[historyId];
-      setLabels(newLabels);
+      dispatch(setLabels(newLabels));
+
       return;
     }
 
@@ -38,14 +40,18 @@ export const Row: FC<Props> = ({ row, editMode, refetch, onShowModal }) => {
       return;
     }
 
-    const newLabels = {
-      ...labels,
+    const newLabels: PurchaseOrderLabelsMap = {
+      ...purchaseOrder.labels,
       [historyId]: {
-        purchaseOrder,
-        ...row.history[historyId],
+        purchaseOrder: purchaseOrder.name || "",
+        dateReceived: row.history[historyId].dateReceived,
+        quantityReceived: row.history[historyId].quantityReceived,
+        description: row.description,
+        partNumber: row.name,
+        storageLocation: row.storageLocation || null,
       },
     };
-    setLabels(newLabels);
+    dispatch(setLabels(newLabels));
   };
 
   return (

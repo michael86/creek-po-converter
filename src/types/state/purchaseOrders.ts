@@ -1,4 +1,4 @@
-import { PurchaseOrderLabels } from "../labels";
+import { PurchaseOrderLabelsMap } from "../labels";
 
 export type Deliveries = { dateReceived: Date; id: number; quantityReceived: number }[];
 
@@ -21,5 +21,5 @@ export interface PoState {
   ref: string | null;
   items: Items[] | null;
   editMode: boolean;
-  labels: Record<number, Record<string, PurchaseOrderLabels>>;
+  labels: PurchaseOrderLabelsMap;
 }
