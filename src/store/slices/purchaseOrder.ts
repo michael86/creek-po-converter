@@ -9,7 +9,7 @@ const initialState: PoState = {
   ref: null,
   items: null,
   editMode: false,
-  deliveriesToPrint: null,
+  labels: {},
 };
 
 const poSlice = createSlice({
@@ -31,12 +31,8 @@ const poSlice = createSlice({
     setEditMode: (state, action: PayloadAction<boolean>) => {
       state.editMode = action.payload;
     },
-    setDeliveriesToPrint: (state, action: PayloadAction<number[]>) => {
-      state.deliveriesToPrint = action.payload;
-    },
   },
 });
 
-export const { setUuid, setName, setItems, setRef, setEditMode, setDeliveriesToPrint } =
-  poSlice.actions;
+export const { setUuid, setName, setItems, setRef, setEditMode } = poSlice.actions;
 export const poReducer = poSlice.reducer;
