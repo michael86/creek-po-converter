@@ -8,8 +8,9 @@ import { setEditMode } from "../../store/slices/purchaseOrder";
 import SnackBar from "../SnackBar";
 import { useState } from "react";
 import jsPDF from "jspdf";
-import { PurchaseOrderLabel } from "../../types/labels";
+import { PurchaseOrderLabel, PurchaseOrderLabelsMap } from "../../types/labels";
 import { genPurchaseOrderLabels } from "../../utils/Nav/purchaseOrders";
+import { Deliveries, Delivery } from "../../types/state/purchaseOrders";
 
 export default function NavButtons() {
   const [showSnack, setShowSnack] = useState<boolean>(false);
@@ -47,8 +48,41 @@ export default function NavButtons() {
 
       {
         role: 3,
-        label: "print",
+        label: "Print Selected",
         action: () => genPurchaseOrderLabels(purchaseOrder.labels, setShowSnack),
+        sx: { mr: 2.5 },
+      },
+      {
+        role: 3,
+        label: "Print All",
+        action: () => {
+          const allLabels: PurchaseOrderLabelsMap = {};
+          if (!purchaseOrder.items) {
+            setShowSnack(true);
+            return;
+          }
+
+          purchaseOrder.items.forEach((item) => {
+            const partNumber = item.partNumber;
+            const history = item.deliveries || {};
+
+            Object.entries(history).forEach(([historyId, historyEntry]) => {
+              const history = historyEntry as Delivery;
+
+              if (!allLabels[partNumber]) allLabels[partNumber] = {};
+              allLabels[partNumber][+historyId] = {
+                purchaseOrder: purchaseOrder.name || "",
+                dateReceived: history.dateReceived,
+                quantityReceived: history.quantityReceived,
+                description: item.description,
+                partNumber,
+                storageLocation: item.storageLocation || null,
+              };
+            });
+          });
+
+          genPurchaseOrderLabels(allLabels, setShowSnack);
+        },
         sx: { mr: 2.5 },
       },
     ],

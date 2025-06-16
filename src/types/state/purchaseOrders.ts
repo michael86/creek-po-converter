@@ -1,6 +1,8 @@
 import { PurchaseOrderLabelsMap } from "../labels";
 
-export type Deliveries = { dateReceived: Date; id: number; quantityReceived: number }[];
+export type Delivery = { dateReceived: Date; id: number; quantityReceived: number };
+
+export type Deliveries = Delivery[];
 
 export interface Items {
   deliveries: Deliveries | null;
