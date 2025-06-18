@@ -1,110 +1,63 @@
 import { Button } from "@mui/material";
 import { useLocation } from "@tanstack/react-router";
 import { useAppDispatch, useAppSelector } from "../../store";
-import { isKeyOf } from "../../utils/typeGuards";
 import { useDeletePurchaseOrder } from "../../hooks/usePurchaseOrderMutations";
-import { ButtonSchema } from "../../types/navBar";
 import { setEditMode } from "../../store/slices/purchaseOrder";
+import { ROLE_BUTTON_KEYS } from "../../schemas/navButtons/navButtons";
+import { ActionDeps } from "../../types/navBar";
 import SnackBar from "../SnackBar";
-import { useState } from "react";
-import { PurchaseOrderLabelsMap } from "../../types/labels";
-import { genPurchaseOrderLabels } from "../../utils/Nav/purchaseOrders";
-import { Delivery } from "../../types/state/purchaseOrders";
+
+import { useMemo, useState } from "react";
 
 export default function NavButtons() {
-  const [showSnack, setShowSnack] = useState<boolean>(false);
-
+  const auth = useAppSelector((s) => s.auth);
+  const po = useAppSelector((s) => s.purchaseOrder);
+  const editMode = po.editMode;
   const { pathname } = useLocation();
-  const pathKey = pathname.replace(/[-/]/g, "");
-  const purchaseOrder = useAppSelector((s) => s.purchaseOrder);
-  const auth = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
-
-  //Have to call hooks inside component to prevent react from moaning
   const deletePO = useDeletePurchaseOrder();
+  const [showSnack, setShowSnack] = useState(false);
 
-  const buttonSchema: ButtonSchema = {
-    purchaseorders: [
-      {
-        role: 3,
-        label: "Edit",
-        action: () => {
-          dispatch(setEditMode(!purchaseOrder.editMode));
-        },
-        sx: { mr: 2.5 },
-      },
+  const pathKey = pathname.replace(/[-/]/g, "");
 
-      {
-        role: 3,
-        label: "Delete",
-        action: () => {
-          if (purchaseOrder.uuid) {
-            deletePO.mutate(purchaseOrder.uuid);
-          }
-        },
-        sx: { mr: 2.5 },
-      },
+  const roleCfg = ROLE_BUTTON_KEYS[auth.role ?? -1]; // fallback to -1 for undefined roles
 
-      {
-        role: 3,
-        label: "Print Selected",
-        action: () => genPurchaseOrderLabels(purchaseOrder.labels, setShowSnack),
-        sx: { mr: 2.5 },
-      },
-      {
-        role: 3,
-        label: "Print All",
-        action: () => {
-          const allLabels: PurchaseOrderLabelsMap = {};
-          if (!purchaseOrder.items) {
-            setShowSnack(true);
-            return;
-          }
+  const deps: ActionDeps = useMemo(
+    () => ({
+      dispatch,
+      setEditMode,
+      editMode,
+      uuid: po.uuid,
+      deletePO,
+      labels: po.labels,
+      purchaseOrder: po,
+      setShowSnack,
+    }),
+    [dispatch, setEditMode, editMode, po, deletePO]
+  );
 
-          purchaseOrder.items.forEach((item) => {
-            const partNumber = item.partNumber;
-            const history = item.deliveries || {};
-
-            Object.entries(history).forEach(([historyId, historyEntry]) => {
-              const history = historyEntry as Delivery;
-
-              if (!allLabels[partNumber]) allLabels[partNumber] = {};
-              allLabels[partNumber][+historyId] = {
-                purchaseOrder: purchaseOrder.name || "",
-                dateReceived: history.dateReceived,
-                quantityReceived: history.quantityReceived,
-                description: item.description,
-                partNumber,
-                storageLocation: item.storageLocation || null,
-              };
-            });
-          });
-
-          genPurchaseOrderLabels(allLabels, setShowSnack);
-        },
-        sx: { mr: 2.5 },
-      },
-    ],
-  };
-
-  if (!isKeyOf(buttonSchema, pathKey)) return null;
-  if (pathKey === "purchaseorders" && !purchaseOrder.items) return null;
+  if (!auth.role || !("buttons" in roleCfg)) return null;
+  if (pathKey === "purchaseorders" && !po.items) return null;
 
   return (
     <>
-      {buttonSchema[pathKey].map((cfg, idx) => {
-        return (
-          <>
-            {auth.role && auth.role >= cfg.role && (
-              <Button key={idx} variant="outlined" color="inherit" onClick={cfg.action} sx={cfg.sx}>
-                {cfg.label}
-              </Button>
-            )}
+      {roleCfg.buttons.map((btnKey) => {
+        const handler = roleCfg.actions?.[btnKey];
+        if (!handler) return null;
 
-            {showSnack && <SnackBar setShowSnack={setShowSnack} message="No labels to Print" />}
-          </>
+        return (
+          <Button
+            key={btnKey}
+            variant="outlined"
+            color="inherit"
+            onClick={() => handler(deps)}
+            sx={{ mr: 2.5 }}
+          >
+            {btnKey.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, (c) => c.toUpperCase())}
+          </Button>
         );
       })}
+      {showSnack && <SnackBar setShowSnack={setShowSnack} message="No labels to Print" />}
     </>
   );
 }
