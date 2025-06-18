@@ -64,3 +64,7 @@ export interface UpdateGenericResponse {
 }
 
 export type useQueryStatus = "idle" | "loading" | "error";
+
+export interface ValidateRole {
+  status: "success" | "Error";
+}

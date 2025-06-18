@@ -1,9 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { RouterProvider } from "@tanstack/react-router";
 
-// Import the generated route tree
-import { routeTree } from "./routeTree.gen.ts";
 import { Provider } from "react-redux";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,16 +13,7 @@ import { queryClient } from "./lib/reactQueryClient";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/en-gb";
-
-// Create a new router instance
-const router = createRouter({ routeTree, pathParamsAllowedCharacters: ["$"] });
-
-// Register the router instance for type safety
-declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
-}
+import router from "./lib/reactRouter";
 
 const theme = createTheme({
   palette: {
