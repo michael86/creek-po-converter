@@ -1,20 +1,17 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import FetchingLoader from "../FetchingLoader";
 import {
-  FormControl,
-  FormControlLabel,
-  InputLabel,
-  MenuItem,
-  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Typography,
 } from "@mui/material";
+
+import FetchingLoader from "../FetchingLoader";
 import { useUsers } from "../../api/queries/getUsers";
+import RoleSelect from "./RoleSelect";
 
 const ManageUsersTable = () => {
   const { data: users, isLoading, isError } = useUsers();
@@ -43,29 +40,7 @@ const ManageUsersTable = () => {
         </TableHead>
         <TableBody>
           {users.map((user) => (
-            <TableRow key={user.email} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-              <TableCell component="th" scope="row">
-                {user.email}
-              </TableCell>
-              <TableCell align="right">{user.name}</TableCell>
-              <TableCell align="right">
-                <FormControl>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={user.role}
-
-                    // onChange={handleChange}
-                  >
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    <MenuItem value={4}>4</MenuItem>
-                  </Select>
-                </FormControl>
-              </TableCell>
-              <TableCell align="right">{new Date(user.dateCreated).toLocaleDateString()}</TableCell>
-            </TableRow>
+            <RoleSelect key={user.email} user={user} />
           ))}
         </TableBody>
       </Table>

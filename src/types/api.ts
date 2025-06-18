@@ -45,6 +45,7 @@ export interface FetchLocations {
 }
 
 export type User = {
+  id: number;
   email: string;
   name: string;
   role: number;
@@ -55,3 +56,11 @@ export interface FetchUsers {
   status: "success";
   data: { users: User[]; status: number; message: string };
 }
+
+export interface UpdateGenericResponse {
+  status: "success" | "error";
+  message: string;
+  data?: any;
+}
+
+export type useQueryStatus = "idle" | "loading" | "error";
