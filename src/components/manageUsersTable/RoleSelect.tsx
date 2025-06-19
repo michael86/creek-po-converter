@@ -11,7 +11,7 @@ type Props = {
 };
 
 const RoleSelect: React.FC<Props> = ({ user }) => {
-  const [value, setValue] = useState<string>(String(user.role));
+  const [value, setValue] = useState<string>(String(user.role_id));
   const [status, setStatus] = useState<useQueryStatus | UpdateGenericResponse>("idle");
   const { mutateAsync } = useUpdateUserRole();
 
