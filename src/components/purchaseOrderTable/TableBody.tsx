@@ -3,7 +3,7 @@ import PurchaseOrderTableRow from "./PurchaseOrderTableRow";
 import { useAppSelector } from "../../store";
 
 const TableBody = () => {
-  const { items } = useAppSelector((state) => state.purchaseOrder);
+  const items = useAppSelector((state) => state.purchaseOrder.items);
 
   if (!items) return;
 

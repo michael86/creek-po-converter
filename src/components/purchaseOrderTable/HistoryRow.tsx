@@ -16,9 +16,14 @@ import { Item } from "../../types/state/purchaseOrders";
 type Props = {
   history: Deliveries;
   open: boolean;
-  row: Item;
-  handleLabelsChange: (row: Item, historyId: number) => void;
+  handleLabelsChange: (row: Deliveries, historyId: number) => void;
 };
+
+/**
+ * 
+ * Need to refactor this so it doesn't require row to be sent to handle labels change
+ 
+ */
 
 const HistoryRow: React.FC<Props> = ({ history, open, handleLabelsChange }) => {
   return (

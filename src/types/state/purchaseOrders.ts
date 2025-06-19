@@ -6,7 +6,7 @@ export interface PoState {
   error: string | null;
   orderName: string | null;
   orderRef: string | null;
-  items: Items[] | null;
+  items: Item[] | null;
   selectedItem: ModalData | null;
   editMode: boolean;
   labels: PurchaseOrderLabelsMap;

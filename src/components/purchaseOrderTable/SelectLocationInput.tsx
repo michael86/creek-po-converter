@@ -5,6 +5,8 @@ import { FC, useState } from "react";
 import SnackBar from "../SnackBar";
 import api from "../../api";
 import { useEffect } from "react";
+import { useUpdateLocation } from "../../api/queries/useUpdateLocation";
+
 type Props = {
   itemId: string;
   itemName: string;
@@ -17,16 +19,18 @@ const SelectLocationInput: FC<Props> = ({ itemId, itemName, currentLocation }) =
   const [showSnack, setShowSnack] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { mutateAsync } = useUpdateLocation();
+
   useEffect(() => {
     setValue(currentLocation || "");
   }, [currentLocation]);
 
+  //Turn this into a mutation function
   const handleChange = async (event: SelectChangeEvent) => {
     try {
-      await api.post("/locations/update", {
-        itemName,
-        location: event.target.value,
-      });
+      const { value: location } = event.target;
+
+      await mutateAsync({ itemName, location });
 
       setValue(event.target.value);
       setShowSnack(true);

@@ -5,6 +5,11 @@ import { Item } from "../types/state/purchaseOrders";
 type UseLabelManager = () => {
   handleLabelsChange: (row: Item, historyId: number) => void;
 };
+
+/**
+ * may need to refactor this to only require the delvieries
+ 
+ */
 export const useLabelManager: UseLabelManager = () => {
   const dispatch = useAppDispatch();
   const purchaseOrder = useAppSelector((state) => state.purchaseOrder);

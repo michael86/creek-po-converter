@@ -14,14 +14,14 @@ import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 
 const PurchaseOrderTable = () => {
-  const purchaseOrder = useAppSelector((state) => state.purchaseOrder);
+  const uuid = useAppSelector((state) => state.purchaseOrder.uuid);
   const showModal = useAppSelector((state) => state.deliveryModal.showModal);
 
   const dispatch = useAppDispatch();
 
   const { data, isLoading, isError } = useQuery<FetchCompletePurchaseOrder>({
-    queryKey: ["fetch-po", purchaseOrder.uuid],
-    queryFn: () => fetchPo(purchaseOrder.uuid!),
+    queryKey: ["fetch-po", uuid],
+    queryFn: () => fetchPo(uuid!),
   });
 
   useEffect(() => {

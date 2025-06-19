@@ -19,8 +19,8 @@ type Props = {
 };
 
 export const PurchaseOrderTableRow: React.FC<Props> = ({ row }) => {
-  const { editMode } = useAppSelector((state) => state.purchaseOrder);
-  // const { handleLabelsChange } = useLabelManager();
+  const editMode = useAppSelector((state) => state.purchaseOrder.editMode);
+  const { handleLabelsChange } = useLabelManager();
   const [open, setOpen] = useState(false);
 
   const data = createCellData(row);
@@ -38,9 +38,9 @@ export const PurchaseOrderTableRow: React.FC<Props> = ({ row }) => {
 
         {editMode && <AddDeliveryButton row={row} />}
       </TableRow>
-      {/* {hasItems(row.deliveries) && (
+      {hasItems(row.deliveries) && (
         <HistoryRow history={row.deliveries} open={open} handleLabelsChange={handleLabelsChange} />
-      )} */}
+      )}
     </>
   );
 };
