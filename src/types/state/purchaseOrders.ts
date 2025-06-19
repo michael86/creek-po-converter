@@ -12,6 +12,7 @@ export interface Items {
   partNumber: string;
   quantity: number;
   quantityReceived: number;
+  threshold: number;
   storageLocation: string | null;
 }
 

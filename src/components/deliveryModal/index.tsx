@@ -50,7 +50,7 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [parcels, setParcels] = useState<number[]>([]);
-  const [thresholdChecked, setThresholdChecked] = useState<boolean>(false);
+  const [thresholdChecked, setThresholdChecked] = useState<boolean>(!!row.threshold);
 
   const [dateValue, setDateValue] = useState<Dayjs | PickerValue>(
     dayjs(new Date().toLocaleString())
@@ -150,6 +150,7 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
               setParcels={setParcels}
               thresholdChecked={thresholdChecked}
               setThresholdChecked={setThresholdChecked}
+              uuid={row.id}
             />
 
             <Button variant="contained" onClick={submitDeliveries}>

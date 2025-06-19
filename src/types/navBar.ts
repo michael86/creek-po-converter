@@ -4,6 +4,8 @@ import { UseMutationResult } from "@tanstack/react-query";
 import { PurchaseOrderLabelsMap } from "./labels";
 import React from "react";
 import { PoState } from "./state/purchaseOrders";
+import { Roles } from "./roles";
+import { RouteKeys } from "./routes";
 
 export interface ActionDeps {
   uuid?: string | null;
@@ -16,14 +18,18 @@ export interface ActionDeps {
   labels?: PurchaseOrderLabelsMap;
 }
 
-export interface ButtonGroup {
-  [key: number]:
-    | {
-        title: string;
+export type ActionHandler = (deps: ActionDeps) => void;
+
+export type ButtonGroup = {
+  [role in Roles]: {
+    title?: string;
+    routes?: Partial<{
+      [key in RouteKeys]: {
         buttons: string[];
-        actions?: {
-          [key: string]: (deps: ActionDeps) => void;
+        actions: {
+          [buttonKey: string]: ActionHandler;
         };
-      }
-    | {};
-}
+      };
+    }>;
+  };
+};

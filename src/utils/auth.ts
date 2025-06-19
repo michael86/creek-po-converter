@@ -46,3 +46,8 @@ export const validateRole = async () => {
     console.error(error);
   }
 };
+
+export const authGuard = async () => {
+  await checkAuth();
+  await validateRole();
+};
