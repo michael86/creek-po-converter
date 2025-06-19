@@ -11,11 +11,13 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { Deliveries } from "../../types/state/purchaseOrders";
+import { Item } from "../../types/state/purchaseOrders";
 
 type Props = {
   history: Deliveries;
   open: boolean;
-  handleLabelsChange: (historyId: number) => void;
+  row: Item;
+  handleLabelsChange: (row: Item, historyId: number) => void;
 };
 
 const HistoryRow: React.FC<Props> = ({ history, open, handleLabelsChange }) => {
@@ -39,7 +41,7 @@ const HistoryRow: React.FC<Props> = ({ history, open, handleLabelsChange }) => {
                 {history.map((row, index) => (
                   <TableRow key={`${row.dateReceived}-${row.quantityReceived}`}>
                     <TableCell>
-                      <Checkbox onChange={() => handleLabelsChange(index)} />
+                      <Checkbox onChange={() => handleLabelsChange(row, index)} />
                     </TableCell>
 
                     <TableCell component="th" scope="row" align="right">

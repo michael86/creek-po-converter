@@ -10,9 +10,10 @@ import AddDeliveryField from "./AddDeliveryField";
 import dayjs, { Dayjs } from "dayjs";
 import { PickerValue } from "@mui/x-date-pickers/internals";
 import api from "../../api";
-import { useAppSelector } from "../../store";
-import { Items } from "../../types/state/purchaseOrders";
+import { useAppDispatch, useAppSelector } from "../../store";
 import { useMutation } from "@tanstack/react-query";
+import { setShowModal } from "../../store/slices/deliveryModal";
+import ThresholdCheckbox from "./ThresholdCheckbox";
 
 const style = {
   position: "absolute",
@@ -27,10 +28,7 @@ const style = {
 };
 
 type Props = {
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  row: Items;
   poName: string;
-  refetch: () => void;
 };
 
 interface AddDeliveryResponse {
@@ -46,11 +44,15 @@ interface AddDeliveryPayload {
   date: Dayjs | PickerValue;
 }
 
-const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) => {
+const DeliveryModal: React.FC<Props> = ({ poName }) => {
+  const dispatch = useAppDispatch();
+  const row = useAppSelector((state) => state.purchaseOrder.selectedItem);
+
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [parcels, setParcels] = useState<number[]>([]);
-  const [thresholdChecked, setThresholdChecked] = useState<boolean>(!!row.threshold);
+
+  // const [thresholdChecked, setThresholdChecked] = useState<boolean>(!!row.threshold);
 
   const [dateValue, setDateValue] = useState<Dayjs | PickerValue>(
     dayjs(new Date().toLocaleString())
@@ -79,8 +81,7 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
         date: (payload.date as Dayjs).toISOString(),
       }),
     onSuccess: () => {
-      refetch();
-      setShowModal(false);
+      dispatch(setShowModal(false));
     },
     onError: () => {
       setError("Error submitting delivery, please contact Michael");
@@ -89,16 +90,17 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
 
   const handleClose = () => {
     setOpen(false);
-    setShowModal(false);
+    dispatch(setShowModal(false));
   };
 
   const submitDeliveries = async () => {
+    if (!row) return;
     setError("");
 
     try {
       if (
         !parcels.length ||
-        (row.quantity - parcels.reduce((a, b) => a + b, 0) < 0 && !thresholdChecked)
+        (row.quantity - parcels.reduce((a, b) => a + b, 0) < 0 && !row.thresholdChecked)
       ) {
         setError("Parcels are empty or threshold is not checked");
         return;
@@ -107,8 +109,8 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
       addDeliveryMutation.mutate({
         poNumber: poName,
         deliveries: parcels,
-        uuid: row.id,
-        partNumber: row.partNumber,
+        uuid: row.itemUuid,
+        partNumber: row.name,
         date: dateValue,
       });
     } catch (error) {
@@ -116,6 +118,8 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
       console.error(error);
     }
   };
+
+  if (!row) return null;
 
   return (
     <div>
@@ -138,8 +142,10 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
               component="h2"
               sx={{ marginBottom: "20px" }}
             >
-              Part: {row.partNumber}
+              Part: {row.name}
             </Typography>
+
+            <ThresholdCheckbox />
 
             <DeliveryDate value={dateValue} setValue={setDateValue} />
 
@@ -148,9 +154,7 @@ const DeliveryModal: React.FC<Props> = ({ setShowModal, row, poName, refetch }) 
               quantitiyToReceive={row.quantity}
               parcels={parcels}
               setParcels={setParcels}
-              thresholdChecked={thresholdChecked}
-              setThresholdChecked={setThresholdChecked}
-              uuid={row.id}
+              thresholdChecked={!!row.thresholdChecked}
             />
 
             <Button variant="contained" onClick={submitDeliveries}>

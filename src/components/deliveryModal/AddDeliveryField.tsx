@@ -1,16 +1,5 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  List,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, List, TextField, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
-import ThresholdWarning from "./ThresoldWarning";
-import { setDeliveryThreshold } from "../../api/queries/setDeliveryThreshold";
-import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   setError: React.Dispatch<React.SetStateAction<string | null>>;
@@ -18,8 +7,6 @@ type Props = {
   parcels: number[];
   setParcels: React.Dispatch<React.SetStateAction<number[]>>;
   thresholdChecked: boolean;
-  setThresholdChecked: React.Dispatch<React.SetStateAction<boolean>>;
-  uuid: string;
 };
 
 const AddDeliveryField: React.FC<Props> = ({
@@ -28,18 +15,10 @@ const AddDeliveryField: React.FC<Props> = ({
   setError,
   quantitiyToReceive,
   thresholdChecked,
-  setThresholdChecked,
-  uuid,
 }) => {
   const [parcelTotal, setParcelTotal] = useState(0);
-  const [message, setMessage] = useState<string | null>(null);
 
   const parcelRef = useRef<HTMLInputElement | null>(null);
-
-  const putDeliveryState = useMutation({
-    mutationFn: ({ uuid, state }: { uuid: string; state: boolean }) =>
-      setDeliveryThreshold(uuid, state),
-  });
 
   const addParcel = () => {
     setError(null);
@@ -68,41 +47,8 @@ const AddDeliveryField: React.FC<Props> = ({
     setParcelTotal(updatedParcels.reduce((a, b) => a + b, 0));
   };
 
-  const handleThresholdChange = async () => {
-    try {
-      setMessage(null);
-      await putDeliveryState.mutateAsync({ uuid, state: !thresholdChecked });
-
-      setThresholdChecked(!thresholdChecked);
-    } catch (error: any) {
-      if (error.response?.data?.errors) {
-        const validationMessages = error.response.data.errors.map((e: any) => e.msg).join(", ");
-        setMessage(validationMessages);
-        console.error("Validation failed:", validationMessages);
-      } else {
-        console.error("Unexpected error:", error);
-        setMessage("An unexpected error occured, contact support");
-      }
-    }
-  };
-
   return (
     <>
-      <FormControlLabel
-        disabled={thresholdChecked && quantitiyToReceive - parcels.reduce((a, b) => a + b, 0) < 0}
-        control={<Checkbox checked={thresholdChecked} onChange={handleThresholdChange} />}
-        label={
-          <>
-            threshold{" "}
-            {(thresholdChecked || message) && (
-              <ThresholdWarning
-                message={message ? message : undefined}
-                sx={message ? { color: "red" } : undefined}
-              />
-            )}
-          </>
-        }
-      />
       <TextField
         type="number"
         variant="filled"

@@ -1,14 +1,23 @@
-import { Items } from "../types/state/purchaseOrders";
+import { CellData, Item, ModalData } from "../types/state/purchaseOrders";
 
-export const createData = (data: Items) => {
+export const createCellData = (data: Item): CellData => {
   return {
     id: data.id,
-    name: data.partNumber,
+    partNumber: data.partNumber,
     description: data.description,
     quantity: data.quantity,
     quantityReceived: data.quantityReceived,
     storageLocation: data.storageLocation,
     dueDate: data.dueDate,
-    history: data.deliveries,
+  };
+};
+
+export const createModalData = (data: Item): ModalData => {
+  return {
+    itemUuid: data.id,
+    name: data.partNumber,
+    quantity: data.quantity,
+    quantityReceived: data.quantityReceived,
+    thresholdChecked: !!data.threshold,
   };
 };

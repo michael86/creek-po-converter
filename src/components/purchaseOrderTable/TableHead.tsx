@@ -1,11 +1,8 @@
 import { TableHead as Thead, TableRow, TableCell } from "@mui/material";
-import React from "react";
+import { useAppSelector } from "../../store";
 
-type Props = {
-  editMode: boolean;
-};
-
-const TableHead: React.FC<Props> = ({ editMode }) => {
+const TableHead = () => {
+  const editMode = useAppSelector((state) => state.purchaseOrder.editMode);
   return (
     <Thead>
       <TableRow>

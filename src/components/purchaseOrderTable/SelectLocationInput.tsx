@@ -8,11 +8,10 @@ import { useEffect } from "react";
 type Props = {
   itemId: string;
   itemName: string;
-  refetch: () => void;
   currentLocation: string;
 };
 
-const SelectLocationInput: FC<Props> = ({ itemId, itemName, refetch, currentLocation }) => {
+const SelectLocationInput: FC<Props> = ({ itemId, itemName, currentLocation }) => {
   const data = getLocations();
   const [value, setValue] = useState<string>(currentLocation);
   const [showSnack, setShowSnack] = useState<boolean>(false);
@@ -29,7 +28,6 @@ const SelectLocationInput: FC<Props> = ({ itemId, itemName, refetch, currentLoca
         location: event.target.value,
       });
 
-      await refetch();
       setValue(event.target.value);
       setShowSnack(true);
     } catch (error) {

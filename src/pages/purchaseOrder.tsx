@@ -1,8 +1,7 @@
 import { Container } from "@mui/material";
-import PurchaseOrderSelect from "../components/purchaseOrderTable/purchaseOrderSelect";
 import { useAppSelector } from "../store";
-
-import PurchaseOrderTable from "../components/purchaseOrderTable";
+import PurchaseOrderTable from "../components/purchaseOrderTable/";
+import PurchaseOrderSelect from "../components/purchaseOrderTable/purchaseOrderSelect";
 
 const PurchaseOrder = () => {
   const uuid = useAppSelector((state) => state.purchaseOrder.uuid);

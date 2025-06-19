@@ -7,23 +7,19 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import FetchingLoader from "../FetchingLoader";
 import { Typography } from "@mui/material";
 import { FetchCompletePurchaseOrder } from "../../types/api";
-import { useEffect, useState } from "react";
-
+import { useEffect } from "react";
 import { setItems, setName, setRef } from "../../store/slices/purchaseOrder";
 import DeliveryModal from "../deliveryModal";
-import { Items } from "../../types/state/purchaseOrders";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 
 const PurchaseOrderTable = () => {
-  const purchaseOrder = useAppSelector((state) => state.purchaseOrder); // Cast as string, this component will not render if null
+  const purchaseOrder = useAppSelector((state) => state.purchaseOrder);
+  const showModal = useAppSelector((state) => state.deliveryModal.showModal);
 
   const dispatch = useAppDispatch();
 
-  const [showModal, setShowModal] = useState(false);
-  const [modalRow, setModalRow] = useState<Items | null>(null);
-
-  const { data, isLoading, isError, refetch } = useQuery<FetchCompletePurchaseOrder>({
+  const { data, isLoading, isError } = useQuery<FetchCompletePurchaseOrder>({
     queryKey: ["fetch-po", purchaseOrder.uuid],
     queryFn: () => fetchPo(purchaseOrder.uuid!),
   });
@@ -36,37 +32,25 @@ const PurchaseOrderTable = () => {
     }
   }, [data, dispatch]);
 
-  if (isLoading) return <FetchingLoader />;
-  if (isError || !data)
-    return (
-      <Typography variant="body1" color="red">
-        Error loading data
-      </Typography>
-    );
-
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table aria-label="collapsible table">
-          <TableHead editMode={purchaseOrder.editMode} />
+      {isLoading ? (
+        <FetchingLoader />
+      ) : isError || !data ? (
+        <Typography variant="body1" color="red">
+          Error loading data
+        </Typography>
+      ) : (
+        <>
+          <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+              <TableHead />
+              <TableBody />
+            </Table>
+          </TableContainer>
 
-          <TableBody
-            items={data.data.items}
-            setModalRow={setModalRow}
-            setShowModal={setShowModal}
-            editMode={purchaseOrder.editMode}
-            refetch={refetch}
-          />
-        </Table>
-      </TableContainer>
-
-      {showModal && modalRow && (
-        <DeliveryModal
-          poName={data.data.poNumber}
-          setShowModal={setShowModal}
-          row={modalRow}
-          refetch={refetch}
-        />
+          {showModal && data && <DeliveryModal poName={data.data.poNumber} />}
+        </>
       )}
     </>
   );

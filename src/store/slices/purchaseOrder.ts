@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PoState, Items } from "../../types/state/purchaseOrders";
+import { PoState, Items, ModalData } from "../../types/state/purchaseOrders";
 import { PurchaseOrderLabelsMap } from "../../types/labels";
 
 const initialState: PoState = {
   uuid: null,
   status: "idle",
   error: null,
-  name: null,
-  ref: null,
+  orderName: null,
+  orderRef: null,
   items: null,
   editMode: false,
+  selectedItem: null,
   labels: {},
 };
 
@@ -22,10 +23,10 @@ const poSlice = createSlice({
       state.labels = {}; // Reset labels when UUID changes
     },
     setName: (state, action: PayloadAction<string | null>) => {
-      state.name = action.payload;
+      state.orderName = action.payload;
     },
     setRef: (state, action: PayloadAction<string | null>) => {
-      state.ref = action.payload;
+      state.orderRef = action.payload;
     },
     setItems: (state, action: PayloadAction<Items[]>) => {
       state.items = action.payload;
@@ -36,8 +37,12 @@ const poSlice = createSlice({
     setLabels: (state, action: PayloadAction<PurchaseOrderLabelsMap>) => {
       state.labels = action.payload;
     },
+    setSelectedItem: (state, action: PayloadAction<ModalData | null>) => {
+      state.selectedItem = action.payload;
+    },
   },
 });
 
-export const { setUuid, setName, setItems, setRef, setEditMode, setLabels } = poSlice.actions;
+export const { setUuid, setName, setItems, setRef, setEditMode, setLabels, setSelectedItem } =
+  poSlice.actions;
 export const poReducer = poSlice.reducer;
