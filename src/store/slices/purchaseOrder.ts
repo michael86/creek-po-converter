@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PoState, Items, ModalData } from "../../types/state/purchaseOrders";
+import { PoState, Items, ModalData, Item } from "../../types/state/purchaseOrders";
 import { PurchaseOrderLabelsMap } from "../../types/labels";
 
 const initialState: PoState = {
@@ -28,7 +28,7 @@ const poSlice = createSlice({
     setRef: (state, action: PayloadAction<string | null>) => {
       state.orderRef = action.payload;
     },
-    setItems: (state, action: PayloadAction<Items[]>) => {
+    setItems: (state, action: PayloadAction<Item[]>) => {
       state.items = action.payload;
     },
     setEditMode: (state, action: PayloadAction<boolean>) => {

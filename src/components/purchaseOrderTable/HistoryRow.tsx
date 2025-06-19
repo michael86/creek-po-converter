@@ -10,13 +10,13 @@ import {
   Checkbox,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { Deliveries } from "../../types/state/purchaseOrders";
+import { Deliveries, Delivery } from "../../types/state/purchaseOrders";
 import { Item } from "../../types/state/purchaseOrders";
 
 type Props = {
   history: Deliveries;
   open: boolean;
-  handleLabelsChange: (row: Deliveries, historyId: number) => void;
+  handleLabelsChange: (row: Delivery, historyId: number) => void;
 };
 
 /**
