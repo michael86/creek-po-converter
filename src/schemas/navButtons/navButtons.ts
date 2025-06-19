@@ -7,7 +7,7 @@ export const ROLE_BUTTON_KEYS: ButtonGroup = {
   [Roles.admin]: {
     title: "Purchase Order Actions",
     routes: {
-      [RouteKeys.PurchaseOrder]: {
+      [RouteKeys.purchaseorders]: {
         buttons: ["edit", "delete", "printSelected", "printAll"],
         actions: {
           edit: setEditPoTable,
@@ -22,7 +22,7 @@ export const ROLE_BUTTON_KEYS: ButtonGroup = {
   [Roles.purchasing]: {
     title: "Purchase Order Actions",
     routes: {
-      [RouteKeys.PurchaseOrder]: {
+      [RouteKeys.purchaseorders]: {
         buttons: ["edit", "delete", "printSelected", "printAll"],
         actions: {
           edit: setEditPoTable,
@@ -36,7 +36,7 @@ export const ROLE_BUTTON_KEYS: ButtonGroup = {
   [Roles.storesAdmin]: {
     title: "Purchase Order Actions",
     routes: {
-      [RouteKeys.PurchaseOrder]: {
+      [RouteKeys.purchaseorders]: {
         buttons: ["edit", "delete", "printSelected", "printAll"],
         actions: {
           edit: setEditPoTable,
@@ -50,7 +50,7 @@ export const ROLE_BUTTON_KEYS: ButtonGroup = {
   [Roles.storesModerator]: {
     title: "Purchase Order Actions",
     routes: {
-      [RouteKeys.PurchaseOrder]: {
+      [RouteKeys.purchaseorders]: {
         buttons: ["edit", "delete", "printSelected", "printAll"],
         actions: {
           edit: setEditPoTable,
@@ -64,7 +64,7 @@ export const ROLE_BUTTON_KEYS: ButtonGroup = {
   [Roles.storesEditor]: {
     title: "Purchase Order Actions",
     routes: {
-      [RouteKeys.PurchaseOrder]: {
+      [RouteKeys.purchaseorders]: {
         buttons: ["edit", "printSelected", "printAll"],
         actions: {
           edit: setEditPoTable,
@@ -77,7 +77,7 @@ export const ROLE_BUTTON_KEYS: ButtonGroup = {
   [Roles.storesViewer]: {
     title: "Purchase Order Actions",
     routes: {
-      [RouteKeys.PurchaseOrder]: {
+      [RouteKeys.purchaseorders]: {
         buttons: ["printSelected", "printAll"],
         actions: {
           printSelected,

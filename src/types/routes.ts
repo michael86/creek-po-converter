@@ -1,8 +1,8 @@
 export enum RouteKeys {
-  PurchaseOrder = "purchaseOrder",
-  ViasatLabels = "viasatLabels",
-  HexLabels = "hexLabels",
-  Dashboard = "dashboard",
-  Dispatch = "dispatch",
-  TestLabels = "testLabels",
+  purchaseorders = "purchaseOrder",
+  viasatlabels = "viasatLabels",
+  hexlabels = "hexLabels",
+  dashboard = "dashboard",
+  dispatch = "dispatch",
+  testlabels = "testLabels",
 }
