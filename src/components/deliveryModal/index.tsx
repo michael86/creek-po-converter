@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from "../../store";
 import { useMutation } from "@tanstack/react-query";
 import { setShowModal } from "../../store/slices/deliveryModal";
 import ThresholdCheckbox from "./ThresholdCheckbox";
+import { setItems } from "../../store/slices/purchaseOrder";
 
 const style = {
   position: "absolute",
@@ -34,6 +35,7 @@ type Props = {
 interface AddDeliveryResponse {
   status: number;
   message: string;
+  rows: { id: string; dateReceived: Date; quantityReceived: number }[];
 }
 
 interface AddDeliveryPayload {
@@ -48,12 +50,13 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
   const dispatch = useAppDispatch();
   const uuid = useAppSelector((state) => state.deliveryModal.targetUuid);
   const items = useAppSelector((state) => state.purchaseOrder.items);
-  const item = uuid ? items?.[uuid] : null;
+  if (!uuid || !items) return null;
+  const item = items[uuid];
 
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [parcels, setParcels] = useState<number[]>([]);
-  const [thresholdChecked, setThresholdChecked] = useState<boolean>(!!item?.threshold);
+  const [thresholdChecked] = useState<boolean>(!!item?.threshold);
   const [dateValue, setDateValue] = useState<Dayjs | PickerValue>(
     dayjs(new Date().toLocaleString())
   );
@@ -70,10 +73,19 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
         ...payload,
         date: (payload.date as Dayjs).toISOString(),
       }),
-    onSuccess: () => {
+    onSuccess: (res) => {
+      const clone = structuredClone(items);
+      clone[uuid].deliveries = res.data.rows;
+      clone[uuid].quantityReceived = clone[uuid].deliveries.reduce(
+        (total, delivery) => total + delivery.quantityReceived,
+        0
+      );
+
+      dispatch(setItems(clone));
       dispatch(setShowModal(false));
     },
-    onError: () => {
+    onError: (err) => {
+      console.error(err);
       setError("Error submitting delivery, please contact Michael");
     },
   });
@@ -93,18 +105,13 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
       return;
     }
 
-    try {
-      addDeliveryMutation.mutate({
-        poNumber: poName,
-        deliveries: parcels,
-        uuid: uuid,
-        partNumber: item.name,
-        date: dateValue,
-      });
-    } catch (error) {
-      console.error(error);
-      setError("Error submitting delivery, please contact Michael");
-    }
+    addDeliveryMutation.mutateAsync({
+      poNumber: poName,
+      deliveries: parcels,
+      uuid: uuid,
+      partNumber: item.partNumber,
+      date: dateValue,
+    });
   };
 
   if (!item) return null;
@@ -145,13 +152,7 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
 
             <DeliveryDate value={dateValue} setValue={setDateValue} />
 
-            <AddDeliveryField
-              setError={setError}
-              quantitiyToReceive={item.quantity}
-              parcels={parcels}
-              setParcels={setParcels}
-              thresholdChecked={thresholdChecked}
-            />
+            <AddDeliveryField setError={setError} parcels={parcels} setParcels={setParcels} />
 
             <Button variant="contained" onClick={submitDeliveries}>
               Submit Delivery

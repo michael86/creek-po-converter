@@ -1,28 +1,32 @@
 import { Box, Button, List, TextField, Typography } from "@mui/material";
 import React, { useRef, useState } from "react";
+import { useAppSelector } from "../../store";
 
 type Props = {
   setError: React.Dispatch<React.SetStateAction<string | null>>;
-  quantitiyToReceive: number;
   parcels: number[];
   setParcels: React.Dispatch<React.SetStateAction<number[]>>;
-  thresholdChecked: boolean;
 };
 
-const AddDeliveryField: React.FC<Props> = ({
-  parcels,
-  setParcels,
-  setError,
-  quantitiyToReceive,
-  thresholdChecked,
-}) => {
+const AddDeliveryField: React.FC<Props> = ({ parcels, setParcels, setError }) => {
+  const parcelRef = useRef<HTMLInputElement | null>(null);
   const [parcelTotal, setParcelTotal] = useState(0);
 
-  const parcelRef = useRef<HTMLInputElement | null>(null);
+  const targetUuid = useAppSelector((state) => state.deliveryModal.targetUuid);
+  const items = useAppSelector((state) => state.purchaseOrder.items);
+  if (!targetUuid || !items) return null;
+
+  const item = items?.[targetUuid] || null;
+  if (!item) return null;
+
+  const { quantity, threshold, quantityReceived } = item;
+  const thresholdChecked = !!threshold;
+  const quantityToReceive = quantity - quantityReceived;
 
   const addParcel = () => {
     setError(null);
     const quantity = parseInt(parcelRef.current?.value || "0");
+
     if (!quantity || quantity <= 0) {
       setError("Enter a valid quantity");
       return;
@@ -30,12 +34,13 @@ const AddDeliveryField: React.FC<Props> = ({
 
     const parcelsReceived = parcels.reduce((a, b) => a + b, 0) + quantity;
 
-    if (!thresholdChecked && quantitiyToReceive - parcelsReceived < 0) {
+    if (!thresholdChecked && quantityToReceive - parcelsReceived < 0) {
       setError(
         "You've met the amount expected. If this is extra, please check the threshold checkbox for this item."
       );
       return;
     }
+
     setParcels([...parcels, quantity]);
     setParcelTotal(parcelsReceived);
     parcelRef.current!.value = "";
@@ -76,7 +81,7 @@ const AddDeliveryField: React.FC<Props> = ({
                   cursor: "pointer",
                   transition: "background-color 0.2s ease-in-out",
                   "&:hover": {
-                    backgroundColor: "primary.dark", // or use theme value like "primary.light"
+                    backgroundColor: "primary.dark",
                   },
                 }}
                 onClick={() => deleteParcel(index)}
