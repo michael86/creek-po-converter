@@ -22,8 +22,6 @@ export const useLabelManager: UseLabelManager = () => {
     location: string | null
   ) => {
     const deliveryId = delivery.id;
-    console.log("delivery ", delivery);
-    console.log("deliveryId ", deliveryId);
 
     // Clone the existing labels
     const newLabels = { ...labels };

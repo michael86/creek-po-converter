@@ -7,43 +7,36 @@ export const setEditPoTable = ({ dispatch, setEditMode, editMode }: ActionDeps) 
   if (dispatch && setEditMode && editMode !== undefined) dispatch(setEditMode(!editMode));
 };
 
-export const deletePo = ({ uuid, deletePO }: ActionDeps) => {
-  if (uuid && deletePO) {
-    deletePO.mutate(uuid);
+export const deletePo = ({ poUuid, deletePO }: ActionDeps) => {
+  if (poUuid && deletePO) {
+    deletePO.mutate(poUuid);
   }
 };
 
-export const printSelected = ({ labels, setShowSnack }: ActionDeps) => {
-  if (labels && setShowSnack) genPurchaseOrderLabels(labels, setShowSnack);
+export const printSelected = ({ poName, labels, setShowSnack }: ActionDeps) => {
+  if (labels && setShowSnack && poName) genPurchaseOrderLabels(poName, labels, setShowSnack);
 };
 
-export const printAll = ({ purchaseOrder, setShowSnack }: ActionDeps) => {
-  if (!purchaseOrder || !setShowSnack) return;
+export const printAll = ({ poName, items, setShowSnack }: ActionDeps) => {
+  if (!setShowSnack || !poName || !items || items.length === 0) return;
 
   const allLabels: PurchaseOrderLabelsMap = {};
-  if (!purchaseOrder.items) {
-    setShowSnack(true);
-    return;
-  }
 
-  purchaseOrder.items.forEach((item) => {
-    const partNumber = item.partNumber;
-    const history = item.deliveries || {};
+  items.forEach((item) => {
+    const { partNumber, description, storageLocation, deliveries } = item;
 
-    Object.entries(history).forEach(([historyId, historyEntry]) => {
-      const history = historyEntry as Delivery;
+    (deliveries || []).forEach((delivery: Delivery) => {
+      const uuid = delivery.id;
 
-      if (!allLabels[partNumber]) allLabels[partNumber] = {};
-      allLabels[partNumber][+historyId] = {
-        purchaseOrder: purchaseOrder.name || "",
-        dateReceived: history.dateReceived,
-        quantityReceived: history.quantityReceived,
-        description: item.description,
+      allLabels[uuid] = {
+        dateReceived: delivery.dateReceived,
+        quantityReceived: delivery.quantityReceived,
+        description,
         partNumber,
-        storageLocation: item.storageLocation || null,
+        storageLocation: storageLocation || null,
       };
     });
   });
 
-  genPurchaseOrderLabels(allLabels, setShowSnack);
+  genPurchaseOrderLabels(poName, allLabels, setShowSnack);
 };

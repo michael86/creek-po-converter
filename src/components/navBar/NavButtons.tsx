@@ -12,13 +12,20 @@ import { useMemo, useState } from "react";
 import { Roles } from "../../types/roles";
 
 export default function NavButtons() {
-  const auth = useAppSelector((s) => s.auth);
-  const po = useAppSelector((s) => s.purchaseOrder);
-  const editMode = po.editMode;
-  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
   const deletePO = useDeletePurchaseOrder();
+  const { pathname } = useLocation();
   const [showSnack, setShowSnack] = useState(false);
+
+  const auth = useAppSelector((s) => s.auth);
+
+  const { orderName, uuid, labels, editMode, items } = useAppSelector((s) => ({
+    orderName: s.purchaseOrder.orderName,
+    uuid: s.purchaseOrder.uuid,
+    labels: s.purchaseOrder.labels,
+    editMode: s.purchaseOrder.editMode,
+    items: s.purchaseOrder.items,
+  }));
 
   const rawKey = pathname.split("/")[1]?.replace(/-/g, "") || "dashboard";
   const routeKey = RouteKeys[rawKey as keyof typeof RouteKeys];
@@ -38,19 +45,20 @@ export default function NavButtons() {
 
   const deps: ActionDeps = useMemo(
     () => ({
+      poName: orderName,
+      poUuid: uuid,
+      labels: labels,
+      items,
       dispatch,
       setEditMode,
       editMode,
-      uuid: po.uuid,
       deletePO,
-      labels: po.labels,
-      purchaseOrder: po,
       setShowSnack,
     }),
-    [dispatch, setEditMode, editMode, po, deletePO]
+    [dispatch, setEditMode, editMode, deletePO]
   );
 
-  if (rawKey === "purchaseorders" && !po.uuid) return null;
+  if (rawKey === "purchaseorders" && !uuid) return null;
 
   return (
     <>
