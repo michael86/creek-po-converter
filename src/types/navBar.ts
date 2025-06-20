@@ -5,12 +5,12 @@ import { PurchaseOrderLabelsMap } from "./labels";
 import React from "react";
 import { Roles } from "./roles";
 import { RouteKeys } from "./routes";
-import { Item } from "./state/purchaseOrders";
+import { Items } from "./state/purchaseOrders";
 
 export interface ActionDeps {
   poName: string | null;
   poUuid: string | null;
-  items: Item[] | null;
+  items: Items | null;
   labels: PurchaseOrderLabelsMap | null;
   dispatch: ReturnType<typeof useAppDispatch> | null;
   setEditMode: PayloadActionCreator<boolean> | null;

@@ -22,7 +22,7 @@ export const printAll = ({ poName, items, setShowSnack }: ActionDeps) => {
 
   const allLabels: PurchaseOrderLabelsMap = {};
 
-  items.forEach((item) => {
+  Object.entries(items).forEach(([_, item]) => {
     const { partNumber, description, storageLocation, deliveries } = item;
 
     (deliveries || []).forEach((delivery: Delivery) => {
