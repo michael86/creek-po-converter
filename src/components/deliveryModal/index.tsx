@@ -46,26 +46,17 @@ interface AddDeliveryPayload {
 
 const DeliveryModal: React.FC<Props> = ({ poName }) => {
   const dispatch = useAppDispatch();
-  const row = useAppSelector((state) => state.purchaseOrder.selectedItem);
+  const uuid = useAppSelector((state) => state.deliveryModal.targetUuid);
+  const items = useAppSelector((state) => state.purchaseOrder.items);
+  const item = uuid ? items?.[uuid] : null;
 
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [parcels, setParcels] = useState<number[]>([]);
-
-  // const [thresholdChecked, setThresholdChecked] = useState<boolean>(!!row.threshold);
-
+  const [thresholdChecked, setThresholdChecked] = useState<boolean>(!!item?.threshold);
   const [dateValue, setDateValue] = useState<Dayjs | PickerValue>(
     dayjs(new Date().toLocaleString())
   );
-
-  const rows = useAppSelector((state) => state.purchaseOrder.items);
-  if (!rows?.length) {
-    return (
-      <Typography variant="body2" color="danger">
-        Error selecting items
-      </Typography>
-    );
-  }
 
   useEffect(() => setOpen(true), []);
 
@@ -77,7 +68,6 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
     mutationFn: (payload: AddDeliveryPayload) =>
       api.post<AddDeliveryResponse>("deliveries/add", {
         ...payload,
-
         date: (payload.date as Dayjs).toISOString(),
       }),
     onSuccess: () => {
@@ -94,32 +84,38 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
   };
 
   const submitDeliveries = async () => {
-    if (!row) return;
+    if (!item || !uuid) return;
     setError("");
 
-    try {
-      if (
-        !parcels.length ||
-        (row.quantity - parcels.reduce((a, b) => a + b, 0) < 0 && !row.thresholdChecked)
-      ) {
-        setError("Parcels are empty or threshold is not checked");
-        return;
-      }
+    const total = parcels.reduce((a, b) => a + b, 0);
+    if (!parcels.length || (item.quantity - total < 0 && !thresholdChecked)) {
+      setError("Parcels are empty or threshold is not checked");
+      return;
+    }
 
+    try {
       addDeliveryMutation.mutate({
         poNumber: poName,
         deliveries: parcels,
-        uuid: row.itemUuid,
-        partNumber: row.name,
+        uuid: uuid,
+        partNumber: item.name,
         date: dateValue,
       });
     } catch (error) {
-      setError("Error submitting delivery, please contact Michael");
       console.error(error);
+      setError("Error submitting delivery, please contact Michael");
     }
   };
 
-  if (!row) return null;
+  if (!item) return null;
+
+  if (!items || Object.keys(items).length === 0) {
+    return (
+      <Typography variant="body2" color="error">
+        Error selecting items
+      </Typography>
+    );
+  }
 
   return (
     <div>
@@ -127,7 +123,7 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-add-part-delivery"
-        aria-describedby="modal-register-delviery"
+        aria-describedby="modal-register-delivery"
       >
         <Box sx={style}>
           <FormGroup>
@@ -142,7 +138,7 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
               component="h2"
               sx={{ marginBottom: "20px" }}
             >
-              Part: {row.name}
+              Part: {item.partNumber}
             </Typography>
 
             <ThresholdCheckbox />
@@ -151,10 +147,10 @@ const DeliveryModal: React.FC<Props> = ({ poName }) => {
 
             <AddDeliveryField
               setError={setError}
-              quantitiyToReceive={row.quantity}
+              quantitiyToReceive={item.quantity}
               parcels={parcels}
               setParcels={setParcels}
-              thresholdChecked={!!row.thresholdChecked}
+              thresholdChecked={thresholdChecked}
             />
 
             <Button variant="contained" onClick={submitDeliveries}>
