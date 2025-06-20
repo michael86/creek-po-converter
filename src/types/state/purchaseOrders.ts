@@ -6,7 +6,7 @@ export interface PoState {
   error: string | null;
   orderName: string | null;
   orderRef: string | null;
-  items: Item[] | null;
+  items: Items | null;
   selectedItem: ModalData | null;
   editMode: boolean;
   labels: PurchaseOrderLabelsMap;
@@ -23,7 +23,7 @@ export interface Item {
   threshold: number;
   storageLocation: string | null;
 }
-export type Items = Item[];
+export type Items = Record<string, Item>;
 
 export type Delivery = { dateReceived: Date; id: string; quantityReceived: number };
 export type Deliveries = Delivery[];

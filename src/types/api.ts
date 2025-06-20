@@ -1,4 +1,4 @@
-import { Items } from "./state/purchaseOrders";
+import { Item, Items } from "./state/purchaseOrders";
 
 export interface AuthMe {
   email: string;
@@ -28,7 +28,7 @@ export interface PurchaseOrderItems {
 export interface FetchCompletePurchaseOrder {
   status: "success";
   data: {
-    items: Items[];
+    items: Item[];
     orderRef: string;
     poNumber: string;
   };

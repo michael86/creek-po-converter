@@ -12,6 +12,7 @@ import { setItems, setName, setRef } from "../../store/slices/purchaseOrder";
 import DeliveryModal from "../deliveryModal";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
+import { Items } from "../../types/state/purchaseOrders";
 
 const PurchaseOrderTable = () => {
   const uuid = useAppSelector((state) => state.purchaseOrder.uuid);
@@ -26,7 +27,13 @@ const PurchaseOrderTable = () => {
 
   useEffect(() => {
     if (data?.data.items && data?.data.orderRef && data?.data.poNumber) {
-      dispatch(setItems(data.data.items));
+      const items: Items = {};
+
+      data.data.items.forEach((item) => {
+        items[item.id] = { ...item };
+      });
+
+      dispatch(setItems(items));
       dispatch(setName(data.data.poNumber));
       dispatch(setRef(data.data.orderRef));
     }

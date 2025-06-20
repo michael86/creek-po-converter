@@ -9,8 +9,8 @@ const TableBody = () => {
 
   return (
     <Tbody>
-      {items.map((row, index) => (
-        <PurchaseOrderTableRow key={`${row.partNumber}-${index}`} row={row} />
+      {Object.entries(items).map(([_, item]) => (
+        <PurchaseOrderTableRow key={item.id} row={item} />
       ))}
     </Tbody>
   );

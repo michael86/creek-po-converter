@@ -28,7 +28,7 @@ const poSlice = createSlice({
     setRef: (state, action: PayloadAction<string | null>) => {
       state.orderRef = action.payload;
     },
-    setItems: (state, action: PayloadAction<Item[]>) => {
+    setItems: (state, action: PayloadAction<Record<string, Item>>) => {
       state.items = action.payload;
     },
     setEditMode: (state, action: PayloadAction<boolean>) => {
