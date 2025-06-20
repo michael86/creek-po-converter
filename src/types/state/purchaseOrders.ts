@@ -25,7 +25,7 @@ export interface Item {
 }
 export type Items = Item[];
 
-export type Delivery = { dateReceived: Date; id: number; quantityReceived: number };
+export type Delivery = { dateReceived: Date; id: string; quantityReceived: number };
 export type Deliveries = Delivery[];
 
 export interface CellData {

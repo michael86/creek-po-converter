@@ -10,22 +10,26 @@ import {
   Checkbox,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { Deliveries, Delivery } from "../../types/state/purchaseOrders";
-import { Item } from "../../types/state/purchaseOrders";
+import { Deliveries } from "../../types/state/purchaseOrders";
+import { useLabelManager } from "../../hooks/useLabelManager";
 
 type Props = {
   history: Deliveries;
   open: boolean;
-  handleLabelsChange: (row: Delivery, historyId: number) => void;
+  handleLabelsChange: ReturnType<typeof useLabelManager>["handleLabelsChange"];
+  partNumber: string;
+  description: string;
+  location: string | null;
 };
 
-/**
- * 
- * Need to refactor this so it doesn't require row to be sent to handle labels change
- 
- */
-
-const HistoryRow: React.FC<Props> = ({ history, open, handleLabelsChange }) => {
+const HistoryRow: React.FC<Props> = ({
+  history,
+  open,
+  handleLabelsChange,
+  partNumber,
+  description,
+  location,
+}) => {
   return (
     <TableRow>
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -43,10 +47,12 @@ const HistoryRow: React.FC<Props> = ({ history, open, handleLabelsChange }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {history.map((row, index) => (
-                  <TableRow key={`${row.dateReceived}-${row.quantityReceived}`}>
+                {history.map((row) => (
+                  <TableRow key={row.id}>
                     <TableCell>
-                      <Checkbox onChange={() => handleLabelsChange(row, index)} />
+                      <Checkbox
+                        onChange={() => handleLabelsChange(row, partNumber, description, location)}
+                      />
                     </TableCell>
 
                     <TableCell component="th" scope="row" align="right">

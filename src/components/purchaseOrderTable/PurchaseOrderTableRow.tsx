@@ -39,7 +39,14 @@ export const PurchaseOrderTableRow: React.FC<Props> = ({ row }) => {
         {editMode && <AddDeliveryButton row={row} />}
       </TableRow>
       {hasItems(row.deliveries) && (
-        <HistoryRow history={row.deliveries} open={open} handleLabelsChange={handleLabelsChange} />
+        <HistoryRow
+          history={row.deliveries}
+          open={open}
+          handleLabelsChange={handleLabelsChange}
+          description={row.description}
+          partNumber={row.partNumber}
+          location={row.storageLocation || null}
+        />
       )}
     </>
   );

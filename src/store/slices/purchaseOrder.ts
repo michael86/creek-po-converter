@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { PoState, Items, ModalData, Item } from "../../types/state/purchaseOrders";
+import { PoState, ModalData, Item } from "../../types/state/purchaseOrders";
 import { PurchaseOrderLabelsMap } from "../../types/labels";
 
 const initialState: PoState = {
