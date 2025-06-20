@@ -3,9 +3,12 @@ import { getLocations } from "../../api/queries/getLocations";
 import FetchingLoader from "../FetchingLoader";
 import { FC, useState } from "react";
 import SnackBar from "../SnackBar";
-import api from "../../api";
 import { useEffect } from "react";
 import { useUpdateLocation } from "../../api/queries/useUpdateLocation";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { updateItemLocationsByPart } from "../../utils/purchaseOrder";
+
+import { setItems } from "../../store/slices/purchaseOrder";
 
 type Props = {
   itemId: string;
@@ -19,6 +22,8 @@ const SelectLocationInput: FC<Props> = ({ itemId, itemName, currentLocation }) =
   const [showSnack, setShowSnack] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const items = useAppSelector((state) => state.purchaseOrder.items);
+  const dispatch = useAppDispatch();
   const { mutateAsync } = useUpdateLocation();
 
   useEffect(() => {
@@ -28,11 +33,15 @@ const SelectLocationInput: FC<Props> = ({ itemId, itemName, currentLocation }) =
   //Turn this into a mutation function
   const handleChange = async (event: SelectChangeEvent) => {
     try {
+      if (!items) return;
+
       const { value: location } = event.target;
-
       await mutateAsync({ itemName, location });
+      const newItems = updateItemLocationsByPart(items, itemName, location);
 
+      dispatch(setItems(newItems));
       setValue(event.target.value);
+
       setShowSnack(true);
     } catch (error) {
       console.error("Error updating lcoation\n", error);

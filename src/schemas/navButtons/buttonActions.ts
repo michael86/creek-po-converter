@@ -18,7 +18,7 @@ export const printSelected = ({ poName, labels, setShowSnack }: ActionDeps) => {
 };
 
 export const printAll = ({ poName, items, setShowSnack }: ActionDeps) => {
-  if (!setShowSnack || !poName || !items || items.length === 0) return;
+  if (!setShowSnack || !poName || !items || Object.keys(items).length === 0) return;
 
   const allLabels: PurchaseOrderLabelsMap = {};
 
