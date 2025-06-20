@@ -1,4 +1,4 @@
-import { Item, Items } from "./state/purchaseOrders";
+import { Item } from "./state/purchaseOrders";
 
 export interface AuthMe {
   email: string;
