@@ -1,5 +1,5 @@
-import { Button, TextField, Typography } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Button, TextField, Typography, InputLabel } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import api from "../api";
 import FetchingLoader from "../components/FetchingLoader";
@@ -47,15 +47,29 @@ const AddLocation = () => {
         Add Stores Location
       </Typography>
 
-      <form>
+      <form
+        style={{
+          width: "30%",
+          margin: "auto",
+          display: "flex",
+          flexDirection: "column",
+          marginTop: "2rem",
+        }}
+      >
+        <InputLabel htmlFor="location-name">Enter New Location Name</InputLabel>
         <TextField
+          id="location-name"
           type="text"
-          helperText="Enter New Location"
           value={state}
           onChange={(e) => setState(e.target.value)}
           disabled={isPending}
         />
+
+        <InputLabel sx={{ marginTop: 2 }} htmlFor="location-amount">
+          Amount
+        </InputLabel>
         <TextField
+          id="location-amount"
           type="number"
           helperText="Select the amount to add, set to 0 if not required"
           value={amount}
@@ -68,14 +82,20 @@ const AddLocation = () => {
           disabled={isPending}
         />
 
-        <Button variant="outlined" onClick={onClick} disabled={isPending}>
+        <Button variant="outlined" onClick={onClick} disabled={isPending} sx={{ marginTop: 2 }}>
           Submit
         </Button>
 
         {isPending && <FetchingLoader message="adding location" />}
       </form>
       {message && (
-        <Typography variant={"body2"} color={message.type === "success" ? "green" : "red"}>
+        <Typography
+          variant={"body2"}
+          color={message.type === "success" ? "green" : "red"}
+          align="center"
+          marginTop={3}
+          fontSize={25}
+        >
           {message.content}
         </Typography>
       )}
