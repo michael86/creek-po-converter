@@ -12,9 +12,11 @@ import {
 import FetchingLoader from "../FetchingLoader";
 import { useUsers } from "../../api/queries/getUsers";
 import RoleSelect from "./RoleSelect";
+import { useAppSelector } from "../../store";
 
 const ManageUsersTable = () => {
   const { data: users, isLoading, isError } = useUsers();
+  const userEmail = useAppSelector((state) => state.auth.email);
 
   if (isError || !users?.length)
     return (
@@ -39,9 +41,11 @@ const ManageUsersTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map((user) => (
-            <RoleSelect key={user.email} user={user} />
-          ))}
+          {users.map((user) => {
+            if (userEmail !== user.email) {
+              return <RoleSelect key={user.email} user={user} />;
+            }
+          })}
         </TableBody>
       </Table>
     </TableContainer>
