@@ -19,13 +19,11 @@ export default function NavButtons() {
 
   const auth = useAppSelector((s) => s.auth);
 
-  const { orderName, uuid, labels, editMode, items } = useAppSelector((s) => ({
-    orderName: s.purchaseOrder.orderName,
-    uuid: s.purchaseOrder.uuid,
-    labels: s.purchaseOrder.labels,
-    editMode: s.purchaseOrder.editMode,
-    items: s.purchaseOrder.items,
-  }));
+  const orderName = useAppSelector((s) => s.purchaseOrder.orderName);
+  const uuid = useAppSelector((s) => s.purchaseOrder.uuid);
+  const labels = useAppSelector((s) => s.purchaseOrder.labels);
+  const editMode = useAppSelector((s) => s.purchaseOrder.editMode);
+  const items = useAppSelector((s) => s.purchaseOrder.items);
 
   const rawKey = pathname.split("/")[1]?.replace(/-/g, "") || "dashboard";
   const routeKey = RouteKeys[rawKey as keyof typeof RouteKeys];
@@ -47,7 +45,7 @@ export default function NavButtons() {
     () => ({
       poName: orderName,
       poUuid: uuid,
-      labels: labels,
+      labels,
       items,
       dispatch,
       setEditMode,
@@ -55,7 +53,7 @@ export default function NavButtons() {
       deletePO,
       setShowSnack,
     }),
-    [dispatch, setEditMode, editMode, deletePO]
+    [orderName, uuid, labels, items, dispatch, setEditMode, editMode, deletePO]
   );
 
   if (rawKey === "purchaseorders" && !uuid) return null;
