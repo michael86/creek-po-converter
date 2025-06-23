@@ -1,6 +1,10 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 
-const FetchingLoader = () => {
+type Props = {
+  message?: string;
+};
+
+const FetchingLoader: React.FC<Props> = ({ message }) => {
   return (
     <Box
       sx={{
@@ -13,7 +17,7 @@ const FetchingLoader = () => {
     >
       <CircularProgress />
       <Typography variant="body1" fontSize={25}>
-        Fetching Data
+        {message ? message : "Fetching Data"}
       </Typography>
     </Box>
   );

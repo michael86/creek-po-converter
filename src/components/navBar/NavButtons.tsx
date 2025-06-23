@@ -18,7 +18,6 @@ export default function NavButtons() {
   const [showSnack, setShowSnack] = useState(false);
 
   const auth = useAppSelector((s) => s.auth);
-
   const orderName = useAppSelector((s) => s.purchaseOrder.orderName);
   const uuid = useAppSelector((s) => s.purchaseOrder.uuid);
   const labels = useAppSelector((s) => s.purchaseOrder.labels);
@@ -28,15 +27,8 @@ export default function NavButtons() {
   const rawKey = pathname.split("/")[1]?.replace(/-/g, "") || "dashboard";
   const routeKey = RouteKeys[rawKey as keyof typeof RouteKeys];
 
-  const role = auth.role as Roles;
-
-  if (!(role in ROLE_BUTTON_KEYS)) {
-    console.warn("Unknown or missing role:", auth.role);
-    return null;
-  }
-
-  const roleCfg = ROLE_BUTTON_KEYS[role];
-
+  const role = auth.role as Roles | null;
+  const roleCfg = role && ROLE_BUTTON_KEYS[role];
   const routeCfg = roleCfg?.routes?.[routeKey];
   const buttons = routeCfg?.buttons ?? [];
   const actions = routeCfg?.actions ?? {};
@@ -56,7 +48,7 @@ export default function NavButtons() {
     [orderName, uuid, labels, items, dispatch, setEditMode, editMode, deletePO]
   );
 
-  if (rawKey === "purchaseorders" && !uuid) return null;
+  if (!roleCfg || (rawKey === "purchaseorders" && !uuid)) return null;
 
   return (
     <>
