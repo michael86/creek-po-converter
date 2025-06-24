@@ -42,16 +42,32 @@ const NavigationMenu = () => {
       >
         <MenuItem onClick={() => handleClose("dashboard")}>Dashboard</MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleClose("hex-stickers")}>Generate Hex Stickers</MenuItem>
+        <MenuItem onClick={() => handleClose("hex-stickers")}>
+          Generate Hex Stickers
+        </MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleClose("pdf/upload")}>Upload Purchase Order</MenuItem>
-        <MenuItem onClick={() => handleClose("purchase-orders")}>View Purchase Orders</MenuItem>
+        <MenuItem onClick={() => handleClose("pdf/upload")}>
+          Upload Purchase Order
+        </MenuItem>
+        <MenuItem onClick={() => handleClose("purchase-orders")}>
+          View Purchase Orders
+        </MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleClose("locations/add")}>Add Location</MenuItem>
-        <MenuItem onClick={() => handleClose("prefix/add")}>Add Prefix</MenuItem>
+        <MenuItem onClick={() => handleClose("locations/add")}>
+          Add Location
+        </MenuItem>
+        <MenuItem onClick={() => handleClose("prefix/add")}>
+          Add Prefix
+        </MenuItem>
         <Divider />
-        <MenuItem onClick={() => handleClose("users/manage")}>Manage Users</MenuItem>
+        <MenuItem onClick={() => handleClose("users/manage")}>
+          Manage Users
+        </MenuItem>
         <MenuItem onClick={() => handleClose("logs")}>View Logs</MenuItem>
+        <Divider />
+        <MenuItem onClick={() => handleClose("viasat")}>
+          Print Viasat Stickers
+        </MenuItem>
       </Menu>
     </>
   );

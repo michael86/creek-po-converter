@@ -1,20 +1,16 @@
 import { useEffect } from "react";
 import { Container, Typography, CircularProgress, Button } from "@mui/material";
 import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "./store";
-import { authUser } from "./store/slices/authSlice";
+import { RootState } from "./store";
+
 import { useRouter } from "@tanstack/react-router";
 
 function App() {
-  const dispatch = useAppDispatch();
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   const status = useSelector((state: RootState) => state.auth.status);
   const router = useRouter();
-
-  // Fetch auth status on app load
-  useEffect(() => {
-    dispatch(authUser());
-  }, [dispatch]);
 
   useEffect(() => {
     if (status !== "loading") {

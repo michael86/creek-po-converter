@@ -19,8 +19,11 @@ export const BUTTONS: Record<ButtonKey, { label: string; route: string }> = {
   manageUsers: { label: "Manage Users", route: "/users/manage" },
   viewLogs: { label: "View Logs", route: "/logs" },
   generateHex: { label: "Generate Hex Stickers", route: "/hex-stickers" },
-  dispatchLabels: { label: "Generate Dispatch Labels", route: "/dispatch-labels" },
-  generateViasat: { label: "Generate Viasat Labels", route: "/viasat-labels" },
+  dispatchLabels: {
+    label: "Generate Dispatch Labels",
+    route: "/dispatch-labels",
+  },
+  generateViasat: { label: "Generate Viasat Labels", route: "/viasat" },
 };
 
 type ButtonGroup = {
@@ -31,7 +34,10 @@ type ButtonGroup = {
 export const ROLE_BUTTON_KEYS: Record<Roles, ButtonGroup[]> = {
   [Roles.admin]: [
     { title: "User Management", buttons: ["manageUsers", "viewLogs"] },
-    { title: "Purchase Orders", buttons: ["uploadPO", "viewPO", "addLocation", "addPrefix"] },
+    {
+      title: "Purchase Orders",
+      buttons: ["uploadPO", "viewPO", "addLocation", "addPrefix"],
+    },
     { title: "Viasat Labels", buttons: ["generateViasat"] },
     { title: "Dispatch Labels", buttons: ["dispatchLabels"] },
     { title: "Hex Stickers", buttons: ["generateHex"] },
@@ -42,11 +48,17 @@ export const ROLE_BUTTON_KEYS: Record<Roles, ButtonGroup[]> = {
     { title: "Dispatch Labels", buttons: ["dispatchLabels"] },
   ],
   [Roles.storesAdmin]: [
-    { title: "Purchase Orders", buttons: ["uploadPO", "viewPO", "addLocation", "addPrefix"] },
+    {
+      title: "Purchase Orders",
+      buttons: ["uploadPO", "viewPO", "addLocation", "addPrefix"],
+    },
     { title: "Dispatch Labels", buttons: ["dispatchLabels"] },
   ],
   [Roles.storesModerator]: [
-    { title: "Purchase Orders", buttons: ["uploadPO", "viewPO", "addLocation", "addPrefix"] },
+    {
+      title: "Purchase Orders",
+      buttons: ["uploadPO", "viewPO", "addLocation", "addPrefix"],
+    },
     { title: "Dispatch Labels", buttons: ["dispatchLabels"] },
   ],
   [Roles.storesEditor]: [

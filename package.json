@@ -23,6 +23,7 @@
     "@tanstack/react-router": "^1.114.17",
     "@tanstack/react-router-devtools": "^1.121.5",
     "@toolpad/core": "^0.16.0",
+    "@types/xlsx": "^0.0.35",
     "axios": "^1.8.2",
     "dayjs": "^1.11.13",
     "jspdf": "^3.0.1",
@@ -31,6 +32,7 @@
     "react-hook-form": "^7.54.2",
     "react-redux": "^9.2.0",
     "redux-thunk": "^3.1.0",
+    "xlsx": "^0.18.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {

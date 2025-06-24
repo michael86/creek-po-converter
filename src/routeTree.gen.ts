@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ViasatImport } from './routes/viasat'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardImport } from './routes/dashboard'
@@ -23,6 +24,12 @@ import { Route as PdfUploadImport } from './routes/pdf/upload'
 import { Route as LocationsAddImport } from './routes/locations/add'
 
 // Create/Update Routes
+
+const ViasatRoute = ViasatImport.update({
+  id: '/viasat',
+  path: '/viasat',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const RegisterRoute = RegisterImport.update({
   id: '/register',
@@ -116,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/viasat': {
+      id: '/viasat'
+      path: '/viasat'
+      fullPath: '/viasat'
+      preLoaderRoute: typeof ViasatImport
+      parentRoute: typeof rootRoute
+    }
     '/locations/add': {
       id: '/locations/add'
       path: '/locations/add'
@@ -168,6 +182,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/viasat': typeof ViasatRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
   '/prefix/add': typeof PrefixAddRoute
@@ -181,6 +196,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/viasat': typeof ViasatRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
   '/prefix/add': typeof PrefixAddRoute
@@ -195,6 +211,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/viasat': typeof ViasatRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
   '/prefix/add': typeof PrefixAddRoute
@@ -210,6 +227,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/viasat'
     | '/locations/add'
     | '/pdf/upload'
     | '/prefix/add'
@@ -222,6 +240,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/viasat'
     | '/locations/add'
     | '/pdf/upload'
     | '/prefix/add'
@@ -234,6 +253,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/viasat'
     | '/locations/add'
     | '/pdf/upload'
     | '/prefix/add'
@@ -248,6 +268,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ViasatRoute: typeof ViasatRoute
   LocationsAddRoute: typeof LocationsAddRoute
   PdfUploadRoute: typeof PdfUploadRoute
   PrefixAddRoute: typeof PrefixAddRoute
@@ -261,6 +282,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ViasatRoute: ViasatRoute,
   LocationsAddRoute: LocationsAddRoute,
   PdfUploadRoute: PdfUploadRoute,
   PrefixAddRoute: PrefixAddRoute,
@@ -283,6 +305,7 @@ export const routeTree = rootRoute
         "/dashboard",
         "/login",
         "/register",
+        "/viasat",
         "/locations/add",
         "/pdf/upload",
         "/prefix/add",
@@ -302,6 +325,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/viasat": {
+      "filePath": "viasat.tsx"
     },
     "/locations/add": {
       "filePath": "locations/add.tsx"
