@@ -5,7 +5,7 @@ import PurchaseOrder from "../../pages/purchaseOrder";
 import { authGuard } from "../../utils/auth";
 
 export const Route = createFileRoute("/purchase-orders/")({
-  beforeLoad: authGuard,
+  beforeLoad: () => authGuard("purchase-orders"),
   component: () => (
     <Suspense fallback={<FetchingLoader />}>
       <PurchaseOrder />

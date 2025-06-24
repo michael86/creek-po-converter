@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { checkAuth } from "../../utils/auth";
+import { authGuard } from "../../utils/auth";
 import PdfUpload from "../../pages/pdf/Upload";
 
 export const Route = createFileRoute("/pdf/upload")({
-  beforeLoad: checkAuth,
+  beforeLoad: () => authGuard("pdf-upload"),
   component: PdfUpload,
 });
