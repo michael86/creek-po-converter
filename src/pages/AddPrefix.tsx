@@ -1,16 +1,16 @@
 import { Typography } from "@mui/material";
 import CreateEntityForm from "../components/createEntityForm";
 
-const AddLocation = () => {
+const AddPrefix = () => {
   return (
     <>
       <Typography variant="h3" component="h1" align="center">
-        Add Stores Location
+        Add Stores Prefix
       </Typography>
 
-      <CreateEntityForm route="location" />
+      <CreateEntityForm route="prefix" />
     </>
   );
 };
 
-export default AddLocation;
+export default AddPrefix;

@@ -18,6 +18,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as PurchaseOrdersIndexImport } from './routes/purchase-orders/index'
 import { Route as PdfIndexImport } from './routes/pdf/index'
 import { Route as UsersManageImport } from './routes/users/manage'
+import { Route as PrefixAddImport } from './routes/prefix/add'
 import { Route as PdfUploadImport } from './routes/pdf/upload'
 import { Route as LocationsAddImport } from './routes/locations/add'
 
@@ -62,6 +63,12 @@ const PdfIndexRoute = PdfIndexImport.update({
 const UsersManageRoute = UsersManageImport.update({
   id: '/users/manage',
   path: '/users/manage',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PrefixAddRoute = PrefixAddImport.update({
+  id: '/prefix/add',
+  path: '/prefix/add',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -123,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PdfUploadImport
       parentRoute: typeof rootRoute
     }
+    '/prefix/add': {
+      id: '/prefix/add'
+      path: '/prefix/add'
+      fullPath: '/prefix/add'
+      preLoaderRoute: typeof PrefixAddImport
+      parentRoute: typeof rootRoute
+    }
     '/users/manage': {
       id: '/users/manage'
       path: '/users/manage'
@@ -156,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/prefix/add': typeof PrefixAddRoute
   '/users/manage': typeof UsersManageRoute
   '/pdf': typeof PdfIndexRoute
   '/purchase-orders': typeof PurchaseOrdersIndexRoute
@@ -168,6 +183,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/prefix/add': typeof PrefixAddRoute
   '/users/manage': typeof UsersManageRoute
   '/pdf': typeof PdfIndexRoute
   '/purchase-orders': typeof PurchaseOrdersIndexRoute
@@ -181,6 +197,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
+  '/prefix/add': typeof PrefixAddRoute
   '/users/manage': typeof UsersManageRoute
   '/pdf/': typeof PdfIndexRoute
   '/purchase-orders/': typeof PurchaseOrdersIndexRoute
@@ -195,6 +212,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/locations/add'
     | '/pdf/upload'
+    | '/prefix/add'
     | '/users/manage'
     | '/pdf'
     | '/purchase-orders'
@@ -206,6 +224,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/locations/add'
     | '/pdf/upload'
+    | '/prefix/add'
     | '/users/manage'
     | '/pdf'
     | '/purchase-orders'
@@ -217,6 +236,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/locations/add'
     | '/pdf/upload'
+    | '/prefix/add'
     | '/users/manage'
     | '/pdf/'
     | '/purchase-orders/'
@@ -230,6 +250,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   LocationsAddRoute: typeof LocationsAddRoute
   PdfUploadRoute: typeof PdfUploadRoute
+  PrefixAddRoute: typeof PrefixAddRoute
   UsersManageRoute: typeof UsersManageRoute
   PdfIndexRoute: typeof PdfIndexRoute
   PurchaseOrdersIndexRoute: typeof PurchaseOrdersIndexRoute
@@ -242,6 +263,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   LocationsAddRoute: LocationsAddRoute,
   PdfUploadRoute: PdfUploadRoute,
+  PrefixAddRoute: PrefixAddRoute,
   UsersManageRoute: UsersManageRoute,
   PdfIndexRoute: PdfIndexRoute,
   PurchaseOrdersIndexRoute: PurchaseOrdersIndexRoute,
@@ -263,6 +285,7 @@ export const routeTree = rootRoute
         "/register",
         "/locations/add",
         "/pdf/upload",
+        "/prefix/add",
         "/users/manage",
         "/pdf/",
         "/purchase-orders/"
@@ -285,6 +308,9 @@ export const routeTree = rootRoute
     },
     "/pdf/upload": {
       "filePath": "pdf/upload.tsx"
+    },
+    "/prefix/add": {
+      "filePath": "prefix/add.tsx"
     },
     "/users/manage": {
       "filePath": "users/manage.tsx"
