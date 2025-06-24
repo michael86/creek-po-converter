@@ -4,3 +4,8 @@ export interface ViasatSticker {
   serialNumber: string;
   userPin: number;
 }
+
+export interface HexSticker {
+  hex: string;
+  decimal: number;
+}

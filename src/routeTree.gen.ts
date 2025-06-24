@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as ViasatImport } from './routes/viasat'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
+import { Route as HexStickersImport } from './routes/hex-stickers'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as PurchaseOrdersIndexImport } from './routes/purchase-orders/index'
@@ -40,6 +41,12 @@ const RegisterRoute = RegisterImport.update({
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const HexStickersRoute = HexStickersImport.update({
+  id: '/hex-stickers',
+  path: '/hex-stickers',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -107,6 +114,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/hex-stickers': {
+      id: '/hex-stickers'
+      path: '/hex-stickers'
+      fullPath: '/hex-stickers'
+      preLoaderRoute: typeof HexStickersImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -180,6 +194,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/viasat': typeof ViasatRoute
@@ -194,6 +209,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/viasat': typeof ViasatRoute
@@ -209,6 +225,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/viasat': typeof ViasatRoute
@@ -225,6 +242,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/hex-stickers'
     | '/login'
     | '/register'
     | '/viasat'
@@ -238,6 +256,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/hex-stickers'
     | '/login'
     | '/register'
     | '/viasat'
@@ -251,6 +270,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/hex-stickers'
     | '/login'
     | '/register'
     | '/viasat'
@@ -266,6 +286,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  HexStickersRoute: typeof HexStickersRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   ViasatRoute: typeof ViasatRoute
@@ -280,6 +301,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  HexStickersRoute: HexStickersRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   ViasatRoute: ViasatRoute,
@@ -303,6 +325,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dashboard",
+        "/hex-stickers",
         "/login",
         "/register",
         "/viasat",
@@ -319,6 +342,9 @@ export const routeTree = rootRoute
     },
     "/dashboard": {
       "filePath": "dashboard.tsx"
+    },
+    "/hex-stickers": {
+      "filePath": "hex-stickers.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
