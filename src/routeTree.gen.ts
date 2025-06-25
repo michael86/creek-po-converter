@@ -15,6 +15,7 @@ import { Route as ViasatImport } from './routes/viasat'
 import { Route as RegisterImport } from './routes/register'
 import { Route as LoginImport } from './routes/login'
 import { Route as HexStickersImport } from './routes/hex-stickers'
+import { Route as DispatchLabelsImport } from './routes/dispatch-labels'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as PurchaseOrdersIndexImport } from './routes/purchase-orders/index'
@@ -47,6 +48,12 @@ const LoginRoute = LoginImport.update({
 const HexStickersRoute = HexStickersImport.update({
   id: '/hex-stickers',
   path: '/hex-stickers',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const DispatchLabelsRoute = DispatchLabelsImport.update({
+  id: '/dispatch-labels',
+  path: '/dispatch-labels',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -114,6 +121,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardImport
+      parentRoute: typeof rootRoute
+    }
+    '/dispatch-labels': {
+      id: '/dispatch-labels'
+      path: '/dispatch-labels'
+      fullPath: '/dispatch-labels'
+      preLoaderRoute: typeof DispatchLabelsImport
       parentRoute: typeof rootRoute
     }
     '/hex-stickers': {
@@ -194,6 +208,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/dispatch-labels': typeof DispatchLabelsRoute
   '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
@@ -209,6 +224,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/dispatch-labels': typeof DispatchLabelsRoute
   '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
@@ -225,6 +241,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
+  '/dispatch-labels': typeof DispatchLabelsRoute
   '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
@@ -242,6 +259,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/dispatch-labels'
     | '/hex-stickers'
     | '/login'
     | '/register'
@@ -256,6 +274,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/dispatch-labels'
     | '/hex-stickers'
     | '/login'
     | '/register'
@@ -270,6 +289,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/dispatch-labels'
     | '/hex-stickers'
     | '/login'
     | '/register'
@@ -286,6 +306,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
+  DispatchLabelsRoute: typeof DispatchLabelsRoute
   HexStickersRoute: typeof HexStickersRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
@@ -301,6 +322,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
+  DispatchLabelsRoute: DispatchLabelsRoute,
   HexStickersRoute: HexStickersRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
@@ -325,6 +347,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dashboard",
+        "/dispatch-labels",
         "/hex-stickers",
         "/login",
         "/register",
@@ -342,6 +365,9 @@ export const routeTree = rootRoute
     },
     "/dashboard": {
       "filePath": "dashboard.tsx"
+    },
+    "/dispatch-labels": {
+      "filePath": "dispatch-labels.tsx"
     },
     "/hex-stickers": {
       "filePath": "hex-stickers.tsx"

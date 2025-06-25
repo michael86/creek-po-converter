@@ -14,7 +14,7 @@ export default function ButtonAppBar() {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ flexGrow: 1, marginBottom: 2.5 }}>
+    <Box sx={{ flexGrow: 1, marginBottom: 2.5 }} className="no-print">
       <AppBar position="static" sx={{ padding: "0.5rem 0" }}>
         <Toolbar>
           <NavigationMenu />
