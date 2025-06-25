@@ -7,15 +7,17 @@ export const generateHexStickersPdf = (
 ) => {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
 
-  // Updated based on real measurements
-  const labelWidth = 17.74;
+  // Adjusted for HP LaserJet M570dn
+  const labelWidth = 17.78;
   const labelHeight = 10.0;
-  const horizontalPitch = 19.05 + 1.39; // 17.78mm label + 1.27mm horizontal gap
-  const verticalPitch = 10.0; // labels touch vertically
+  const horizontalPitch = 19.05; // label + gap
+  const verticalPitch = 10.0;
   const labelsPerRow = 10;
   const labelsPerCol = 27;
-  const leftMargin = 4.2;
-  const topMargin = 12.7;
+
+  // Add 4.23mm compensation for HP non-printable area
+  const leftMargin = 4.2 + 4.23; // = 8.43 mm
+  const topMargin = 12.7 + 4.23; // = 16.93 mm
 
   doc.setFontSize(9);
   let index = 0;

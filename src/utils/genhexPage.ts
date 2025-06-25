@@ -7,6 +7,9 @@ export function openHtmlLabelSheet(
   data: HexLabel[],
   format: "decimal" | "hex" = "decimal"
 ) {
+  const highlightSixAndNine = (text: string) =>
+    text.replace(/6|9/g, (digit) => `<u>${digit}</u>`);
+
   const html = `<!DOCTYPE html>
   <html lang="en">
   <head>
@@ -49,7 +52,13 @@ export function openHtmlLabelSheet(
   </head>
   <body>
     <div class="label-sheet">
-      ${(<HexLabel[]>data).map((item: HexLabel) => `<div class="label">${format === "decimal" ? item.decimal : item.hex}</div>`).join("")}
+      ${data
+        .map((item: HexLabel) => {
+          const value =
+            format === "decimal" ? item.decimal.toString() : item.hex;
+          return `<div class="label">${highlightSixAndNine(value)}</div>`;
+        })
+        .join("")}
     </div>
     <script>
       window.onload = () => window.print();

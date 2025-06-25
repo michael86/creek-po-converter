@@ -24,14 +24,12 @@ const HexStickers = () => {
     let raw = e.target.value;
     if (raw === "") {
       setStartCountInput("");
-      setStartCount(0);
       return;
     }
     if (/^0[0-9]+/.test(raw)) raw = raw.replace(/^0+/, "");
     const num = Number(raw);
     if (!isNaN(num)) {
       setStartCountInput(raw);
-      setStartCount(num);
     }
   };
 
