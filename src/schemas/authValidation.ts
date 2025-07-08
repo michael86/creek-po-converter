@@ -9,7 +9,10 @@ export const loginSchema = yup.object({
     .matches(/^(?=.*[a-z])/, "Must contain at least one lowercase character")
     .matches(/^(?=.*[A-Z])/, "Must contain at least one uppercase character")
     .matches(/^(?=.*[0-9])/, "Must contain at least one number")
-    .matches(/^(?=.*[!@#%&])/, "Must contain at least one special character"),
+    .matches(
+      /^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~])/,
+      "Must contain at least one special character"
+    ),
 });
 
 export const registerSchema = loginSchema.shape({
