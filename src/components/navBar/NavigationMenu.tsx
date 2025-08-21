@@ -68,6 +68,8 @@ const NavigationMenu = () => {
         <MenuItem onClick={() => handleClose("viasat")}>
           Print Viasat Stickers
         </MenuItem>
+        <Divider />
+        <MenuItem onClick={() => handleClose("propelair")}>Propelair</MenuItem>
       </Menu>
     </>
   );

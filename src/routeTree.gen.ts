@@ -13,14 +13,17 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as ViasatImport } from './routes/viasat'
 import { Route as RegisterImport } from './routes/register'
+import { Route as PropelairImport } from './routes/propelair'
 import { Route as LoginImport } from './routes/login'
 import { Route as HexStickersImport } from './routes/hex-stickers'
+import { Route as ForgotPasswordImport } from './routes/forgot-password'
 import { Route as DispatchLabelsImport } from './routes/dispatch-labels'
 import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
 import { Route as PurchaseOrdersIndexImport } from './routes/purchase-orders/index'
 import { Route as PdfIndexImport } from './routes/pdf/index'
 import { Route as UsersManageImport } from './routes/users/manage'
+import { Route as ResetPasswordTokenImport } from './routes/reset-password/$token'
 import { Route as PrefixAddImport } from './routes/prefix/add'
 import { Route as PdfUploadImport } from './routes/pdf/upload'
 import { Route as LocationsAddImport } from './routes/locations/add'
@@ -39,6 +42,12 @@ const RegisterRoute = RegisterImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const PropelairRoute = PropelairImport.update({
+  id: '/propelair',
+  path: '/propelair',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
@@ -48,6 +57,12 @@ const LoginRoute = LoginImport.update({
 const HexStickersRoute = HexStickersImport.update({
   id: '/hex-stickers',
   path: '/hex-stickers',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ForgotPasswordRoute = ForgotPasswordImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -84,6 +99,12 @@ const PdfIndexRoute = PdfIndexImport.update({
 const UsersManageRoute = UsersManageImport.update({
   id: '/users/manage',
   path: '/users/manage',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ResetPasswordTokenRoute = ResetPasswordTokenImport.update({
+  id: '/reset-password/$token',
+  path: '/reset-password/$token',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -130,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DispatchLabelsImport
       parentRoute: typeof rootRoute
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordImport
+      parentRoute: typeof rootRoute
+    }
     '/hex-stickers': {
       id: '/hex-stickers'
       path: '/hex-stickers'
@@ -142,6 +170,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/propelair': {
+      id: '/propelair'
+      path: '/propelair'
+      fullPath: '/propelair'
+      preLoaderRoute: typeof PropelairImport
       parentRoute: typeof rootRoute
     }
     '/register': {
@@ -179,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrefixAddImport
       parentRoute: typeof rootRoute
     }
+    '/reset-password/$token': {
+      id: '/reset-password/$token'
+      path: '/reset-password/$token'
+      fullPath: '/reset-password/$token'
+      preLoaderRoute: typeof ResetPasswordTokenImport
+      parentRoute: typeof rootRoute
+    }
     '/users/manage': {
       id: '/users/manage'
       path: '/users/manage'
@@ -209,13 +251,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/dispatch-labels': typeof DispatchLabelsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
+  '/propelair': typeof PropelairRoute
   '/register': typeof RegisterRoute
   '/viasat': typeof ViasatRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
   '/prefix/add': typeof PrefixAddRoute
+  '/reset-password/$token': typeof ResetPasswordTokenRoute
   '/users/manage': typeof UsersManageRoute
   '/pdf': typeof PdfIndexRoute
   '/purchase-orders': typeof PurchaseOrdersIndexRoute
@@ -225,13 +270,16 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/dispatch-labels': typeof DispatchLabelsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
+  '/propelair': typeof PropelairRoute
   '/register': typeof RegisterRoute
   '/viasat': typeof ViasatRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
   '/prefix/add': typeof PrefixAddRoute
+  '/reset-password/$token': typeof ResetPasswordTokenRoute
   '/users/manage': typeof UsersManageRoute
   '/pdf': typeof PdfIndexRoute
   '/purchase-orders': typeof PurchaseOrdersIndexRoute
@@ -242,13 +290,16 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
   '/dispatch-labels': typeof DispatchLabelsRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/hex-stickers': typeof HexStickersRoute
   '/login': typeof LoginRoute
+  '/propelair': typeof PropelairRoute
   '/register': typeof RegisterRoute
   '/viasat': typeof ViasatRoute
   '/locations/add': typeof LocationsAddRoute
   '/pdf/upload': typeof PdfUploadRoute
   '/prefix/add': typeof PrefixAddRoute
+  '/reset-password/$token': typeof ResetPasswordTokenRoute
   '/users/manage': typeof UsersManageRoute
   '/pdf/': typeof PdfIndexRoute
   '/purchase-orders/': typeof PurchaseOrdersIndexRoute
@@ -260,13 +311,16 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dispatch-labels'
+    | '/forgot-password'
     | '/hex-stickers'
     | '/login'
+    | '/propelair'
     | '/register'
     | '/viasat'
     | '/locations/add'
     | '/pdf/upload'
     | '/prefix/add'
+    | '/reset-password/$token'
     | '/users/manage'
     | '/pdf'
     | '/purchase-orders'
@@ -275,13 +329,16 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dispatch-labels'
+    | '/forgot-password'
     | '/hex-stickers'
     | '/login'
+    | '/propelair'
     | '/register'
     | '/viasat'
     | '/locations/add'
     | '/pdf/upload'
     | '/prefix/add'
+    | '/reset-password/$token'
     | '/users/manage'
     | '/pdf'
     | '/purchase-orders'
@@ -290,13 +347,16 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard'
     | '/dispatch-labels'
+    | '/forgot-password'
     | '/hex-stickers'
     | '/login'
+    | '/propelair'
     | '/register'
     | '/viasat'
     | '/locations/add'
     | '/pdf/upload'
     | '/prefix/add'
+    | '/reset-password/$token'
     | '/users/manage'
     | '/pdf/'
     | '/purchase-orders/'
@@ -307,13 +367,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
   DispatchLabelsRoute: typeof DispatchLabelsRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   HexStickersRoute: typeof HexStickersRoute
   LoginRoute: typeof LoginRoute
+  PropelairRoute: typeof PropelairRoute
   RegisterRoute: typeof RegisterRoute
   ViasatRoute: typeof ViasatRoute
   LocationsAddRoute: typeof LocationsAddRoute
   PdfUploadRoute: typeof PdfUploadRoute
   PrefixAddRoute: typeof PrefixAddRoute
+  ResetPasswordTokenRoute: typeof ResetPasswordTokenRoute
   UsersManageRoute: typeof UsersManageRoute
   PdfIndexRoute: typeof PdfIndexRoute
   PurchaseOrdersIndexRoute: typeof PurchaseOrdersIndexRoute
@@ -323,13 +386,16 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
   DispatchLabelsRoute: DispatchLabelsRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   HexStickersRoute: HexStickersRoute,
   LoginRoute: LoginRoute,
+  PropelairRoute: PropelairRoute,
   RegisterRoute: RegisterRoute,
   ViasatRoute: ViasatRoute,
   LocationsAddRoute: LocationsAddRoute,
   PdfUploadRoute: PdfUploadRoute,
   PrefixAddRoute: PrefixAddRoute,
+  ResetPasswordTokenRoute: ResetPasswordTokenRoute,
   UsersManageRoute: UsersManageRoute,
   PdfIndexRoute: PdfIndexRoute,
   PurchaseOrdersIndexRoute: PurchaseOrdersIndexRoute,
@@ -348,13 +414,16 @@ export const routeTree = rootRoute
         "/",
         "/dashboard",
         "/dispatch-labels",
+        "/forgot-password",
         "/hex-stickers",
         "/login",
+        "/propelair",
         "/register",
         "/viasat",
         "/locations/add",
         "/pdf/upload",
         "/prefix/add",
+        "/reset-password/$token",
         "/users/manage",
         "/pdf/",
         "/purchase-orders/"
@@ -369,11 +438,17 @@ export const routeTree = rootRoute
     "/dispatch-labels": {
       "filePath": "dispatch-labels.tsx"
     },
+    "/forgot-password": {
+      "filePath": "forgot-password.tsx"
+    },
     "/hex-stickers": {
       "filePath": "hex-stickers.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/propelair": {
+      "filePath": "propelair.tsx"
     },
     "/register": {
       "filePath": "register.tsx"
@@ -389,6 +464,9 @@ export const routeTree = rootRoute
     },
     "/prefix/add": {
       "filePath": "prefix/add.tsx"
+    },
+    "/reset-password/$token": {
+      "filePath": "reset-password/$token.tsx"
     },
     "/users/manage": {
       "filePath": "users/manage.tsx"

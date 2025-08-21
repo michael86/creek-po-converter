@@ -8,10 +8,12 @@ import {
   TableHead,
   TableBody,
   Checkbox,
+  Button,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { Deliveries } from "../../types/state/purchaseOrders";
 import { useLabelManager } from "../../hooks/useLabelManager";
+import { useDeleteDelivery } from "../../api/queries/useDeleteDelivery";
 
 type Props = {
   history: Deliveries;
@@ -20,6 +22,7 @@ type Props = {
   partNumber: string;
   description: string;
   location: string | null;
+  onDelete: (id: string) => void;
 };
 
 const HistoryRow: React.FC<Props> = ({
@@ -29,7 +32,19 @@ const HistoryRow: React.FC<Props> = ({
   partNumber,
   description,
   location,
+  onDelete,
 }) => {
+  const { mutate, error } = useDeleteDelivery();
+
+  const onClick = async (id: string) => {
+    if (!id) return;
+    await mutate({ id });
+    if (error) {
+      console.error("Error deleting delivery:", error);
+      return;
+    }
+    onDelete(id);
+  };
   return (
     <TableRow>
       <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -44,6 +59,7 @@ const HistoryRow: React.FC<Props> = ({
                   <TableCell>Print</TableCell>
                   <TableCell align="right">Date Received</TableCell>
                   <TableCell align="right">Amount Received</TableCell>
+                  <TableCell align="right">Delete</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -51,7 +67,14 @@ const HistoryRow: React.FC<Props> = ({
                   <TableRow key={row.id}>
                     <TableCell>
                       <Checkbox
-                        onChange={() => handleLabelsChange(row, partNumber, description, location)}
+                        onChange={() =>
+                          handleLabelsChange(
+                            row,
+                            partNumber,
+                            description,
+                            location
+                          )
+                        }
                       />
                     </TableCell>
 
@@ -60,6 +83,14 @@ const HistoryRow: React.FC<Props> = ({
                     </TableCell>
 
                     <TableCell align="right">{row.quantityReceived}</TableCell>
+                    <TableCell align="right">
+                      <Button
+                        variant="contained"
+                        onClick={() => onClick(row.id)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -3,7 +3,7 @@ import { validateErrorResponse } from "../utils/api";
 
 const ROOT = import.meta.env.PROD
   ? `${import.meta.env.VITE_API_URL}`
-  : `${import.meta.env.VITE_DEV_API_URL}:${import.meta.env.VITE_API_PORT}`;
+  : `${import.meta.env.VITE_DEV_API_URL}`;
 
 const api = axios.create({
   baseURL: ROOT,

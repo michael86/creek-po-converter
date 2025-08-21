@@ -11,7 +11,7 @@ import { useAppSelector } from "../../store";
 import { createCellData } from "../../utils/table";
 import { hasItems } from "../../utils/typeGuards";
 
-import { Item } from "../../types/state/purchaseOrders";
+import { Deliveries, Item } from "../../types/state/purchaseOrders";
 import { useLabelManager } from "../../hooks/useLabelManager";
 
 type Props = {
@@ -22,8 +22,17 @@ export const PurchaseOrderTableRow: React.FC<Props> = ({ row }) => {
   const editMode = useAppSelector((state) => state.purchaseOrder.editMode);
   const { handleLabelsChange } = useLabelManager();
   const [open, setOpen] = useState(false);
+  const [deliveries, setDeliveries] = useState<Deliveries>(
+    row.deliveries || []
+  );
 
   const data = createCellData(row);
+
+  const handleDelete = (id: string) => {
+    setDeliveries((prevDeliveries) =>
+      prevDeliveries.filter((delivery) => delivery.id !== id)
+    );
+  };
 
   return (
     <>
@@ -31,21 +40,22 @@ export const PurchaseOrderTableRow: React.FC<Props> = ({ row }) => {
         <ShowItemHistoryButton
           open={open}
           setOpen={setOpen}
-          disabled={row.deliveries?.length === 0}
+          disabled={!hasItems(deliveries)}
         />
 
         <RowCells data={data} />
 
         {editMode && <AddDeliveryButton row={row} />}
       </TableRow>
-      {hasItems(row.deliveries) && (
+      {hasItems(deliveries) && (
         <HistoryRow
-          history={row.deliveries}
+          history={deliveries}
           open={open}
           handleLabelsChange={handleLabelsChange}
           description={row.description}
           partNumber={row.partNumber}
           location={row.storageLocation || null}
+          onDelete={handleDelete}
         />
       )}
     </>

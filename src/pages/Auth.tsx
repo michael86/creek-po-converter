@@ -10,11 +10,12 @@ import BackButton from "../components/backButton";
 import { AuthForm } from "../types/authForm";
 import { useAppDispatch } from "../store";
 import { login } from "../store/slices/authSlice";
-import { useRouter } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 
 const Auth: React.FC<{ route: "login" | "register" }> = ({ route }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const navigate = useNavigate();
 
   const fields = route === "login" ? loginFields : registerFields;
   const schema = route === "login" ? loginSchema : registerSchema;
@@ -36,11 +37,17 @@ const Auth: React.FC<{ route: "login" | "register" }> = ({ route }) => {
     setError(null);
 
     try {
-      const valid = await api.post(route === "login" ? "user/login" : "user/register", data);
+      const valid = await api.post(
+        route === "login" ? "user/login" : "user/register",
+        data
+      );
 
       if (valid.status === 200) {
-        const data: { email: string; name: string; role: number } = valid.data.data;
-        dispatch(login({ name: data.name, email: data.email, role: data.role }));
+        const data: { email: string; name: string; role: number } =
+          valid.data.data;
+        dispatch(
+          login({ name: data.name, email: data.email, role: data.role })
+        );
         router.navigate({ to: "/dashboard" });
       }
     } catch (error: any) {
@@ -80,15 +87,24 @@ const Auth: React.FC<{ route: "login" | "register" }> = ({ route }) => {
           />
         ))}
 
-        <Button type="submit" variant="contained">
+        <Button type="submit" variant="contained" sx={{ mt: 2 }}>
           Submit
         </Button>
       </form>
 
       {error && (
-        <Typography color="red" align="center">
-          {error}
-        </Typography>
+        <>
+          <Button
+            variant="contained"
+            onClick={() => navigate({ to: "/forgot-password" })}
+            sx={{ display: "block", margin: "auto", mt: 2 }}
+          >
+            forgot password
+          </Button>
+          <Typography color="red" align="center">
+            {error}
+          </Typography>
+        </>
       )}
     </>
   );

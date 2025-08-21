@@ -109,12 +109,12 @@ const StickerTemplate = () => {
 
     .sticker-logo {
       top: 2mm !important;
-      right: 2mm !important;
+      right: 3mm !important;
     }
 
     .content-container {
       top: 2mm !important;
-      left: 2mm !important;
+      left: 3mm !important;
       line-height: 1.4;
     }
   }

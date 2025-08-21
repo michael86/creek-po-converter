@@ -4,14 +4,19 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-import { useAppSelector } from "../../store";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { logout } from "../../store/slices/authSlice";
 import { useNavigate } from "@tanstack/react-router";
 import NavButtons from "./NavButtons";
 import NavigationMenu from "./NavigationMenu";
+import { useLogout } from "../../api/queries/useLogout";
 
 export default function ButtonAppBar() {
   const auth = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const logoutMutate = useLogout();
 
   return (
     <Box sx={{ flexGrow: 1, marginBottom: 2.5 }} className="no-print">
@@ -42,7 +47,10 @@ export default function ButtonAppBar() {
             color="inherit"
             onClick={() =>
               auth.email && auth.role
-                ? /* your logout fn */ console.log("logout")
+                ? logoutMutate.mutateAsync().then(() => {
+                    dispatch(logout());
+                    navigate({ to: "/" });
+                  })
                 : navigate({ to: "/login" })
             }
           >

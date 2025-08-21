@@ -38,7 +38,11 @@ function App() {
     <>
       <Container sx={{ textAlign: "center", mt: 5 }}>
         <Typography variant="h4">Welcome to Creekview</Typography>
-        <Button variant="contained" onClick={() => navigate("login")}>
+        <Button
+          variant="contained"
+          style={{ marginRight: 10 }}
+          onClick={() => navigate("login")}
+        >
           Login
         </Button>
         <Button variant="contained" onClick={() => navigate("register")}>
